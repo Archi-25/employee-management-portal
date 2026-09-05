@@ -1,0 +1,161 @@
+<header class="page-head">
+  <h1 i18n="@@directory.title">Employee directory</h1>
+  <p i18n="@@directory.subtitle">
+    Filter the roster, inspect a profile, and edit records. Data is served by the in-memory
+    backend through the full interceptor chain.
+  </p>
+</header>
+
+<div class="tiles">
+  <app-stat-tile label="Headcount" i18n-label="@@tile.headcount" [value]="store.total()" accent="#6366f1" />
+  <app-stat-tile label="Active" i18n-label="@@tile.active" [value]="store.activeCount()" accent="#16a34a" />
+  <app-stat-tile label="Matching filters" [value]="store.filtered().length" accent="#0ea5e9" />
+  <app-stat-tile
+    label="Annual payroll"
+    [value]="store.payrollTotal()"
+    [currency]="true"
+    accent="#f59e0b"
+  />
+</div>
+
+<app-card subtitle="Every field writes straight into the signal store">
+  <h3 card-title>Filters</h3>
+
+  <div card-actions>
+    <button type="button" class="btn btn--ghost btn--sm" (click)="store.resetFilter()">
+      Reset
+    </button>
+    <button type="button" class="btn btn--ghost btn--sm" (click)="store.load()">Reload</button>
+  </div>
+
+  <div class="filters">
+    <label class="field">
+      <span i18n="@@filter.search">Search</span>
+      <input
+        type="search"
+        [value]="store.filter().search"
+        (input)="onSearch($any($event.target).value)"
+        placeholder="Name, email or title"
+      />
+    </label>
+
+    <label class="field">
+      <span i18n="@@filter.department">Department</span>
+      <select [value]="store.filter().department" (change)="onDepartment($any($event.target).value)">
+        @for (department of departments; track department) {
+          <option [value]="department">{{ department }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="field">
+      <span i18n="@@filter.status">Status</span>
+      <select [value]="store.filter().status" (change)="onStatus($any($event.target).value)">
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="field field--check">
+      <input type="checkbox" [checked]="denseProfile()" (change)="denseProfile.set(!denseProfile())" />
+      <span>Dense profile</span>
+    </label>
+  </div>
+</app-card>
+
+<div class="layout">
+  <app-card heading="Roster" [subtitle]="store.filtered().length + ' shown'">
+    @if (store.loading() && store.total() === 0) {
+      <p class="hint">Loading employees…</p>
+    } @else if (store.filtered().length === 0) {
+      <p class="hint">{{ emptyMessage() }}</p>
+    } @else {
+      <ul class="roster">
+        <!-- `track` keeps DOM nodes stable across re-renders (MODULE 3). -->
+        @for (employee of store.filtered(); track employee.id) {
+          <li>
+            <button
+              type="button"
+              class="roster__row"
+              [class.is-selected]="employee.id === selected()?.id"
+              [appHighlight]="'#f1f5f9'"
+              (click)="store.select(employee.id)"
+            >
+              <span class="roster__avatar" [style.background]="employee.avatarColor">
+                {{ employee.firstName + ' ' + employee.lastName | initials }}
+              </span>
+              <span class="roster__text">
+                <strong>{{ employee.firstName }} {{ employee.lastName }}</strong>
+                <small>{{ employee.title }} · {{ employee.joinedOn | tenure }}</small>
+              </span>
+              <span class="roster__status" [attr.data-status]="employee.status">
+                {{ employee.status }}
+              </span>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
+    <div card-footer class="row">
+      <!-- Structural directive: only ADMIN/MANAGER sees the create action. -->
+      <a *appHasRole="['MANAGER', 'ADMIN']; else: noCreate" class="btn" routerLink="/employees/new">
+        Add employee
+      </a>
+      <ng-template #noCreate>
+        <span class="hint">Sign in as a manager to add employees.</span>
+      </ng-template>
+
+      <!-- Second structural directive, inverted condition. -->
+      <span *appUnless="store.loading()" class="hint">Store idle.</span>
+    </div>
+  </app-card>
+
+  <div class="detail">
+    @if (selected(); as employee) {
+      <app-card heading="Profile" subtitle="app-employee-profile with projected content">
+        <app-employee-profile
+          [employee]="employee"
+          [dense]="denseProfile()"
+          [showSalary]="auth.hasRole('MANAGER')"
+          (edit)="onEdit($event)"
+          (remove)="onRemove($event)"
+          (noteAdded)="onNoteAdded($event)"
+        >
+          <!-- Projected into <ng-content select="[profile-banner]"> -->
+          <div profile-banner class="banner">
+            Viewing as <strong>{{ auth.role() }}</strong> — salary is
+            {{ auth.hasRole('MANAGER') ? 'visible' : 'hidden' }}.
+          </div>
+
+          <!-- Projected into <ng-content select="[profile-actions]"> -->
+          <a profile-actions class="btn btn--ghost btn--sm" [routerLink]="['/employees', employee.id]">
+            Open
+          </a>
+
+          <!-- Falls into the catch-all <ng-content> -->
+          <p class="projected-note">
+            This paragraph lives in the parent template but renders inside the child, which is
+            what content projection means.
+          </p>
+
+          <!-- Projected into <ng-content select="[profile-footer]"> -->
+          <small profile-footer class="hint">
+            Record #{{ employee.id }} · department {{ employee.department }}
+          </small>
+        </app-employee-profile>
+      </app-card>
+
+      @if (lastNote(); as note) {
+        <app-card heading="Last &#64;Output payload" subtitle="Emitted by (noteAdded)">
+          <pre class="payload">{{ note | json }}</pre>
+        </app-card>
+      }
+    } @else {
+      <app-card heading="Profile">
+        <p class="hint">Select an employee from the roster.</p>
+      </app-card>
+    }
+  </div>
+</div>

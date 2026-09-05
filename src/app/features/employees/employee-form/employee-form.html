@@ -1,0 +1,97 @@
+<header class="page-head">
+  <h1>{{ isEdit() ? 'Edit employee' : 'New employee' }}</h1>
+  <p>
+    Reactive form with typed controls. Navigating away with unsaved edits is blocked by
+    <code>unsavedChangesGuard</code>.
+  </p>
+</header>
+
+<app-card heading="Record" [subtitle]="isEdit() ? 'Editing #' + employeeId() : 'Creating a new record'">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <label class="field">
+      <span>First name</span>
+      <input formControlName="firstName" autocomplete="given-name" />
+      @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+        <em class="error">At least 2 characters.</em>
+      }
+    </label>
+
+    <label class="field">
+      <span>Last name</span>
+      <input formControlName="lastName" autocomplete="family-name" />
+      @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+        <em class="error">At least 2 characters.</em>
+      }
+    </label>
+
+    <label class="field">
+      <span>Email</span>
+      <input formControlName="email" type="email" autocomplete="email" />
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <em class="error">A valid address is required.</em>
+      }
+    </label>
+
+    <label class="field">
+      <span>Title</span>
+      <input formControlName="title" />
+    </label>
+
+    <label class="field">
+      <span>Department</span>
+      <select formControlName="department">
+        @for (department of departments; track department) {
+          <option [value]="department">{{ department }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="field">
+      <span>Status</span>
+      <select formControlName="status">
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="field">
+      <span>Role</span>
+      <select formControlName="role">
+        <option value="EMPLOYEE">EMPLOYEE</option>
+        <option value="MANAGER">MANAGER</option>
+        <option value="ADMIN">ADMIN</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span>Salary (USD)</span>
+      <input formControlName="salary" type="number" min="0" step="1000" />
+    </label>
+
+    <label class="field">
+      <span>Joined on</span>
+      <input formControlName="joinedOn" type="date" />
+    </label>
+
+    <label class="field">
+      <span>Location</span>
+      <input formControlName="location" />
+    </label>
+
+    <label class="field field--wide">
+      <span>Skills (comma separated)</span>
+      <input formControlName="skills" placeholder="Angular, RxJS, Testing" />
+    </label>
+
+    <div class="actions">
+      <button type="submit" class="btn" [disabled]="saving()">
+        {{ saving() ? 'Saving…' : isEdit() ? 'Save changes' : 'Create employee' }}
+      </button>
+      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+      @if (form.dirty) {
+        <span class="hint">Unsaved changes</span>
+      }
+    </div>
+  </form>
+</app-card>

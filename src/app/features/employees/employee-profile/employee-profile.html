@@ -1,0 +1,123 @@
+<article class="profile" [class.profile--dense]="dense()">
+  <!-- ng-content slot: caller-supplied banner above everything else -->
+  <ng-content select="[profile-banner]" />
+
+  <header #profileHeader class="profile__header">
+    <div class="avatar" [style.background]="employee.avatarColor">
+      {{ displayName | initials }}
+    </div>
+
+    <div class="identity">
+      <h2 class="identity__name">{{ displayName }}</h2>
+      <p class="identity__title">
+        {{ employee.title }} · {{ employee.department }}
+      </p>
+      <div class="identity__meta">
+        <span [appRoleBadge]="employee.role"></span>
+        <span class="chip chip--status" [attr.data-status]="employee.status">
+          {{ employee.status }}
+        </span>
+        <span class="chip">{{ employee.location }}</span>
+        <span class="chip">{{ employee.joinedOn | tenure }} tenure</span>
+      </div>
+    </div>
+
+    <div class="profile__actions">
+      <!-- ng-content slot: host page injects its own buttons here -->
+      <ng-content select="[profile-actions]" />
+      <button type="button" class="btn" (click)="edit.emit(employee)">Edit</button>
+      <button type="button" class="btn btn--danger" (click)="remove.emit(employee)">
+        Remove
+      </button>
+    </div>
+  </header>
+
+  <dl class="facts">
+    <div><dt>Email</dt><dd>{{ employee.email }}</dd></div>
+    <div><dt>Joined</dt><dd>{{ employee.joinedOn | date: 'mediumDate' }}</dd></div>
+    @if (showSalary()) {
+      <div><dt>Salary</dt><dd>{{ employee.salary | currency: 'USD' : 'symbol' : '1.0-0' }}</dd></div>
+    }
+    <div><dt>Employee ID</dt><dd>#{{ employee.id }}</dd></div>
+  </dl>
+
+  <section class="skills">
+    <h3 class="section-title">
+      Skills
+      <small>{{ skillCount() }} chips found by viewChildren()</small>
+    </h3>
+
+    <!-- #skillList is a local reference to the plain <ul> element -->
+    <ul #skillList class="skills__list">
+      @for (skill of employee.skills; track skill) {
+        <!-- #skillChip is collected by BOTH @ViewChildren and viewChildren() -->
+        <li #skillChip class="chip chip--skill" tabindex="-1" [appHighlight]="'#e0e7ff'"
+            highlightLabel="skill">
+          {{ skill }}
+        </li>
+      }
+    </ul>
+
+    <div class="row">
+      <button type="button" class="btn btn--ghost" (click)="highlightFirstSkill()">
+        Focus first chip (&#64;ViewChildren)
+      </button>
+      <button type="button" class="btn btn--ghost" (click)="skillList.scrollIntoView()">
+        Scroll to list (local ref)
+      </button>
+      @if (lastFocusedSkill(); as skill) {
+        <span class="hint">Focused: <strong>{{ skill }}</strong></span>
+      }
+    </div>
+  </section>
+
+  <section class="bio">
+    <h3 class="section-title">Biography</h3>
+    <!-- Interpolation escapes the markup. The Security module renders the same
+         field through DomSanitizer to show the difference. -->
+    <p class="bio__raw">{{ employee.bioHtml }}</p>
+  </section>
+
+  <section class="notes">
+    <h3 class="section-title">Private notes</h3>
+    <textarea
+      #noteBox
+      class="notes__input"
+      rows="2"
+      placeholder="Add a note, then press Save"
+      (keydown.enter)="addNote(noteBox)"
+    ></textarea>
+
+    <div class="row">
+      <button type="button" class="btn" (click)="addNote(noteBox)">Save note</button>
+      <button type="button" class="btn btn--ghost" (click)="focusNote(noteBox)">
+        Focus (local ref)
+      </button>
+      <button type="button" class="btn btn--ghost" (click)="clearNoteViaViewChild()">
+        Clear (&#64;ViewChild)
+      </button>
+      <span class="hint">Header measured at {{ measuredHeaderWidth() }}px</span>
+    </div>
+
+    @if (notes().length) {
+      <ul class="notes__list">
+        @for (note of notes(); track note.at) {
+          <li>{{ note.text }} <small>{{ note.at | date: 'shortTime' }}</small></li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">No notes yet.</p>
+    }
+  </section>
+
+  <!-- Default (catch-all) slot: anything not matching a select above -->
+  <div class="projected">
+    <ng-content />
+  </div>
+
+  <footer class="profile__footer">
+    <ng-content select="[profile-footer]">
+      <span class="hint">Default footer — replaced when content is projected.</span>
+    </ng-content>
+  </footer>
+</article>
