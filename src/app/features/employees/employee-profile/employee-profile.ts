@@ -62,7 +62,13 @@ export class EmployeeProfile implements AfterViewInit {
 
   /** Signal inputs: read as functions, usable inside `computed`. */
   readonly dense = input(false);
-  readonly showSalary = input(true, { transform: (value: boolean | string) => value !== 'false' });
+  /**
+   * `transform` lets the input accept a plain attribute (`showSalary="false"`)
+   * as well as a real boolean binding, normalising both to a boolean.
+   */
+  readonly showSalary = input(true, {
+    transform: (value: boolean | string) => (typeof value === 'string' ? value !== 'false' : value),
+  });
 
   // --------------------------------------------------------------- outputs --
   /** Decorator output. */

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Host, Optional, Self, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Host, Optional, inject } from '@angular/core';
 import { ANALYTICS, AnalyticsSink } from '@core/tokens/analytics.token';
 import { APP_CONFIG } from '@core/tokens/app-config.token';
 import { FEATURE_FLAGS, provideFeatureFlags } from '@core/tokens/feature-flags.token';
@@ -10,10 +10,14 @@ import { PanelContextService } from './panel-context.service';
 /**
  * MODULE 5 — a child that asks for `PanelContextService` with `@Host()`.
  *
- * `@Host()` stops the lookup at the host component's injector: it will find a
- * provider declared by its immediate host, but will NOT walk further up to the
- * root. Combined with `@Optional()` it degrades gracefully instead of throwing
- * `NullInjectorError` when used outside a panel.
+ * `@Host()` stops the lookup at the boundary of the view this element lives in.
+ * It therefore resolves providers the host component declared in
+ * `viewProviders`, but NOT ones it declared in `providers` — that is the whole
+ * difference between the two arrays, and it is why `DiPanel` below uses
+ * `viewProviders`. The lookup never reaches the root injector.
+ *
+ * Combined with `@Optional()` it degrades to `null` instead of throwing
+ * `NullInjectorError` when the probe is used outside a panel.
  */
 @Component({
   selector: 'app-host-probe',
@@ -23,8 +27,10 @@ import { PanelContextService } from './panel-context.service';
       <strong>&#64;Host() + &#64;Optional()</strong>
       @if (context) {
         <span>resolved PanelContextService #{{ context.instanceId }} ({{ context.label() }})</span>
+        <span class="probe__why">found via the panel's <code>viewProviders</code></span>
       } @else {
-        <span>not found — this probe is outside any panel, and it survived that.</span>
+        <span>not found — no panel above this probe, and it survived that.</span>
+        <span class="probe__why">&#64;Optional() turned the miss into <code>null</code></span>
       }
     </div>
   `,
@@ -40,6 +46,7 @@ import { PanelContextService } from './panel-context.service';
       gap: 0.15rem;
     }
     .probe--miss { background: #fee2e2; color: #7f1d1d; }
+    .probe__why { font-size: 0.74rem; opacity: 0.75; }
   `,
 })
 export class HostProbe {
@@ -51,19 +58,23 @@ export class HostProbe {
 }
 
 /**
- * MODULE 5 — a panel that PROVIDES its own `PanelContextService` and its own
- * `Logger`. Every child below it resolves those instances instead of the root
- * ones: that is hierarchical injection.
+ * MODULE 5 — a panel that provides its own `PanelContextService` and `Logger`.
+ * Every child below it resolves those instances instead of the root ones: that
+ * is hierarchical injection.
+ *
+ * `PanelContextService` goes in `viewProviders` so the `@Host()` probe in this
+ * component's template can reach it. `Logger` goes in `providers`, which is the
+ * wider scope: it also covers content projected in from a parent.
  */
 @Component({
   selector: 'app-di-panel',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [HostProbe],
-  providers: [
-    PanelContextService,
-    // `useFactory` — build the dependency at injection time.
-    { provide: Logger, useFactory: scopedLoggerFactory('di-panel') },
-  ],
+  // Visible to this component's own template — what `@Host()` can see.
+  viewProviders: [PanelContextService],
+  // Visible to the template AND to projected content.
+  // `useFactory` — build the dependency at injection time.
+  providers: [{ provide: Logger, useFactory: scopedLoggerFactory('di-panel') }],
   template: `
     <div class="panel">
       <p class="panel__meta">
@@ -89,9 +100,9 @@ export class HostProbe {
   `,
 })
 export class DiPanel {
-  /** `@Self()` asserts the provider is on THIS component, not an ancestor. */
-  // eslint-disable-next-line @angular-eslint/prefer-inject -- demonstrating the parameter-decorator form
-  constructor(@Self() readonly context: PanelContextService) {
+  readonly context = inject(PanelContextService);
+
+  constructor() {
     this.context.label.set('panel-alpha');
   }
 

@@ -70,9 +70,15 @@
 <app-card heading="&#64;Host() outside a panel" subtitle="The same probe, no panel above it">
   <app-host-probe />
   <p class="hint">
-    The lookup stops at the host element instead of falling through to the root injector, which
-    is exactly what makes <code>&#64;Host()</code> useful for directives that must be used inside
-    a specific parent.
+    The lookup stops at the view boundary instead of falling through to the root injector, which
+    is exactly what makes <code>&#64;Host()</code> useful for directives that are only valid
+    inside a specific parent — <code>formControlName</code> works this way.
+  </p>
+  <p class="hint">
+    <strong>The subtlety:</strong> <code>&#64;Host()</code> can see the host component's
+    <code>viewProviders</code> but <em>not</em> its <code>providers</code>. Both are on the same
+    element, yet <code>providers</code> sits one step further out so that projected content can
+    reach it too — and that extra step is past where <code>&#64;Host()</code> stops.
   </p>
 </app-card>
 
