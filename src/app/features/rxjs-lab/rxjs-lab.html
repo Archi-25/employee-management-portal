@@ -1,0 +1,109 @@
+<header class="page-head">
+  <h1>RxJS</h1>
+  <p>
+    A custom observable produces the headcount feed; operators reshape it; an explicit observer
+    consumes a second stream; and <code>takeUntil</code> tears everything down on destroy.
+  </p>
+</header>
+
+<div class="grid">
+  <app-card
+    heading="Custom observable"
+    subtitle="new Observable(subscriber => …) with a teardown function"
+  >
+    <div class="row">
+      <button type="button" class="btn" (click)="startFeed()" [disabled]="feedRunning()">
+        Start feed
+      </button>
+      <button type="button" class="btn btn--ghost" (click)="stopFeed()" [disabled]="!feedRunning()">
+        Stop (takeUntil)
+      </button>
+    </div>
+
+    @if (ticks().length) {
+      <ul class="stream">
+        @for (tick of ticks(); track tick.sequence) {
+          <li>
+            <code>#{{ tick.sequence }}</code>
+            <span>{{ tick.activeCount }} active</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">Idle. The producer only runs while something is subscribed.</p>
+    }
+  </app-card>
+
+  <app-card heading="filter + map + takeUntil" subtitle="Second subscriber on the same source">
+    @if (evenLabels().length) {
+      <ul class="stream">
+        @for (label of evenLabels(); track label) {
+          <li><span>{{ label }}</span></li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">
+        Only even sequence numbers survive the <code>filter</code>, then <code>map</code> turns
+        each tick into a label.
+      </p>
+    }
+  </app-card>
+
+  <app-card heading="Observer object" subtitle="next / error / complete, all named">
+    <div class="row">
+      <button type="button" class="btn" (click)="watchStatuses()">Subscribe with an Observer</button>
+      @if (status(); as value) {
+        <span class="pill">{{ value }}</span>
+      }
+    </div>
+    @if (observerLog().length) {
+      <ul class="stream">
+        @for (entry of observerLog(); track entry) {
+          <li><code>{{ entry }}</code></li>
+        }
+      </ul>
+    }
+  </app-card>
+
+  <app-card heading="Custom operator" subtitle="An operator is just Observable → Observable">
+    <button type="button" class="btn" (click)="runCountdown()">Run countdown</button>
+    @if (countdown().length) {
+      <p class="countdown">
+        @for (value of countdown(); track $index) {
+          <span>{{ value }}</span>
+        }
+      </p>
+    } @else {
+      <p class="hint">
+        <code>filterPositive()</code> drops the trailing zero before it reaches the subscriber.
+      </p>
+    }
+  </app-card>
+</div>
+
+<app-card
+  heading="debounceTime + distinctUntilChanged + switchMap"
+  subtitle="Type-ahead over the HTTP layer"
+>
+  <input
+    class="search"
+    type="search"
+    placeholder="Search the directory…"
+    [value]="searchTerm()"
+    (input)="onSearch($any($event.target).value)"
+  />
+  <p class="hint">
+    Keystrokes are debounced by 250 ms, repeated terms are dropped, and
+    <code>switchMap</code> cancels any in-flight request when a newer term arrives.
+  </p>
+
+  @if (searchResults().length) {
+    <ul class="results">
+      @for (result of searchResults(); track result) {
+        <li>{{ result }}</li>
+      }
+    </ul>
+  } @else if (searchTerm()) {
+    <p class="hint">No matches.</p>
+  }
+</app-card>

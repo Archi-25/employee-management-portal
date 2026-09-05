@@ -1,0 +1,93 @@
+<header class="page-head">
+  <h1>Dependency injection</h1>
+  <p>
+    Angular resolves a dependency by walking up the injector tree: element injector →
+    component ancestors → environment (route) injector → root. Providers, modifiers and
+    hierarchy are all visible below.
+  </p>
+</header>
+
+<div class="grid">
+  <app-card heading="Root injector" subtitle="providedIn: 'root'">
+    <dl class="kv">
+      <div><dt>APP_CONFIG.appName</dt><dd>{{ config.appName }}</dd></div>
+      <div><dt>APP_CONFIG.apiBaseUrl</dt><dd><code>{{ config.apiBaseUrl }}</code></dd></div>
+      <div><dt>Cache TTL</dt><dd>{{ config.httpCacheTtlMs }} ms</dd></div>
+      <div><dt>Root Logger scope</dt><dd><code>{{ rootLogger.scope }}</code></dd></div>
+      <div>
+        <dt>useExisting alias</dt>
+        <dd>{{ sameInstance ? 'Logger === ConsoleLogger (same instance)' : 'different instances' }}</dd>
+      </div>
+    </dl>
+    <button type="button" class="btn btn--ghost btn--sm" (click)="logFromRoot()">
+      Write a root-scope log entry
+    </button>
+  </app-card>
+
+  <app-card heading="&#64;Optional()" subtitle="A token that is deliberately never provided">
+    @if (analytics) {
+      <p>An analytics sink is configured.</p>
+    } @else {
+      <p class="ok">
+        <code>ANALYTICS</code> resolved to <code>null</code>. Without <code>&#64;Optional()</code>
+        this component would have thrown <code>NullInjectorError</code> at construction.
+      </p>
+    }
+  </app-card>
+
+  <app-card heading="multi: true providers" subtitle="FEATURE_FLAGS contributed by this route">
+    @if (flags.length) {
+      <ul class="flags">
+        @for (flag of flags; track flag.key) {
+          <li>
+            <code>{{ flag.key }}</code>
+            <span [class.on]="flag.enabled" [class.off]="!flag.enabled">
+              {{ flag.enabled ? 'enabled' : 'disabled' }}
+            </span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">No flags registered.</p>
+    }
+  </app-card>
+</div>
+
+<app-card
+  heading="Hierarchical injection"
+  subtitle="Each panel provides its own PanelContextService and Logger"
+>
+  <div class="panels">
+    <app-di-panel />
+    <app-di-panel />
+  </div>
+  <p class="hint">
+    Two panels, two distinct instance ids — a component-level provider creates one instance per
+    component instance, unlike <code>providedIn: 'root'</code>.
+  </p>
+</app-card>
+
+<app-card heading="&#64;Host() outside a panel" subtitle="The same probe, no panel above it">
+  <app-host-probe />
+  <p class="hint">
+    The lookup stops at the host element instead of falling through to the root injector, which
+    is exactly what makes <code>&#64;Host()</code> useful for directives that must be used inside
+    a specific parent.
+  </p>
+</app-card>
+
+<app-card heading="Log sink" subtitle="Shared array injected by every Logger in the tree">
+  @if (logSink.length) {
+    <ul class="logs">
+      @for (entry of logSink; track entry.at + entry.message) {
+        <li>
+          <code class="scope">{{ entry.scope }}</code>
+          <span class="level level--{{ entry.level }}">{{ entry.level }}</span>
+          {{ entry.message }}
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="hint">No entries yet — use the buttons above.</p>
+  }
+</app-card>
