@@ -52,6 +52,46 @@ module.exports = defineConfig([
       'no-var': 'error',
     },
   },
+  // -------------------------------------------------------------------------
+  // Architectural boundaries. The source is partitioned into three layers and
+  // imports may only travel in one direction:
+  //
+  //     features  ->  shared  ->  core
+  //
+  // core knows nothing about the UI, shared knows nothing about any feature,
+  // and no feature may reach into another feature's internals. Nx enforces the
+  // same idea across projects with tags; within one project these rules do it.
+  // -------------------------------------------------------------------------
+  {
+    files: ['src/app/core/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { group: ['@shared/*', '**/shared/**'], message: 'core must not depend on shared.' },
+            { group: ['@features/*', '**/features/**'], message: 'core must not depend on features.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/app/shared/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@features/*', '**/features/**'],
+              message: 'shared must not depend on features.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   {
     // The Express entry point is a Node program: startup logging is expected there.
     files: ['src/server.ts', 'src/main.server.ts'],

@@ -1,0 +1,140 @@
+{
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "name": "employee-management-portal",
+  "projectType": "application",
+  "generators": {},
+  "sourceRoot": "src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "options": {
+        "browser": "src/main.ts",
+        "tsConfig": "tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "public"
+          }
+        ],
+        "styles": [
+          "src/styles.css"
+        ],
+        "server": "src/main.server.ts",
+        "outputMode": "server",
+        "security": {
+          "allowedHosts": [
+            "localhost",
+            "127.0.0.1"
+          ]
+        },
+        "ssr": {
+          "entry": "src/server.ts"
+        },
+        "polyfills": [
+          "@angular/localize/init"
+        ],
+        "i18nMissingTranslation": "error",
+        "outputPath": "dist/employee-management-portal"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kB",
+              "maximumError": "1MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kB",
+              "maximumError": "8kB"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        },
+        "i18n": {
+          "localize": true,
+          "outputHashing": "all",
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kB",
+              "maximumError": "1MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kB",
+              "maximumError": "8kB"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{options.outputPath}"
+      ]
+    },
+    "serve": {
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "employee-management-portal:build:production"
+        },
+        "development": {
+          "buildTarget": "employee-management-portal:build:development"
+        },
+        "fr": {
+          "buildTarget": "employee-management-portal:build:development,i18n"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "coverage": true,
+        "coverageReporters": [
+          "text-summary",
+          "lcov"
+        ]
+      },
+      "outputs": [
+        "{workspaceRoot}/coverage"
+      ]
+    },
+    "lint": {
+      "executor": "@angular-eslint/builder:lint",
+      "options": {
+        "lintFilePatterns": [
+          "src/**/*.ts",
+          "src/**/*.html"
+        ]
+      },
+      "outputs": [
+        "{options.outputFile}"
+      ]
+    },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n",
+      "options": {
+        "buildTarget": "employee-management-portal:build",
+        "format": "xlf",
+        "outputPath": "src/locale"
+      }
+    }
+  },
+  "i18n": {
+    "sourceLocale": "en-US",
+    "locales": {
+      "fr": {
+        "translation": "src/locale/messages.fr.xlf"
+      }
+    }
+  }
+}
