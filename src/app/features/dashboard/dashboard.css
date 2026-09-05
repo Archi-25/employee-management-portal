@@ -1,0 +1,43 @@
+:host { display: block; }
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.welcome {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.86rem;
+  margin-bottom: 1rem;
+}
+.welcome--muted { color: var(--muted); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.module {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+}
+.module:hover { border-color: var(--accent); }
+.module__badge {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.module__title { font-size: 0.95rem; }
+.module__blurb { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+.flow { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.3rem; font-size: 0.87rem; }
