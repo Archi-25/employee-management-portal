@@ -1,1 +1,125 @@
-/* You can add global styles to this file, and also import other style files */
+/* ---------------------------------------------------------------------------
+   Employee Management Portal — global stylesheet.
+   Component styles stay in their components; this file holds the design tokens
+   and the handful of primitives shared across every feature.
+   ------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #4f46e5;
+  --accent-soft: #eef2ff;
+  --danger: #dc2626;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1120;
+    --surface: #111827;
+    --surface-2: #1b2537;
+    --border: #263349;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --accent: #818cf8;
+    --accent-soft: #1e1b4b;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); }
+
+code,
+kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border-radius: 4px;
+  padding: 0.05em 0.32em;
+}
+
+/* --- page heading -------------------------------------------------------- */
+.page-head { margin-bottom: 1.25rem; }
+.page-head h1 { margin: 0 0 0.3rem; font-size: 1.55rem; letter-spacing: -0.025em; }
+.page-head p { margin: 0; color: var(--muted); font-size: 0.9rem; max-width: 72ch; }
+
+/* --- buttons ------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.42rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover { filter: brightness(1.07); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; filter: none; }
+.btn--ghost { background: transparent; border-color: var(--border); color: var(--text); }
+.btn--ghost:hover { background: var(--surface-2); filter: none; }
+.btn--danger { background: var(--danger); }
+.btn--sm { font-size: 0.78rem; padding: 0.3rem 0.6rem; }
+
+/* --- shared primitives --------------------------------------------------- */
+.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.hint { color: var(--muted); font-size: 0.8rem; margin: 0.5rem 0 0; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.14rem 0.6rem;
+  font-size: 0.73rem;
+  background: var(--surface-2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.chip--status[data-status='ACTIVE'] { color: #15803d; border-color: #bbf7d0; }
+.chip--status[data-status='ON_LEAVE'] { color: #b45309; border-color: #fde68a; }
+.chip--status[data-status='PROBATION'] { color: #1d4ed8; border-color: #bfdbfe; }
+.chip--status[data-status='EXITED'] { color: #b91c1c; border-color: #fecaca; }
+
+/* Rendered by RoleBadgeDirective through Renderer2, so it cannot be scoped to
+   a component — it belongs to whichever host element carries the directive. */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.14rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
