@@ -8,11 +8,7 @@ import { Card } from '@shared/components/card/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DatePipe, Card],
   template: `
-    <app-card heading="Audit log" [subtitle]="'Written through the ' + logger.scope + ' logger'">
-      <div card-actions>
-        <button type="button" class="btn btn--ghost btn--sm" (click)="write()">Write entry</button>
-      </div>
-
+    <app-card heading="Audit log" subtitle="Actions recorded across the portal">
       @if (entries.length) {
         <ul class="log">
           @for (entry of entries; track entry.at + entry.message) {
@@ -25,7 +21,7 @@ import { Card } from '@shared/components/card/card';
           }
         </ul>
       } @else {
-        <p class="hint">Nothing logged yet.</p>
+        <p class="hint">No activity recorded in this session yet.</p>
       }
     </app-card>
   `,
@@ -43,11 +39,11 @@ import { Card } from '@shared/components/card/card';
   `,
 })
 export class AdminAudit {
-  /** Module-scoped logger from `AdminModule.providers` (MODULE 5). */
+  /**
+   * Resolves the admin module's own logger rather than the root one, because
+   * `AdminModule` re-provides `Logger` in its environment injector.
+   */
   protected readonly logger = inject(Logger);
   protected readonly entries = inject(LOG_SINK);
 
-  protected write(): void {
-    this.logger.warn(`Manual audit entry at ${new Date().toLocaleTimeString()}`);
-  }
 }

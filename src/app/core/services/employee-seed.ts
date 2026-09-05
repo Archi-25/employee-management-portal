@@ -1,3 +1,4 @@
+import { Announcement } from '@core/models/announcement.model';
 import { Employee } from '@core/models/employee.model';
 
 /**
@@ -167,5 +168,43 @@ export const EMPLOYEE_SEED: readonly Employee[] = [
     skills: ['Airflow', 'dbt', 'Python'],
     bioHtml: '<p>Built the first warehouse. Alumni network member.</p>',
     avatarColor: '#a855f7',
+  },
+];
+
+/**
+ * Seeded company announcements. The first entry deliberately carries a hostile
+ * payload: announcements are authored by humans through a rich-text field, so
+ * the render path must sanitise, and this proves it does.
+ */
+export const ANNOUNCEMENT_SEED: readonly Announcement[] = [
+  {
+    id: 1,
+    title: 'Open enrolment closes 30 September',
+    bodyHtml:
+      '<p>Benefits open enrolment closes at <strong>17:00 on 30 September</strong>. ' +
+      'Review your elections in the People Ops portal.</p>' +
+      '<p><em>Questions?</em> Ask in #people-ops.</p>',
+    author: 'Noah Fischer',
+    postedAt: '2026-09-01T09:00:00.000Z',
+    pinned: true,
+  },
+  {
+    id: 2,
+    title: 'Engineering all-hands moved to Thursday',
+    bodyHtml:
+      '<p>This month’s all-hands moves to <strong>Thursday 14:00</strong>. ' +
+      'The agenda covers the platform roadmap and Q4 hiring.</p>' +
+      '<img src="x" onerror="alert(\'XSS in announcement\')">',
+    author: 'Riya Sharma',
+    postedAt: '2026-08-28T11:30:00.000Z',
+    pinned: false,
+  },
+  {
+    id: 3,
+    title: 'Welcome to our new joiners',
+    bodyHtml: '<p>Please welcome <strong>Ishita Rao</strong> to the QA team.</p>',
+    author: 'Noah Fischer',
+    postedAt: '2026-08-20T08:15:00.000Z',
+    pinned: false,
   },
 ];

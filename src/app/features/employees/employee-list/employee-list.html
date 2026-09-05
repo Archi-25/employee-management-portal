@@ -1,8 +1,7 @@
 <header class="page-head">
   <h1 i18n="@@directory.title">Employee directory</h1>
   <p i18n="@@directory.subtitle">
-    Filter the roster, inspect a profile, and edit records. Data is served by the in-memory
-    backend through the full interceptor chain.
+    Search, filter and manage the people in your organisation.
   </p>
 </header>
 
@@ -18,14 +17,15 @@
   />
 </div>
 
-<app-card subtitle="Every field writes straight into the signal store">
-  <h3 card-title>Filters</h3>
+<app-card>
+  <h3 card-title i18n="@@directory.filters">Filters</h3>
 
-  <div card-actions>
-    <button type="button" class="btn btn--ghost btn--sm" (click)="store.resetFilter()">
-      Reset
-    </button>
-    <button type="button" class="btn btn--ghost btn--sm" (click)="store.load()">Reload</button>
+  <div card-actions class="row">
+    <button type="button" class="btn btn--ghost btn--sm" (click)="clearFilters()">Clear</button>
+    <!-- Only managers and admins may create records. -->
+    <a *appHasRole="['MANAGER', 'ADMIN']" class="btn btn--sm" routerLink="/employees/new">
+      Add employee
+    </a>
   </div>
 
   <div class="filters">
@@ -33,9 +33,9 @@
       <span i18n="@@filter.search">Search</span>
       <input
         type="search"
-        [value]="store.filter().search"
+        [value]="searchText()"
         (input)="onSearch($any($event.target).value)"
-        placeholder="Name, email or title"
+        placeholder="Name, email or job title"
       />
     </label>
 
@@ -56,106 +56,139 @@
         }
       </select>
     </label>
-
-    <label class="field field--check">
-      <input type="checkbox" [checked]="denseProfile()" (change)="denseProfile.set(!denseProfile())" />
-      <span>Dense profile</span>
-    </label>
   </div>
 </app-card>
 
-<div class="layout">
-  <app-card heading="Roster" [subtitle]="store.filtered().length + ' shown'">
-    @if (store.loading() && store.total() === 0) {
-      <p class="hint">Loading employees…</p>
-    } @else if (store.filtered().length === 0) {
-      <p class="hint">{{ emptyMessage() }}</p>
-    } @else {
-      <ul class="roster">
-        <!-- `track` keeps DOM nodes stable across re-renders (MODULE 3). -->
-        @for (employee of store.filtered(); track employee.id) {
-          <li>
-            <button
-              type="button"
-              class="roster__row"
-              [class.is-selected]="employee.id === selected()?.id"
-              [appHighlight]="'#f1f5f9'"
-              (click)="store.select(employee.id)"
-            >
-              <span class="roster__avatar" [style.background]="employee.avatarColor">
-                {{ employee.firstName + ' ' + employee.lastName | initials }}
-              </span>
-              <span class="roster__text">
-                <strong>{{ employee.firstName }} {{ employee.lastName }}</strong>
-                <small>{{ employee.title }} · {{ employee.joinedOn | tenure }}</small>
-              </span>
-              <span class="roster__status" [attr.data-status]="employee.status">
-                {{ employee.status }}
-              </span>
-            </button>
-          </li>
-        }
-      </ul>
-    }
+<app-card [heading]="'People'" [subtitle]="store.filtered().length + ' matching'">
+  @if (store.loading() && store.total() === 0) {
+    <p class="hint">Loading directory…</p>
+  } @else if (sorted().length === 0) {
+    <p class="hint">No employee matches the current filters.</p>
+  } @else {
+    <div class="table-wrap">
+      <table class="grid">
+        <thead>
+          <tr>
+            <th scope="col">
+              <button type="button" class="sort" (click)="sortBy('name')">
+                Name{{ sortKey() === 'name' ? (sortAsc() ? ' ▲' : ' ▼') : '' }}
+              </button>
+            </th>
+            <th scope="col">
+              <button type="button" class="sort" (click)="sortBy('department')">
+                Department{{ sortKey() === 'department' ? (sortAsc() ? ' ▲' : ' ▼') : '' }}
+              </button>
+            </th>
+            <th scope="col">
+              <button type="button" class="sort" (click)="sortBy('joinedOn')">
+                Tenure{{ sortKey() === 'joinedOn' ? (sortAsc() ? ' ▲' : ' ▼') : '' }}
+              </button>
+            </th>
+            <th scope="col">Status</th>
+            @if (auth.hasRole('MANAGER')) {
+              <th scope="col" class="num">
+                <button type="button" class="sort" (click)="sortBy('salary')">
+                  Salary{{ sortKey() === 'salary' ? (sortAsc() ? ' ▲' : ' ▼') : '' }}
+                </button>
+              </th>
+            }
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
 
-    <div card-footer class="row">
-      <!-- Structural directive: only ADMIN/MANAGER sees the create action. -->
-      <a *appHasRole="['MANAGER', 'ADMIN']; else: noCreate" class="btn" routerLink="/employees/new">
-        Add employee
-      </a>
-      <ng-template #noCreate>
-        <span class="hint">Sign in as a manager to add employees.</span>
-      </ng-template>
+        <tbody>
+          <!-- track by id keeps the DOM rows stable across sorts and filters -->
+          @for (employee of visible(); track employee.id) {
+            <tr>
+              <td>
+                <a class="person" [routerLink]="['/employees', employee.id]">
+                  <span class="person__avatar" [style.background]="employee.avatarColor">
+                    {{ displayName(employee) | initials }}
+                  </span>
+                  <span class="person__text">
+                    <strong>{{ displayName(employee) }}</strong>
+                    <small>{{ employee.title }}</small>
+                  </span>
+                </a>
+              </td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.joinedOn | tenure }}</td>
+              <td>
+                <span
+                  class="chip chip--status"
+                  [attr.data-status]="employee.status"
+                  [appTooltip]="statusHint(employee.status)"
+                >
+                  {{ employee.status }}
+                </span>
+              </td>
+              @if (auth.hasRole('MANAGER')) {
+                <td class="num">{{ employee.salary | number }}</td>
+              }
+              <td class="actions">
+                <div class="menu" (appClickOutside)="openMenuId.set(null)">
+                  <button
+                    type="button"
+                    class="menu__trigger"
+                    [attr.aria-expanded]="openMenuId() === employee.id"
+                    aria-label="Row actions"
+                    (click)="toggleMenu(employee.id)"
+                  >
+                    ⋯
+                  </button>
 
-      <!-- Second structural directive, inverted condition. -->
-      <span *appUnless="store.loading()" class="hint">Store idle.</span>
+                  @if (openMenuId() === employee.id) {
+                    <div class="menu__panel" role="menu">
+                      <a role="menuitem" [routerLink]="['/employees', employee.id]">View profile</a>
+                      <button *appHasRole="['MANAGER', 'ADMIN']" type="button" role="menuitem"
+                              (click)="edit(employee)">
+                        Edit
+                      </button>
+                      <button *appHasRole="'ADMIN'" type="button" role="menuitem" class="danger"
+                              (click)="askToDelete(employee)">
+                        Remove
+                      </button>
+                    </div>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
-  </app-card>
 
-  <div class="detail">
-    @if (selected(); as employee) {
-      <app-card heading="Profile" subtitle="app-employee-profile with projected content">
-        <app-employee-profile
-          [employee]="employee"
-          [dense]="denseProfile()"
-          [showSalary]="auth.hasRole('MANAGER')"
-          (edit)="onEdit($event)"
-          (remove)="onRemove($event)"
-          (noteAdded)="onNoteAdded($event)"
-        >
-          <!-- Projected into <ng-content select="[profile-banner]"> -->
-          <div profile-banner class="banner">
-            Viewing as <strong>{{ auth.role() }}</strong> — salary is
-            {{ auth.hasRole('MANAGER') ? 'visible' : 'hidden' }}.
-          </div>
-
-          <!-- Projected into <ng-content select="[profile-actions]"> -->
-          <a profile-actions class="btn btn--ghost btn--sm" [routerLink]="['/employees', employee.id]">
-            Open
-          </a>
-
-          <!-- Falls into the catch-all <ng-content> -->
-          <p class="projected-note">
-            This paragraph lives in the parent template but renders inside the child, which is
-            what content projection means.
-          </p>
-
-          <!-- Projected into <ng-content select="[profile-footer]"> -->
-          <small profile-footer class="hint">
-            Record #{{ employee.id }} · department {{ employee.department }}
-          </small>
-        </app-employee-profile>
-      </app-card>
-
-      @if (lastNote(); as note) {
-        <app-card heading="Last &#64;Output payload" subtitle="Emitted by (noteAdded)">
-          <pre class="payload">{{ note | json }}</pre>
-        </app-card>
-      }
-    } @else {
-      <app-card heading="Profile">
-        <p class="hint">Select an employee from the roster.</p>
-      </app-card>
+    @if (totalPages() > 1) {
+      <div class="pager">
+        <button type="button" class="btn btn--ghost btn--sm"
+                [disabled]="page() === 1" (click)="goToPage(page() - 1)">
+          Previous
+        </button>
+        <span class="pager__label">Page {{ page() }} of {{ totalPages() }}</span>
+        <button type="button" class="btn btn--ghost btn--sm"
+                [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">
+          Next
+        </button>
+      </div>
     }
-  </div>
-</div>
+  }
+</app-card>
+
+@if (pendingDelete(); as employee) {
+  <app-confirm-dialog
+    heading="Remove employee?"
+    confirmLabel="Remove"
+    (confirmed)="confirmDelete()"
+    (cancelled)="pendingDelete.set(null)"
+  >
+    <p>
+      <strong>{{ displayName(employee) }}</strong> will be removed from the directory. This cannot
+      be undone.
+    </p>
+    <!-- [appDialogClose] finds the DialogRef with @Host() -->
+    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
+            (click)="pendingDelete.set(null)">
+      Not now
+    </button>
+  </app-confirm-dialog>
+}

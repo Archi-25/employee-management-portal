@@ -4,13 +4,12 @@ import { AuthService } from '@core/services/auth.service';
 import { APP_CONFIG } from '@core/tokens/app-config.token';
 import { FEATURE_FLAGS } from '@core/tokens/feature-flags.token';
 import { Card } from '@shared/components/card/card';
-import { HasRoleDirective } from '@shared/directives/has-role.directive';
 
 /** Reachable only by ADMIN — guarded by `roleGuard('ADMIN')` on the route. */
 @Component({
   selector: 'app-admin-settings',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, HasRoleDirective],
+  imports: [Card],
   template: `
     <app-card heading="Portal settings" subtitle="ADMIN-only route">
       <dl class="kv">
@@ -32,7 +31,11 @@ import { HasRoleDirective } from '@shared/directives/has-role.directive';
       </ul>
     </app-card>
 
-    <app-card heading="Role simulation" subtitle="Drives every *appHasRole in the app">
+    <app-card heading="Access simulation" subtitle="Preview the portal as another role">
+      <p class="hint">
+        Changing this affects only your session. Use it to check what a manager or an employee
+        can see before rolling out a permission change.
+      </p>
       <div class="row">
         @for (role of roles; track role) {
           <button
@@ -45,13 +48,6 @@ import { HasRoleDirective } from '@shared/directives/has-role.directive';
           </button>
         }
       </div>
-
-      <p *appHasRole="'ADMIN'; else: notAdmin" class="ok">
-        This paragraph is stamped by the structural directive because you are ADMIN.
-      </p>
-      <ng-template #notAdmin>
-        <p class="hint">Switch to ADMIN to reveal the privileged paragraph.</p>
-      </ng-template>
     </app-card>
   `,
   styles: `

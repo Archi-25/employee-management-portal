@@ -3,15 +3,11 @@ import { unsavedChangesGuard } from '@core/guards/unsaved-changes.guard';
 import { roleGuard } from '@core/guards/role.guard';
 import { employeeResolver } from '@core/resolvers/employee.resolver';
 
-/**
- * MODULE 4 — feature routes loaded lazily by the root router with
- * `loadChildren`. Standalone components use `loadComponent` per route, so each
- * screen is its own chunk.
- */
+/** Employee directory routes. Each screen is its own lazily loaded chunk. */
 export const EMPLOYEE_ROUTES: Routes = [
   {
     path: '',
-    title: 'Employee directory',
+    title: 'Employees · Employee Management Portal',
     loadComponent: () => import('./employee-list/employee-list').then((m) => m.EmployeeList),
   },
   {
@@ -20,18 +16,6 @@ export const EMPLOYEE_ROUTES: Routes = [
     canActivate: [roleGuard('MANAGER', 'ADMIN')],
     canDeactivate: [unsavedChangesGuard],
     loadComponent: () => import('./employee-form/employee-form').then((m) => m.EmployeeForm),
-  },
-  {
-    path: 'encapsulation',
-    title: 'View encapsulation',
-    loadComponent: () =>
-      import('./encapsulation/encapsulation-demo').then((m) => m.EncapsulationPage),
-  },
-  {
-    path: 'change-detection',
-    title: 'Change detection',
-    loadComponent: () =>
-      import('./change-detection/change-detection-page').then((m) => m.ChangeDetectionPage),
   },
   {
     path: ':id',

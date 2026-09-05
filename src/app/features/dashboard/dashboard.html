@@ -1,0 +1,105 @@
+<header class="page-head">
+  <h1 i18n="@@dashboard.title">Dashboard</h1>
+  <p i18n="@@dashboard.subtitle">
+    Headcount, recent joiners and company announcements at a glance.
+  </p>
+</header>
+
+<div class="tiles">
+  <app-stat-tile label="Headcount" i18n-label="@@tile.headcount" [value]="store.total()" accent="#6366f1" />
+  <app-stat-tile label="Active" i18n-label="@@tile.active" [value]="store.activeCount()" accent="#16a34a" />
+  <app-stat-tile label="On leave" [value]="onLeave().length" accent="#f59e0b" />
+  <app-stat-tile
+    label="Online now"
+    [value]="presence()?.onlineNow ?? '—'"
+    [hint]="presence() ? 'live' : 'connecting…'"
+    accent="#0ea5e9"
+  />
+</div>
+
+<div *appHasRole="'EMPLOYEE'; else: signedOut" class="welcome">
+  Welcome back, <strong>{{ auth.displayName() }}</strong>.
+</div>
+<ng-template #signedOut>
+  <div class="welcome welcome--muted">
+    You are browsing as a guest — <a routerLink="/login">sign in</a> to manage the directory.
+  </div>
+</ng-template>
+
+<div class="grid">
+  <app-card heading="Headcount by department" subtitle="Across the whole organisation">
+    <div card-actions>
+      <a class="btn btn--ghost btn--sm" routerLink="/departments">All departments</a>
+    </div>
+
+    @if (departments().length) {
+      <ul class="bars">
+        @for (row of departments(); track row.department) {
+          <li>
+            <a class="bars__label" [routerLink]="['/departments', row.department]">
+              {{ row.department }}
+            </a>
+            <span class="bars__track">
+              <span class="bars__fill" [style.width.%]="share(row.count)"></span>
+            </span>
+            <span class="bars__value">{{ row.count }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">Loading headcount…</p>
+    }
+  </app-card>
+
+  <app-card heading="Recent joiners" subtitle="Newest first">
+    <div card-actions>
+      <a class="btn btn--ghost btn--sm" routerLink="/employees">Directory</a>
+    </div>
+
+    @if (recentJoiners().length) {
+      <ul class="joiners">
+        @for (person of recentJoiners(); track person.id) {
+          <li>
+            <span class="joiners__avatar" [style.background]="person.avatarColor">
+              {{ person.firstName + ' ' + person.lastName | initials }}
+            </span>
+            <span class="joiners__text">
+              <a [routerLink]="['/employees', person.id]">
+                {{ person.firstName }} {{ person.lastName }}
+              </a>
+              <small>{{ person.title }} · joined {{ person.joinedOn | date: 'MMM y' }}</small>
+            </span>
+            <span class="joiners__tenure">{{ person.joinedOn | tenure }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">Loading joiners…</p>
+    }
+  </app-card>
+
+  <!-- Announcement bodies are author-supplied rich text; the panel sanitises them. -->
+  <app-announcement-panel [limit]="3">
+    <a panel-actions *appHasRole="['MANAGER', 'ADMIN']" class="btn btn--ghost btn--sm"
+       routerLink="/admin/announcements">
+      Manage
+    </a>
+  </app-announcement-panel>
+
+  <app-card heading="Currently on leave" [subtitle]="onLeave().length + ' people'">
+    @if (onLeave().length) {
+      <ul class="leave">
+        @for (person of onLeave(); track person.id) {
+          <li>
+            <a [routerLink]="['/employees', person.id]">
+              {{ person.firstName }} {{ person.lastName }}
+            </a>
+            <small>{{ person.department }}</small>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">Everyone is in.</p>
+    }
+  </app-card>
+</div>

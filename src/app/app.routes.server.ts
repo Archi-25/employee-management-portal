@@ -1,20 +1,20 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
 /**
- * MODULE 9 — per-route render modes.
+ * Per-route render modes.
  *
- * Most routes are prerendered at build time (fastest possible first paint).
- * Anything that depends on browser-only APIs is marked `Client`, because there
- * is no server equivalent:
- *  - the encapsulation demo mounts a real Shadow DOM root,
- *  - the change-detection demo drives `setInterval` timers,
- *  - employee detail pages are parameterised and cheap to render on demand.
+ * Public, static pages are prerendered at build time for the fastest possible
+ * first paint. Data-driven pages render per request. The admin area is
+ * client-rendered: it is private, highly interactive, and the shareable badge
+ * mounts a real Shadow DOM root, which has no server-side equivalent.
  */
 export const serverRoutes: ServerRoute[] = [
-  { path: 'employees/encapsulation', renderMode: RenderMode.Client },
-  { path: 'employees/change-detection', renderMode: RenderMode.Client },
+  // Parameterised and data-driven screens render per request.
   { path: 'employees/**', renderMode: RenderMode.Server },
+  { path: 'departments/**', renderMode: RenderMode.Server },
+  // The admin area is private and interactive; there is nothing to gain from
+  // prerendering it, and the badge widget needs a real Shadow DOM root.
   { path: 'admin/**', renderMode: RenderMode.Client },
-  { path: 'rxjs', renderMode: RenderMode.Client },
+  // Everything else is static enough to prerender at build time.
   { path: '**', renderMode: RenderMode.Prerender },
 ];

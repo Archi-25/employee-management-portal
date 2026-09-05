@@ -3,11 +3,8 @@ import { authGuard } from '@core/guards/auth.guard';
 import { roleGuard } from '@core/guards/role.guard';
 
 /**
- * MODULE 4 — root route table.
- *
- * Standalone screens are loaded with `loadComponent`, the employees feature with
- * `loadChildren` over a routes array, and the admin area with `loadChildren`
- * over a real lazy `NgModule`.
+ * Root route table. Every screen is lazily loaded, so the initial bundle
+ * carries only the shell and whatever the landing route needs.
  */
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -19,7 +16,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    title: 'Sign in',
+    title: 'Sign in · Employee Management Portal',
     loadComponent: () => import('@features/auth/login').then((m) => m.Login),
   },
   {
@@ -29,33 +26,13 @@ export const routes: Routes = [
       import('@features/employees/employees.routes').then((m) => m.EMPLOYEE_ROUTES),
   },
   {
-    path: 'directives',
-    title: 'Custom directives',
-    loadComponent: () =>
-      import('@features/directives-lab/directives-lab').then((m) => m.DirectivesLab),
-  },
-  {
-    path: 'di',
-    title: 'Dependency injection',
-    loadComponent: () => import('@features/di-lab/di-lab').then((m) => m.DiLab),
-  },
-  {
-    path: 'rxjs',
-    title: 'RxJS',
-    loadComponent: () => import('@features/rxjs-lab/rxjs-lab').then((m) => m.RxjsLab),
-  },
-  {
-    path: 'security',
-    title: 'Security',
-    loadComponent: () => import('@features/security/security-lab').then((m) => m.SecurityLab),
-  },
-  {
-    path: 'modern',
-    title: 'Modern Angular',
-    loadComponent: () => import('@features/modern/modern-angular').then((m) => m.ModernAngular),
+    path: 'departments',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('@features/departments/departments.routes').then((m) => m.DEPARTMENT_ROUTES),
   },
 
-  // A lazy-loaded NgModule, not a standalone component (MODULE 4).
+  // The admin area is a lazily loaded NgModule with its own environment injector.
   {
     path: 'admin',
     canActivate: [authGuard, roleGuard('MANAGER', 'ADMIN')],
@@ -69,7 +46,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    title: 'Not found',
+    title: 'Page not found',
     loadComponent: () => import('@features/misc/not-found').then((m) => m.NotFound),
   },
 ];

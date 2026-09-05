@@ -1,0 +1,32 @@
+:host { display: contents; }
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(15 23 42 / 45%);
+  z-index: 60;
+  border: 0;
+  padding: 0;
+  cursor: default;
+}
+.dialog {
+  position: fixed;
+  z-index: 61;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, calc(100vw - 2rem));
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 50px rgb(15 23 42 / 30%);
+}
+.dialog__title { margin: 0 0 0.6rem; font-size: 1.05rem; }
+.dialog__body { font-size: 0.88rem; color: var(--muted); }
+.dialog__body p { margin: 0; }
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.15rem;
+}

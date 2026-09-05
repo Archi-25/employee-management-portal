@@ -7,8 +7,9 @@ import {
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { Page } from '@core/models/api.model';
+import { Announcement, AnnouncementDraft } from '@core/models/announcement.model';
 import { Employee, EmployeeDraft } from '@core/models/employee.model';
-import { EMPLOYEE_SEED } from '@core/services/employee-seed';
+import { ANNOUNCEMENT_SEED, EMPLOYEE_SEED } from '@core/services/employee-seed';
 
 /**
  * The portal ships without a backend, so this interceptor terminates the chain
@@ -21,9 +22,14 @@ const LATENCY_MS = 220;
 let employees: Employee[] = EMPLOYEE_SEED.map((employee) => ({ ...employee }));
 let nextId = employees.length + 1;
 
+let announcements: Announcement[] = ANNOUNCEMENT_SEED.map((item) => ({ ...item }));
+let nextAnnouncementId = announcements.length + 1;
+
 export function resetMockBackend(): void {
   employees = EMPLOYEE_SEED.map((employee) => ({ ...employee }));
   nextId = employees.length + 1;
+  announcements = ANNOUNCEMENT_SEED.map((item) => ({ ...item }));
+  nextAnnouncementId = announcements.length + 1;
 }
 
 function matchesSearch(employee: Employee, term: string): boolean {
@@ -59,6 +65,42 @@ function handle(req: HttpRequest<unknown>): Observable<HttpResponse<unknown>> {
 
   if (url === '/api/employees' && req.method === 'GET') {
     return of(collection(req));
+  }
+
+  if (url === '/api/announcements' && req.method === 'GET') {
+    return of(
+      new HttpResponse({
+        status: 200,
+        body: { items: [...announcements], total: announcements.length },
+      }),
+    );
+  }
+
+  if (url === '/api/announcements' && req.method === 'POST') {
+    const created: Announcement = {
+      ...(req.body as AnnouncementDraft),
+      id: nextAnnouncementId++,
+      postedAt: new Date().toISOString(),
+    };
+    announcements = [created, ...announcements];
+    return of(new HttpResponse({ status: 201, body: created }));
+  }
+
+  const announcementMatch = /^\/api\/announcements\/(\d+)$/.exec(url);
+  if (announcementMatch && req.method === 'DELETE') {
+    if (role !== 'ADMIN' && role !== 'MANAGER') {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 403,
+            statusText: 'Forbidden',
+            url: req.url,
+            error: { message: 'Only managers may remove announcements.' },
+          }),
+      );
+    }
+    announcements = announcements.filter((item) => item.id !== Number(announcementMatch[1]));
+    return of(new HttpResponse({ status: 204 }));
   }
 
   if (url === '/api/departments' && req.method === 'GET') {

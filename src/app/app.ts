@@ -15,11 +15,7 @@ interface NavItem {
 const NAV: readonly NavItem[] = [
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/employees', label: 'Employees', minRole: 'EMPLOYEE' },
-  { path: '/directives', label: 'Directives' },
-  { path: '/di', label: 'DI' },
-  { path: '/rxjs', label: 'RxJS' },
-  { path: '/security', label: 'Security' },
-  { path: '/modern', label: 'Modern' },
+  { path: '/departments', label: 'Departments', minRole: 'EMPLOYEE' },
   { path: '/admin', label: 'Admin', minRole: 'MANAGER' },
 ];
 

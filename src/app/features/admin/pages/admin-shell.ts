@@ -15,23 +15,22 @@ import { Logger } from '@core/tokens/logger.token';
   imports: [RouterLink, RouterLinkActive, RouterOutlet],
   template: `
     <header class="page-head">
-      <h1>Administration</h1>
-      <p>
-        Lazy-loaded <code>AdminModule</code> — its own chunk, its own environment injector
-        (<code>Logger</code> scope <code>{{ logger.scope }}</code>), and its own nested routes.
+      <h1 i18n="@@admin.title">Administration</h1>
+      <p i18n="@@admin.subtitle">
+        Organisation settings, announcements and system health.
       </p>
     </header>
 
     <nav class="subnav">
       <a routerLink="overview" routerLinkActive="is-active">Overview</a>
-      <a routerLink="teams" routerLinkActive="is-active">Teams</a>
-      <a routerLink="interceptors" routerLinkActive="is-active">HTTP</a>
+      <a routerLink="announcements" routerLinkActive="is-active">Announcements</a>
+      <a routerLink="system" routerLinkActive="is-active">System health</a>
       <a routerLink="audit" routerLinkActive="is-active">Audit log</a>
       @if (auth.hasRole('ADMIN')) {
         <a routerLink="settings" routerLinkActive="is-active">Settings</a>
       }
       <span class="spacer"></span>
-      <span class="flags">{{ enabledFlags }} feature flags enabled</span>
+      <span class="flags">{{ enabledFlags }} feature flag(s) enabled</span>
     </nav>
 
     <!-- Child routes render here -->

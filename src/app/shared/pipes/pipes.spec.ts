@@ -1,5 +1,4 @@
 import { InitialsPipe } from './initials.pipe';
-import { RenderCountPipe } from './render-count.pipe';
 import { TenurePipe } from './tenure.pipe';
 
 describe('InitialsPipe', () => {
@@ -37,15 +36,5 @@ describe('TenurePipe', () => {
 
   it('renders a dash for a missing date', () => {
     expect(pipe.transform(null)).toBe('—');
-  });
-});
-
-describe('RenderCountPipe', () => {
-  it('counts every invocation, which is what makes it a CD probe', () => {
-    const pipe = new RenderCountPipe();
-
-    expect(pipe.transform()).toBe(1);
-    expect(pipe.transform()).toBe(2);
-    expect(pipe.transform()).toBe(3);
   });
 });

@@ -3,25 +3,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { roleGuard } from '@core/guards/role.guard';
 import { AdminShell } from './pages/admin-shell';
 import { AdminOverview } from './pages/admin-overview';
-import { AdminInterceptors } from './pages/admin-interceptors';
+import { AdminAnnouncements } from './pages/admin-announcements';
 import { AdminAudit } from './pages/admin-audit';
 import { AdminSettings } from './pages/admin-settings';
-import { AdminTeamList } from './pages/admin-team-list';
-import { AdminTeamDetail } from './pages/admin-team-detail';
+import { AdminSystem } from './pages/admin-system';
 
 /**
- * MODULE 4 — NESTED routes, three levels deep:
+ * Admin routes, nested under a shell that provides the sub-navigation:
  *
- *   /admin                       → AdminShell   (has its own <router-outlet>)
- *     /admin/overview            → AdminOverview
- *     /admin/teams               → AdminTeamList  (has its own <router-outlet>)
- *       /admin/teams/:id         → AdminTeamDetail
- *     /admin/interceptors        → AdminInterceptors
- *     /admin/audit               → AdminAudit
- *     /admin/settings            → AdminSettings  (ADMIN only)
+ *   /admin/overview       organisation summary
+ *   /admin/announcements  compose and manage notices
+ *   /admin/system         API health and request metrics
+ *   /admin/audit          activity trail
+ *   /admin/settings       configuration (ADMIN only)
  *
- * `canActivateChild` runs for every child navigation, not just the first, so a
- * role downgrade mid-session is caught immediately.
+ * `canActivateChild` re-checks on every child navigation, so a role change
+ * mid-session takes effect immediately rather than at the next full load.
  */
 const routes: Routes = [
   {
@@ -31,13 +28,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: AdminOverview, title: 'Admin · Overview' },
-      {
-        path: 'teams',
-        component: AdminTeamList,
-        title: 'Admin · Teams',
-        children: [{ path: ':id', component: AdminTeamDetail, title: 'Admin · Team' }],
-      },
-      { path: 'interceptors', component: AdminInterceptors, title: 'Admin · HTTP' },
+      { path: 'announcements', component: AdminAnnouncements, title: 'Admin · Announcements' },
+      { path: 'system', component: AdminSystem, title: 'Admin · System health' },
       { path: 'audit', component: AdminAudit, title: 'Admin · Audit log' },
       {
         path: 'settings',

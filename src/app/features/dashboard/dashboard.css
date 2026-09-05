@@ -14,30 +14,31 @@
   margin-bottom: 1rem;
 }
 .welcome--muted { color: var(--muted); }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+
+.bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.bars li { display: grid; grid-template-columns: 120px 1fr 28px; gap: 0.6rem; align-items: center; font-size: 0.84rem; }
+.bars__label { color: inherit; text-decoration: none; }
+.bars__label:hover { text-decoration: underline; }
+.bars__track { background: var(--surface-2); border-radius: 999px; height: 7px; overflow: hidden; }
+.bars__fill { display: block; height: 100%; background: var(--accent); }
+.bars__value { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.joiners { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.joiners li { display: flex; align-items: center; gap: 0.6rem; }
+.joiners__avatar {
+  width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center;
+  color: #fff; font-size: 0.66rem; font-weight: 700; flex: none;
 }
-.module {
-  display: grid;
-  gap: 0.25rem;
-  padding: 0.85rem 0.95rem;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  background: var(--surface);
-  text-decoration: none;
-  color: inherit;
-}
-.module:hover { border-color: var(--accent); }
-.module__badge {
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 600;
-}
-.module__title { font-size: 0.95rem; }
-.module__blurb { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
-.flow { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.3rem; font-size: 0.87rem; }
+.joiners__text { display: grid; flex: 1; min-width: 0; }
+.joiners__text a { color: inherit; font-weight: 600; font-size: 0.86rem; text-decoration: none; }
+.joiners__text a:hover { text-decoration: underline; }
+.joiners__text small { color: var(--muted); font-size: 0.73rem; }
+.joiners__tenure { font-size: 0.75rem; color: var(--muted); }
+
+.leave { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; font-size: 0.85rem; }
+.leave li { display: flex; justify-content: space-between; gap: 0.75rem; }
+.leave a { color: inherit; text-decoration: none; font-weight: 500; }
+.leave a:hover { text-decoration: underline; }
+.leave small { color: var(--muted); }

@@ -26,6 +26,22 @@
           <context context-type="linenumber">50,53</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="admin.title" datatype="html">
+        <source>Administration</source>
+        <target>Administration</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/admin/pages/admin-shell.ts</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="admin.subtitle" datatype="html">
+        <source> Organisation settings, announcements and system health. </source>
+        <target> Paramètres de l'organisation, annonces et état du système. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/admin/pages/admin-shell.ts</context>
+          <context context-type="linenumber">20,22</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="login.title" datatype="html">
         <source>Sign in</source>
         <target>Se connecter</target>
@@ -36,7 +52,7 @@
       </trans-unit>
       <trans-unit id="login.subtitle" datatype="html">
         <source> No password required — pick a role and the whole portal reacts: guards, structural directives, the Authorization header and the salary column all follow it. </source>
-        <target> Aucun mot de passe requis — choisissez un rôle et tout le portail réagit : les gardes, les directives structurelles, l'en-tête Authorization et la colonne des salaires le suivent. </target>
+        <target> Aucun mot de passe requis — choisissez un rôle pour prévisualiser le portail tel que cet utilisateur le voit. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/auth/login.ts</context>
           <context context-type="linenumber">16,19</context>
@@ -67,43 +83,59 @@
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.title" datatype="html">
-        <source>Employee Management Portal</source>
-        <target>Portail de gestion des employés</target>
+        <source>Dashboard</source>
+        <target>Tableau de bord</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">87,88</context>
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.subtitle" datatype="html">
-        <source> An enterprise Angular reference application. Every assessment module is implemented as a working screen, not a snippet. </source>
-        <target> Une application Angular de référence pour l'entreprise. Chaque module de l'évaluation est implémenté comme un écran fonctionnel, pas comme un extrait de code. </target>
+        <source> Headcount, recent joiners and company announcements at a glance. </source>
+        <target> Effectif, nouvelles recrues et annonces de l'entreprise en un coup d'œil. </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">89,92</context>
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">4,8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tile.headcount" datatype="html">
         <source>Headcount</source>
         <target>Effectif</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">9</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tile.active" datatype="html">
         <source>Active</source>
         <target>Actifs</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">10</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="departments.title" datatype="html">
+        <source>Departments</source>
+        <target>Services</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/departments/department-list.ts</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="departments.subtitle" datatype="html">
+        <source> Headcount and payroll split by team. Select a department to see its members. </source>
+        <target> Effectif et masse salariale par équipe. Sélectionnez un service pour voir ses membres. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/departments/department-list.ts</context>
+          <context context-type="linenumber">19,23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="directory.title" datatype="html">
@@ -115,11 +147,19 @@
         </context-group>
       </trans-unit>
       <trans-unit id="directory.subtitle" datatype="html">
-        <source> Filter the roster, inspect a profile, and edit records. Data is served by the in-memory backend through the full interceptor chain. </source>
-        <target> Filtrez la liste, consultez un profil et modifiez les fiches. Les données sont servies par le backend en mémoire à travers toute la chaîne d'intercepteurs. </target>
+        <source> Search, filter and manage the people in your organisation. </source>
+        <target> Recherchez, filtrez et gérez les personnes de votre organisation. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
-          <context context-type="linenumber">4,9</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="directory.filters" datatype="html">
+        <source>Filters</source>
+        <target>Filtres</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
+          <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="filter.search" datatype="html">
@@ -144,22 +184,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
           <context context-type="linenumber">52,53</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="modern.title" datatype="html">
-        <source>Modern Angular</source>
-        <target>Angular moderne</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/modern/modern-angular.html</context>
-          <context context-type="linenumber">2,3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="modern.subtitle" datatype="html">
-        <source> Standalone components, signals, internationalisation, server-side rendering, a signal-based store, and an Nx-ready workspace layout. </source>
-        <target> Composants autonomes, signaux, internationalisation, rendu côté serveur, un store à base de signaux et une organisation prête pour Nx. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/modern/modern-angular.html</context>
-          <context context-type="linenumber">4,9</context>
         </context-group>
       </trans-unit>
     </body>

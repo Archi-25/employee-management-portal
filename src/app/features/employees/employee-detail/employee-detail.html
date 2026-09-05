@@ -1,0 +1,137 @@
+<header class="page-head detail-head">
+  <div>
+    <a class="back" routerLink="/employees">← Directory</a>
+    <h1>{{ displayName() }}</h1>
+    <p>{{ employee().title }} · {{ employee().department }} · {{ employee().location }}</p>
+  </div>
+
+  <div class="detail-head__actions">
+    <button type="button" class="btn btn--ghost btn--sm" (click)="print()">Print record</button>
+    <button *appHasRole="['MANAGER', 'ADMIN']" type="button" class="btn btn--sm" (click)="edit()">
+      Edit
+    </button>
+    <button
+      *appHasRole="'ADMIN'"
+      type="button"
+      class="btn btn--danger btn--sm"
+      (click)="confirmingDelete.set(true)"
+    >
+      Remove
+    </button>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button type="button" role="tab" [attr.aria-selected]="tab() === 'overview'"
+          [class.is-active]="tab() === 'overview'" (click)="tab.set('overview')">
+    Overview
+  </button>
+  <button type="button" role="tab" [attr.aria-selected]="tab() === 'badge'"
+          [class.is-active]="tab() === 'badge'" (click)="tab.set('badge')">
+    Shareable badge
+  </button>
+  <button type="button" role="tab" [attr.aria-selected]="tab() === 'print'"
+          [class.is-active]="tab() === 'print'" (click)="tab.set('print')">
+    Printable record
+  </button>
+</nav>
+
+@switch (tab()) {
+  @case ('overview') {
+    <div class="layout">
+      <app-card heading="Profile">
+        <app-employee-profile
+          [employee]="employee()"
+          [showSalary]="auth.hasRole('MANAGER')"
+          (edit)="edit()"
+          (remove)="confirmingDelete.set(true)"
+          (noteAdded)="onNoteAdded($event)"
+        >
+          <!-- Projected into the profile's named slots -->
+          <div profile-banner class="banner">
+            Record #{{ employee().id }} · last reviewed by People Ops
+          </div>
+
+          <a profile-actions class="btn btn--ghost btn--sm"
+             [routerLink]="['/departments', employee().department]">
+            View team
+          </a>
+
+          <small profile-footer class="hint">
+            Salary is visible to managers and administrators only.
+          </small>
+        </app-employee-profile>
+      </app-card>
+
+      <aside class="side">
+        <app-card heading="Team" [subtitle]="employee().department">
+          @if (teammates().length) {
+            <ul class="mates">
+              @for (mate of teammates(); track mate.id) {
+                <li>
+                  <a [routerLink]="['/employees', mate.id]">
+                    {{ mate.firstName }} {{ mate.lastName }}
+                  </a>
+                  <small>{{ mate.title }}</small>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="hint">No other members in this department.</p>
+          }
+        </app-card>
+
+        @if (savedNotes().length) {
+          <app-card heading="Notes added this session" [subtitle]="savedNotes().length + ' note(s)'">
+            <ul class="notes">
+              @for (note of savedNotes(); track note.at) {
+                <li>{{ note.text }}</li>
+              }
+            </ul>
+          </app-card>
+        }
+      </aside>
+    </div>
+  }
+
+  @case ('badge') {
+    <app-card
+      heading="Shareable badge"
+      subtitle="Rendered in a shadow root so host styles cannot alter it"
+    >
+      <div class="badge-frame">
+        <app-badge-widget [employee]="employee()" />
+      </div>
+      <p class="hint">
+        This widget is designed to be embedded in other internal tools, so it is isolated from
+        whatever stylesheet surrounds it.
+      </p>
+    </app-card>
+  }
+
+  @case ('print') {
+    <app-card heading="Printable record" subtitle="Uses the document-level print stylesheet">
+      <div class="print-host">
+        <app-print-record [employee]="employee()" />
+      </div>
+      <div class="row">
+        <button type="button" class="btn btn--ghost btn--sm" (click)="print()">Print now</button>
+      </div>
+    </app-card>
+  }
+}
+
+@if (confirmingDelete()) {
+  <app-confirm-dialog
+    heading="Remove employee?"
+    confirmLabel="Remove"
+    (confirmed)="remove()"
+    (cancelled)="confirmingDelete.set(false)"
+  >
+    <p><strong>{{ displayName() }}</strong> will be removed from the directory.</p>
+    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
+            (click)="confirmingDelete.set(false)">
+      Not now
+    </button>
+  </app-confirm-dialog>
+}
