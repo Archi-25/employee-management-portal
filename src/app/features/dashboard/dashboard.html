@@ -28,6 +28,11 @@
     [value]="leave.pendingCount()"
     hint="leave requests"
     accent="#ec835a" />
+  <app-stat-tile
+    label="Online now"
+    [value]="presence()?.onlineNow ?? '—'"
+    [hint]="presence() ? 'live · updates every 5s' : 'connecting…'"
+    accent="#e87ba4" />
 </div>
 
 <div *appHasRole="'EMPLOYEE'; else: signedOut" class="welcome">

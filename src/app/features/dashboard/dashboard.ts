@@ -1,8 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Observer, Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Employee } from '@core/models/employee.model';
 import { AuthService } from '@core/services/auth.service';
+import { HeadcountFeedService, PresenceSnapshot } from '@core/services/headcount-feed.service';
 import { AnnouncementStore } from '@core/state/announcement.store';
 import { AttendanceStore } from '@core/state/attendance.store';
 import { EmployeeStore } from '@core/state/employee.store';
@@ -32,12 +35,19 @@ const RECENT_LIMIT = 5;
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
+export class Dashboard implements OnDestroy {
   protected readonly store = inject(EmployeeStore);
   protected readonly attendance = inject(AttendanceStore);
   protected readonly leave = inject(LeaveStore);
   protected readonly announcements = inject(AnnouncementStore);
   protected readonly auth = inject(AuthService);
+  private readonly feed = inject(HeadcountFeedService);
+
+  private readonly destroy$ = new Subject<void>();
+  private presenceSub: Subscription | null = null;
+
+  /** Live "who is online" figure, pushed by the presence feed. */
+  protected readonly presence = signal<PresenceSnapshot | null>(null);
 
   protected readonly departmentChart = computed<BarDatum[]>(() =>
     this.store.headcountByDepartment().map((row) => ({
@@ -77,6 +87,23 @@ export class Dashboard {
     void this.announcements.load();
     void this.attendance.load();
     void this.leave.load();
+
+    // Explicit Observer: next / error / complete each handled by name.
+    const observer: Observer<PresenceSnapshot> = {
+      next: (snapshot) => this.presence.set(snapshot),
+      error: () => this.presence.set(null),
+      complete: () => this.presence.set(null),
+    };
+
+    this.presenceSub = this.feed.presence().pipe(takeUntil(this.destroy$)).subscribe(observer);
+  }
+
+  ngOnDestroy(): void {
+    // Completing the notifier runs the observable's teardown, which clears the
+    // polling timer — leaving the dashboard genuinely stops the work.
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.presenceSub?.unsubscribe();
   }
 
   protected nameOf(employeeId: number): string {
