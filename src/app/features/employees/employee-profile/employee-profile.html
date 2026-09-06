@@ -1,5 +1,5 @@
 <article class="profile" [class.profile--dense]="dense()">
-  <!-- ng-content slot: caller-supplied banner above everything else -->
+  <!-- Host page can slot a banner above the record -->
   <ng-content select="[profile-banner]" />
 
   <header #profileHeader class="profile__header">
@@ -9,12 +9,11 @@
 
     <div class="identity">
       <h2 class="identity__name">{{ displayName }}</h2>
-      <p class="identity__title">
-        {{ employee.title }} · {{ employee.department }}
-      </p>
+      <p class="identity__title">{{ employee.title }} · {{ employee.department }}</p>
       <div class="identity__meta">
         <span [appRoleBadge]="employee.role"></span>
-        <span class="chip chip--status" [attr.data-status]="employee.status">
+        <span class="chip chip--status" [attr.data-status]="employee.status"
+              [appTooltip]="statusHint">
           {{ employee.status }}
         </span>
         <span class="chip">{{ employee.location }}</span>
@@ -23,7 +22,6 @@
     </div>
 
     <div class="profile__actions">
-      <!-- ng-content slot: host page injects its own buttons here -->
       <ng-content select="[profile-actions]" />
       <button type="button" class="btn" (click)="edit.emit(employee)">Edit</button>
       <button type="button" class="btn btn--danger" (click)="remove.emit(employee)">
@@ -33,7 +31,7 @@
   </header>
 
   <dl class="facts">
-    <div><dt>Email</dt><dd>{{ employee.email }}</dd></div>
+    <div><dt>Email</dt><dd><a [href]="'mailto:' + employee.email">{{ employee.email }}</a></dd></div>
     <div><dt>Joined</dt><dd>{{ employee.joinedOn | date: 'mediumDate' }}</dd></div>
     @if (showSalary()) {
       <div><dt>Salary</dt><dd>{{ employee.salary | currency: 'USD' : 'symbol' : '1.0-0' }}</dd></div>
@@ -42,61 +40,49 @@
   </dl>
 
   <section class="skills">
-    <h3 class="section-title">
-      Skills
-      <small>{{ skillCount() }} chips found by viewChildren()</small>
-    </h3>
+    <h3 class="section-title">Skills</h3>
 
-    <!-- #skillList is a local reference to the plain <ul> element -->
-    <ul #skillList class="skills__list">
-      @for (skill of employee.skills; track skill) {
-        <!-- #skillChip is collected by BOTH @ViewChildren and viewChildren() -->
-        <li #skillChip class="chip chip--skill" tabindex="-1" [appHighlight]="'#e0e7ff'"
-            highlightLabel="skill">
-          {{ skill }}
-        </li>
-      }
-    </ul>
-
-    <div class="row">
-      <button type="button" class="btn btn--ghost" (click)="highlightFirstSkill()">
-        Focus first chip (&#64;ViewChildren)
-      </button>
-      <button type="button" class="btn btn--ghost" (click)="skillList.scrollIntoView()">
-        Scroll to list (local ref)
-      </button>
-      @if (lastFocusedSkill(); as skill) {
-        <span class="hint">Focused: <strong>{{ skill }}</strong></span>
-      }
-    </div>
+    @if (employee.skills.length) {
+      <!-- Arrow keys move between chips; the directive queries them to do it. -->
+      <ul #skillList class="skills__list" role="listbox" aria-label="Skills" tabindex="-1"
+          (keydown)="onSkillKeydown($event)">
+        @for (skill of employee.skills; track skill) {
+          <li #skillChip class="chip chip--skill" role="option" tabindex="0"
+              [attr.aria-selected]="false">
+            {{ skill }}
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">No skills recorded.</p>
+    }
   </section>
 
-  <section class="bio">
-    <h3 class="section-title">Biography</h3>
-    <!-- Interpolation escapes the markup. The Security module renders the same
-         field through DomSanitizer to show the difference. -->
-    <p class="bio__raw">{{ employee.bioHtml }}</p>
-  </section>
+  @if (employee.bioHtml) {
+    <section class="bio">
+      <h3 class="section-title">Biography</h3>
+      <!-- Author-written rich text: Angular sanitises it before it reaches the DOM. -->
+      <div class="bio__body" [innerHTML]="employee.bioHtml"></div>
+    </section>
+  }
 
   <section class="notes">
     <h3 class="section-title">Private notes</h3>
+
     <textarea
       #noteBox
       class="notes__input"
       rows="2"
-      placeholder="Add a note, then press Save"
+      aria-label="Add a private note"
+      placeholder="Add a note about this employee…"
       (keydown.enter)="addNote(noteBox)"
     ></textarea>
 
     <div class="row">
       <button type="button" class="btn" (click)="addNote(noteBox)">Save note</button>
-      <button type="button" class="btn btn--ghost" (click)="focusNote(noteBox)">
-        Focus (local ref)
-      </button>
-      <button type="button" class="btn btn--ghost" (click)="clearNoteViaViewChild()">
-        Clear (&#64;ViewChild)
-      </button>
-      <span class="hint">Header measured at {{ measuredHeaderWidth() }}px</span>
+      @if (notes().length) {
+        <button type="button" class="btn btn--ghost" (click)="clearNotes()">Clear all</button>
+      }
     </div>
 
     @if (notes().length) {
@@ -106,18 +92,16 @@
         }
       </ul>
     } @else {
-      <p class="hint">No notes yet.</p>
+      <p class="hint">No notes yet. Notes are visible to managers only.</p>
     }
   </section>
 
-  <!-- Default (catch-all) slot: anything not matching a select above -->
+  <!-- Catch-all slot -->
   <div class="projected">
     <ng-content />
   </div>
 
   <footer class="profile__footer">
-    <ng-content select="[profile-footer]">
-      <span class="hint">Default footer — replaced when content is projected.</span>
-    </ng-content>
+    <ng-content select="[profile-footer]" />
   </footer>
 </article>

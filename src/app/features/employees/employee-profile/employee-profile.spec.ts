@@ -73,13 +73,35 @@ describe('EmployeeProfile', () => {
     expect(element.querySelector('.profile__footer > #footer')).not.toBeNull();
   });
 
-  it('collects skill chips with both @ViewChildren and viewChildren()', async () => {
+  it('renders one focusable chip per skill', async () => {
     const { fixture, element } = await setup();
     const profile = fixture.debugElement.children[0].componentInstance as EmployeeProfile;
 
-    expect(element.querySelectorAll('.chip--skill').length).toBe(EMPLOYEE.skills.length);
+    const chips = element.querySelectorAll('.chip--skill');
+    expect(chips.length).toBe(EMPLOYEE.skills.length);
     expect(profile.skillChips?.length).toBe(EMPLOYEE.skills.length);
-    expect(profile.skillChipSignals().length).toBe(EMPLOYEE.skills.length);
+    expect((chips[0] as HTMLElement).getAttribute('tabindex')).toBe('0');
+  });
+
+  it('moves focus between skill chips with the arrow keys', async () => {
+    const { fixture, element } = await setup();
+
+    const chips = [...element.querySelectorAll('.chip--skill')] as HTMLElement[];
+    const list = element.querySelector('.skills__list') as HTMLElement;
+
+    chips[0].focus();
+    list.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(chips[1]);
+
+    list.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(chips[chips.length - 1]);
+
+    // Wraps around from the last chip back to the first.
+    list.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(chips[0]);
   });
 
   it('resolves the @ViewChild handle to the note textarea', async () => {
@@ -88,6 +110,28 @@ describe('EmployeeProfile', () => {
 
     expect(profile.noteBoxRef?.nativeElement.tagName).toBe('TEXTAREA');
     expect(profile.headerRef()?.nativeElement).not.toBeNull();
+  });
+
+  it('clears saved notes and returns focus to the input', async () => {
+    const { fixture, element } = await setup();
+    const textarea = element.querySelector('textarea') as HTMLTextAreaElement;
+
+    textarea.value = 'Discussed promotion';
+    const save = [...element.querySelectorAll('button')].find(
+      (button) => button.textContent?.trim() === 'Save note',
+    );
+    save?.click();
+    await fixture.whenStable();
+    expect(element.querySelectorAll('.notes__list li').length).toBe(1);
+
+    const clear = [...element.querySelectorAll('button')].find(
+      (button) => button.textContent?.trim() === 'Clear all',
+    );
+    clear?.click();
+    await fixture.whenStable();
+
+    expect(element.querySelectorAll('.notes__list li').length).toBe(0);
+    expect(document.activeElement).toBe(textarea);
   });
 
   it('emits the decorator @Output when Edit is pressed', async () => {
@@ -155,11 +199,13 @@ describe('EmployeeProfile', () => {
     expect(element.textContent).not.toContain('Salary');
   });
 
-  it('escapes the bio instead of parsing it as markup', async () => {
+  it('renders the bio as rich text but strips the hostile payload', async () => {
     const { element } = await setup();
-    const bio = element.querySelector('.bio__raw');
+    const bio = element.querySelector('.bio__body');
 
-    expect(bio?.textContent).toContain('onerror');
-    expect(bio?.querySelector('img')).toBeNull();
+    // Legitimate markup survives...
+    expect(bio?.querySelector('p')).not.toBeNull();
+    // ...and the event handler does not reach the DOM.
+    expect(bio?.innerHTML).not.toContain('onerror');
   });
 });

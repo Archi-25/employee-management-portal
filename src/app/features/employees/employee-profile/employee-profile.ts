@@ -10,15 +10,14 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
-  computed,
   input,
   output,
   signal,
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { Employee, Role, fullName } from '@core/models/employee.model';
-import { HighlightDirective } from '@shared/directives/highlight.directive';
+import { Employee, fullName } from '@core/models/employee.model';
+import { TooltipDirective } from '@shared/directives/tooltip.directive';
 import { RoleBadgeDirective } from '@shared/directives/role-badge.directive';
 import { InitialsPipe } from '@shared/pipes/initials.pipe';
 import { TenurePipe } from '@shared/pipes/tenure.pipe';
@@ -30,16 +29,12 @@ export interface ProfileNote {
 }
 
 /**
- * MODULE 1 — the reference component for template interaction.
+ * An employee's record card: identity, key facts, skills, biography and the
+ * private notes a manager keeps against them.
  *
- * Demonstrates, in one place:
- *  - `@Input()` / `@Output()` (decorator form) alongside `input()` / `output()`
- *    (signal form), so both APIs are visible side by side;
- *  - `@ViewChild` / `@ViewChildren` (QueryList) alongside the signal queries
- *    `viewChild()` / `viewChildren()`;
- *  - template local references (`#noteBox`, `#skillList`) passed straight into
- *    handlers without any TypeScript query at all;
- *  - `<ng-content>` projection with named slots.
+ * Reused on the employee detail page and anywhere else a full record is shown.
+ * The host supplies its own banner, actions and footer through the projection
+ * slots, so the same component serves different surrounding pages.
  */
 @Component({
   selector: 'app-employee-profile',
@@ -49,7 +44,7 @@ export interface ProfileNote {
     DatePipe,
     InitialsPipe,
     TenurePipe,
-    HighlightDirective,
+    TooltipDirective,
     RoleBadgeDirective,
   ],
   templateUrl: './employee-profile.html',
@@ -76,7 +71,6 @@ export class EmployeeProfile implements AfterViewInit {
   /** Signal outputs — same wire format, less boilerplate. */
   readonly remove = output<Employee>();
   readonly noteAdded = output<ProfileNote>();
-  readonly roleRequested = output<Role>();
 
   // --------------------------------------------------------------- queries --
   /** Decorator query for a DOM element. */
@@ -88,46 +82,61 @@ export class EmployeeProfile implements AfterViewInit {
   readonly headerRef = viewChild<ElementRef<HTMLElement>>('profileHeader');
   readonly skillChipSignals = viewChildren<ElementRef<HTMLElement>>('skillChip');
 
-  protected readonly skillCount = computed(() => this.skillChipSignals().length);
   protected readonly notes = signal<ProfileNote[]>([]);
-  protected readonly measuredHeaderWidth = signal(0);
-  protected readonly lastFocusedSkill = signal<string | null>(null);
 
   protected get displayName(): string {
     return fullName(this.employee);
   }
 
+  protected get statusHint(): string {
+    const hints: Record<Employee['status'], string> = {
+      ACTIVE: 'Currently working',
+      ON_LEAVE: 'On approved leave',
+      PROBATION: 'Within probation period',
+      EXITED: 'No longer with the company',
+    };
+    return hints[this.employee.status];
+  }
+
   ngAfterViewInit(): void {
-    // `@ViewChild` results are only guaranteed here — before this hook they are
-    // undefined. Signal queries (`headerRef()`) have no such restriction.
-    this.measuredHeaderWidth.set(
-      Math.round(this.headerRef()?.nativeElement.getBoundingClientRect().width ?? 0),
-    );
+    // @ViewChild results are only guaranteed from this hook onwards.
+    this.noteBoxRef?.nativeElement.setAttribute('data-ready', 'true');
   }
 
-  /** Called with a template local reference — no query required. */
-  protected focusNote(noteBox: HTMLTextAreaElement): void {
-    noteBox.focus();
-    noteBox.select();
-  }
-
-  /** Uses the decorator `@ViewChild` handle instead. */
-  protected clearNoteViaViewChild(): void {
-    const element = this.noteBoxRef?.nativeElement;
-    if (element) {
-      element.value = '';
-      element.focus();
-    }
-  }
-
-  /** Walks the `QueryList` from `@ViewChildren`. */
-  protected highlightFirstSkill(): void {
-    const first = this.skillChips?.first?.nativeElement;
-    if (!first) {
+  /**
+   * Roving-tabindex keyboard navigation across the skill chips. This is what the
+   * `@ViewChildren` QueryList is for: the handler needs the live list of chip
+   * elements to decide which one to focus next.
+   */
+  protected onSkillKeydown(event: KeyboardEvent): void {
+    const chips = this.skillChips?.map((ref) => ref.nativeElement) ?? [];
+    if (chips.length === 0) {
       return;
     }
-    first.focus();
-    this.lastFocusedSkill.set(first.textContent?.trim() ?? null);
+
+    const current = chips.indexOf(document.activeElement as HTMLElement);
+    let next: number;
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      next = (current + 1) % chips.length;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      next = (current - 1 + chips.length) % chips.length;
+    } else if (event.key === 'Home') {
+      next = 0;
+    } else if (event.key === 'End') {
+      next = chips.length - 1;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    chips[next]?.focus();
+  }
+
+  /** Clears the notes list and returns focus to the input via @ViewChild. */
+  protected clearNotes(): void {
+    this.notes.set([]);
+    this.noteBoxRef?.nativeElement.focus();
   }
 
   protected addNote(noteBox: HTMLTextAreaElement): void {
@@ -139,5 +148,6 @@ export class EmployeeProfile implements AfterViewInit {
     this.notes.update((list) => [note, ...list]);
     this.noteAdded.emit(note);
     noteBox.value = '';
+    noteBox.focus();
   }
 }

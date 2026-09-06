@@ -32,11 +32,11 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         <ng-content />
       </div>
 
-      @if (hasFooter()) {
-        <footer class="card__foot">
-          <ng-content select="[card-footer]" />
-        </footer>
-      }
+      <!-- Always rendered; collapses itself when nothing is projected, so a
+           caller never has to remember to announce that it has a footer. -->
+      <footer class="card__foot">
+        <ng-content select="[card-footer]" />
+      </footer>
     </section>
   `,
   styles: `
@@ -72,11 +72,13 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       padding-top: 0.75rem;
       border-top: 1px dashed var(--border);
     }
+    .card__foot:empty {
+      display: none;
+    }
   `,
 })
 export class Card {
   /** Fallback heading, used when no `[card-title]` content is projected. */
   readonly heading = input('');
   readonly subtitle = input('');
-  readonly hasFooter = input(false);
 }

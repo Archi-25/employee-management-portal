@@ -13,12 +13,11 @@ import { Card } from '@shared/components/card/card';
     <header class="page-head">
       <h1 i18n="@@login.title">Sign in</h1>
       <p i18n="@@login.subtitle">
-        No password required — pick a role and the whole portal reacts: guards, structural
-        directives, the Authorization header and the salary column all follow it.
+        Choose the role you want to sign in as. Your role decides what you can see and change.
       </p>
     </header>
 
-    <app-card heading="Session" subtitle="Stored in a signal, not in localStorage">
+    <app-card heading="Session" subtitle="Your session lasts until you reload the page">
       <label class="field">
         <span i18n="@@login.name">Display name</span>
         <input [(ngModel)]="name" name="name" autocomplete="name" />

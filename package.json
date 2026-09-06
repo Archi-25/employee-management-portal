@@ -55,6 +55,7 @@
     "eslint": "^10.9.0",
     "jsdom": "^28.0.0",
     "nx": "23.2.0",
+    "playwright": "^1.63.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "8.67.0",
