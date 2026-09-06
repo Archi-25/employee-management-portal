@@ -16,7 +16,7 @@
     "format:check": "prettier --check \"src/**/*.{ts,html,css,json}\"",
     "extract-i18n": "nx extract-i18n",
     "serve:ssr": "node dist/employee-management-portal/server/server.mjs",
-    "sonar": "sonar-scanner",
+    "sonar": "sonar-scanner || echo \"sonar-scanner not installed \u2014 see sonar-project.properties\"",
     "nx:build": "nx build employee-management-portal",
     "nx:graph": "nx graph",
     "serve:ssr:fr": "node dist/employee-management-portal/server/fr/server.mjs"
