@@ -69,7 +69,7 @@
   <div class="sub">Viva Preparation &amp; Complete Project Walkthrough</div>
   <div class="meta">
     Angular 22 &middot; Standalone &middot; Zoneless &middot; SSR &middot; Nx workspace<br>
-    98 TypeScript files &middot; ~11,000 lines &middot; 100 tests<br>
+    98 TypeScript files &middot; ~11,000 lines &middot; 160 tests<br>
     Angular Advanced Training — Practical Assessment
   </div>
 </div>
@@ -137,7 +137,7 @@
   <tr><th>Metric</th><th>Value</th></tr>
   <tr><td>TypeScript files</td><td>98</td></tr>
   <tr><td>Total lines (TS + HTML + CSS)</td><td>~11,000</td></tr>
-  <tr><td>Tests</td><td>100, across 12 files</td></tr>
+  <tr><td>Tests</td><td>160, across 18 files</td></tr>
   <tr><td>Initial bundle</td><td>~113 kB gzipped</td></tr>
   <tr><td>Screens</td><td>Dashboard, Employees, Attendance, Leave, Departments, Admin (5 sub-pages), Settings, Login</td></tr>
   <tr><td>Seeded records</td><td>16 employees, 7 departments, ~130 attendance rows, 6 leave requests</td></tr>
@@ -620,12 +620,18 @@ which I enforce with lint rules. Nx earns its keep with fifteen apps in a monore
 it's mostly the caching.
 </div>
 
-<div class="q"><span class="qq">Your test coverage is 75%. Why not higher?</span>
-The 25% is almost entirely feature components — screens. What is covered is the part where bugs
-are expensive: the whole interceptor chain, every store, the guards, the directives, DI
-resolution, and the profile component. I'd rather have 100 meaningful tests than 400 that assert
-a template rendered. If I had another day I'd add component tests for the attendance and leave
-screens, because those have real logic in them.
+<div class="q"><span class="qq">Talk me through your testing.</span>
+160 tests across 18 files, about 83% line coverage. The priority was the places where bugs are
+expensive rather than the places that are easy to test: the whole interceptor chain against the
+real backend, every store, the guards, all six directives, DI resolution, and the screens with
+actual logic — pagination and sorting, the ten form validation rules, leave approvals deducting
+the right balance, and attendance scoping so an employee cannot see a colleague's rows.
+<br><br>
+Several tests exist because they caught something. The role-gating tests were written after I
+found the profile card rendering Edit and Remove with no permission check at all. The
+click-outside tests were written after I found the row menu never opened. What is still thin is
+the presentational components — the card, the tiles — which I'd rather leave untested than pad
+the number with assertions that a template rendered.
 </div>
 
 <h3>If they push on weaknesses</h3>
@@ -709,7 +715,7 @@ npm start            →  http://localhost:4200
 <h3>If you have a terminal on screen</h3>
 <pre>
 npm run verify     # 72 module requirements + 73 feature items, all passing
-npm test           # 100 tests
+npm test           # 160 tests
 npm run build      # then run it again — Nx cache, 4.2s → 0.6s
 </pre>
 
@@ -767,7 +773,7 @@ npm run build      # then run it again — Nx cache, 4.2s → 0.6s
 
 <h3>Commands</h3>
 <pre>
-npm start          dev server              npm test        100 tests
+npm start          dev server              npm test        160 tests
 npm run build      production + SSR        npm run lint    ESLint + a11y
 npm run verify     requirement checklist   npm run build:i18n   en-US + fr
 npm run serve:ssr  run the built server    npx nx graph    task graph
@@ -793,7 +799,7 @@ npm run serve:ssr  run the built server    npx nx graph    task graph
 
 <h3>Numbers</h3>
 <table>
-  <tr><td>98 TypeScript files</td><td>~11,000 lines</td><td>100 tests, 12 files</td></tr>
+  <tr><td>98 TypeScript files</td><td>~11,000 lines</td><td>160 tests, 18 files</td></tr>
   <tr><td>113 kB gzipped initial</td><td>16 employees, 7 departments</td><td>31 translated messages</td></tr>
   <tr><td>6 SignalStores</td><td>6 custom directives</td><td>5 interceptors</td></tr>
 </table>

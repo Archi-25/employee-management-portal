@@ -228,7 +228,7 @@ merely documented: `no-restricted-imports` rules in `eslint.config.js` fail
 
 ## Tests
 
-`npm test` — 100 tests across 12 files:
+`npm test` — 160 tests across 18 files:
 
 | File | Covers |
 | --- | --- |
@@ -244,6 +244,12 @@ merely documented: `no-restricted-imports` rules in `eslint.config.js` fail
 | `features/announcements/announcement-panel.spec.ts` | Ordering, rendering, and that the stored XSS payload never reaches the DOM |
 | `core/change-detection.spec.ts` | Default vs OnPush, including the in-place-mutation failure mode |
 | `shared/directives/click-outside.spec.ts` | Row action menus open, switch, and close on an outside click |
+| `features/employees/employee-list.spec.ts` | Pagination, sorting, filtering, empty state, role-gated columns and menus, delete flow |
+| `features/employees/employee-form.spec.ts` | All ten validation rules, submit blocking, create, edit pre-fill, unsaved-changes |
+| `features/attendance/attendance-page.spec.ts` | Day summaries, attendance rate, status filter, and that an employee sees only their own rows |
+| `features/leave/leave-page.spec.ts` | Role-scoped lists, approve/reject, balance deduction, working-day counting |
+| `features/departments/department-list.spec.ts` | Headcount, department head, admin-only CRUD, delete refused while staffed |
+| `features/dashboard/dashboard.spec.ts` | KPI tiles, chart bars and table view, joiners, birthdays, announcement sanitisation |
 
 ## Data visualisation
 

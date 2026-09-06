@@ -121,7 +121,7 @@ Sign in with any of the demo accounts shown on the login page; the password is
 | `npm run build` | Production build — browser + server bundles |
 | `npm run build:i18n` | Production build emitting `en-US` **and** `fr` |
 | `npm run serve:ssr` | Run the built SSR server (port 4000) |
-| `npm test` | Unit tests with coverage |
+| `npm test` | 160 unit tests with coverage |
 | `npm run verify` | Check every assessment requirement against the source |
 | `npm run viva` | Rebuild `docs/VIVA-GUIDE.pdf` from `docs/viva-guide.html` |
 | `npm run lint` | ESLint over TypeScript and templates |
