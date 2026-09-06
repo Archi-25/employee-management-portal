@@ -21,7 +21,8 @@
     "nx:graph": "nx graph",
     "serve:ssr:fr": "node dist/employee-management-portal/server/fr/server.mjs",
     "verify": "bash scripts/verify-requirements.sh",
-    "viva": "node scripts/build-viva-pdf.mjs"
+    "viva": "node scripts/build-viva-pdf.mjs",
+    "simple": "node scripts/build-simple-pdf.mjs"
   },
   "private": true,
   "packageManager": "npm@12.0.2",

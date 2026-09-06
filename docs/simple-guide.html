@@ -1,0 +1,1911 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Employee Management Portal — The Simple Guide</title>
+<style>
+  @page { size: A4; margin: 15mm 13mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 10.4pt; line-height: 1.55; color: #16202c; margin: 0;
+  }
+  h1 { font-size: 20pt; margin: 0 0 4pt; letter-spacing: -0.4pt; }
+  h2 {
+    font-size: 15pt; margin: 20pt 0 8pt; padding-bottom: 4pt;
+    border-bottom: 2.5px solid #2a78d6; color: #10141c; page-break-after: avoid;
+  }
+  h3 { font-size: 12pt; margin: 15pt 0 5pt; color: #1c4e8a; page-break-after: avoid; }
+  h4 {
+    font-size: 10.6pt; margin: 11pt 0 3pt; color: #10141c; page-break-after: avoid;
+    font-family: "SF Mono", Menlo, Consolas, monospace; background: #eef2f7;
+    padding: 3pt 6pt; border-radius: 3px; border-left: 3px solid #2a78d6;
+  }
+  p, li { orphans: 3; widows: 3; }
+  p { margin: 5pt 0; }
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 8.9pt;
+    background: #eef2f7; padding: 1pt 3pt; border-radius: 3px; color: #10141c;
+  }
+  pre {
+    background: #f5f7fa; border: 1px solid #dfe5ee; border-left: 3px solid #2a78d6;
+    border-radius: 4px; padding: 7pt 9pt; font-family: "SF Mono", Menlo, monospace;
+    font-size: 8.5pt; line-height: 1.5; overflow-x: auto; page-break-inside: avoid;
+    margin: 6pt 0; white-space: pre-wrap;
+  }
+  pre .cm { color: #6b7383; }
+  table { width: 100%; border-collapse: collapse; margin: 7pt 0; font-size: 9.3pt; page-break-inside: avoid; }
+  th, td { text-align: left; padding: 4pt 6pt; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f5f7fa; font-weight: 600; font-size: 8.7pt; text-transform: uppercase; letter-spacing: 0.4pt; color: #48505e; }
+  td code { font-size: 8.3pt; }
+  table.lines td:first-child { width: 42%; }
+  table.lines td:first-child code { background: none; padding: 0; color: #1c4e8a; }
+  .cover { text-align: center; padding-top: 48mm; page-break-after: always; }
+  .cover .mark {
+    display: inline-block; background: #2a78d6; color: #fff; font-weight: 700;
+    letter-spacing: 2pt; padding: 6pt 12pt; border-radius: 6px; font-size: 12pt;
+  }
+  .cover h1 { font-size: 27pt; margin: 14pt 0 6pt; }
+  .cover .sub { color: #48505e; font-size: 13pt; }
+  .cover .meta { margin-top: 26pt; color: #6b7383; font-size: 9.5pt; line-height: 1.9; }
+  .page-break { page-break-before: always; }
+  .plain {
+    background: #eef7ee; border-left: 3px solid #0ca30c; padding: 6pt 9pt;
+    margin: 6pt 0; border-radius: 0 4px 4px 0; page-break-inside: avoid;
+  }
+  .plain strong:first-child { color: #0a6b0a; }
+  .warn {
+    background: #fdf6e7; border-left: 3px solid #fab219; padding: 6pt 9pt;
+    margin: 6pt 0; border-radius: 0 4px 4px 0; page-break-inside: avoid;
+  }
+  .warn strong:first-child { color: #8a5d00; }
+  .def {
+    background: #f5f7fa; border: 1px solid #dfe5ee; border-radius: 5px;
+    padding: 7pt 10pt; margin: 6pt 0; page-break-inside: avoid;
+  }
+  .def .word { font-weight: 700; color: #1c4e8a; }
+  ul, ol { margin: 5pt 0; padding-left: 16pt; }
+  li { margin-bottom: 3pt; }
+  .toc { column-count: 2; column-gap: 12mm; font-size: 9.6pt; }
+  .toc a { color: #16202c; text-decoration: none; display: block; margin-bottom: 3pt; }
+  .toc .lvl2 { font-weight: 700; margin-top: 7pt; color: #1c4e8a; }
+  .lead { font-size: 11pt; color: #48505e; }
+  .filemeta { font-size: 8.8pt; color: #6b7383; margin: 0 0 4pt; }
+  .job { background: #eaf2fd; border-radius: 4px; padding: 5pt 8pt; margin: 4pt 0 6pt; font-size: 9.8pt; }
+  .job strong { color: #1c4e8a; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <span class="mark">EMP</span>
+  <h1>Employee Management Portal</h1>
+  <div class="sub">The Simple Guide &mdash; every file, in plain English</div>
+  <div class="meta">
+    Written for someone who is new to Angular.<br>
+    Nothing is assumed. Every word is explained the first time it appears.<br><br>
+    Angular 22 &middot; TypeScript &middot; 136 files &middot; ~11,900 lines
+  </div>
+</div>
+
+<h2 id="how">0. How to read this document</h2>
+<p class="lead">
+  This guide explains the whole project as if you had never written a line of Angular.
+  It is deliberately slow. If you already know a word, skip that box &mdash; but every word
+  <em>is</em> explained somewhere, and nothing later depends on knowledge you were never given.
+</p>
+
+<p>Read it in this order:</p>
+<ol>
+  <li><strong>Part 1</strong> is a dictionary. Read it once, quickly. Do not try to memorise it &mdash;
+      just get familiar with the words so they are not strangers later.</li>
+  <li><strong>Part 2</strong> shows the whole app from above: what it does and how the folders are arranged.</li>
+  <li><strong>Part 3</strong> follows one single button click all the way through the app and back.
+      This is the most valuable page in the document. If you understand Part 3, everything else is detail.</li>
+  <li><strong>Parts 4&ndash;9</strong> go file by file. Each file gets: what it is, why it exists,
+      and a table explaining its important lines.</li>
+</ol>
+
+<div class="plain">
+  <strong>Green boxes</strong> translate technical wording into everyday language.
+</div>
+<div class="warn">
+  <strong>Amber boxes</strong> are warnings, gotchas, or "this looks strange but here is why".
+</div>
+<div class="def">
+  <span class="word">Grey boxes</span> define a new word the moment it first appears.
+</div>
+
+<h3>Contents</h3>
+<div class="toc">
+  <a class="lvl2" href="#dict">1. The dictionary</a>
+  <a href="#d-basics">1.1 Basic web words</a>
+  <a href="#d-ts">1.2 TypeScript words</a>
+  <a href="#d-ng">1.3 Angular words</a>
+  <a href="#d-reactive">1.4 Signals &amp; observables</a>
+  <a href="#d-http">1.5 HTTP words</a>
+  <a class="lvl2" href="#big">2. The big picture</a>
+  <a class="lvl2" href="#story">3. One click, start to finish</a>
+  <a class="lvl2" href="#f-root">4. The starting files</a>
+  <a class="lvl2" href="#f-models">5. core/ &mdash; the brain</a>
+  <a href="#f-models">5.1 models &mdash; the shapes</a>
+  <a href="#f-tokens">5.2 tokens &mdash; named settings</a>
+  <a href="#f-services">5.3 services &mdash; the workers</a>
+  <a href="#f-state">5.4 state &mdash; the memory</a>
+  <a href="#f-http2">5.5 interceptors &mdash; the checkpoints</a>
+  <a href="#f-guards">5.6 guards &amp; resolvers</a>
+  <a class="lvl2" href="#f-shared">6. shared/ &mdash; reusable parts</a>
+  <a href="#f-comp">6.1 components</a>
+  <a href="#f-dir">6.2 directives</a>
+  <a href="#f-pipes">6.3 pipes</a>
+  <a class="lvl2" href="#f-feat">7. features/ &mdash; the screens</a>
+  <a href="#f-login">7.1 Login</a>
+  <a href="#f-dash">7.2 Dashboard</a>
+  <a href="#f-emp">7.3 Employees</a>
+  <a href="#f-dept">7.4 Departments</a>
+  <a href="#f-att">7.5 Attendance &amp; Leave</a>
+  <a href="#f-admin">7.6 Admin area</a>
+  <a href="#f-misc">7.7 Settings &amp; error pages</a>
+  <a class="lvl2" href="#f-test">8. Testing files</a>
+  <a class="lvl2" href="#f-config">9. Configuration files</a>
+  <a class="lvl2" href="#recap">10. Recap tables</a>
+</div>
+
+<div class="page-break"></div>
+<h2 id="dict">1. The dictionary</h2>
+<p class="lead">
+  Every word this project uses, explained once, properly. Read it top to bottom. It will feel
+  like a lot &mdash; but each entry is three sentences, and you will meet all of them again later.
+</p>
+
+<h3 id="d-basics">1.1 Basic web words</h3>
+
+<div class="def"><span class="word">HTML</span> &mdash; the language that describes <em>what is on a page</em>:
+a heading, a paragraph, a button. It is a list of nested tags like <code>&lt;button&gt;Save&lt;/button&gt;</code>.
+Think of it as the skeleton.</div>
+
+<div class="def"><span class="word">CSS</span> &mdash; the language that describes <em>how the page looks</em>:
+colours, spacing, size, fonts. Think of it as the clothes on the skeleton.</div>
+
+<div class="def"><span class="word">JavaScript</span> &mdash; the language that describes <em>what the page does</em>
+when you interact with it: what happens when you click, type, or scroll. Think of it as the muscles.</div>
+
+<div class="def"><span class="word">DOM</span> (Document Object Model) &mdash; the live, in-memory version of the
+page that the browser actually keeps while the page is open. When we say "put it in the DOM",
+we mean "make it really appear on screen". When we say "removed from the DOM", the element does not
+exist at all &mdash; it is not merely hidden.</div>
+
+<div class="def"><span class="word">Browser</span> &mdash; Chrome, Safari, Firefox. It downloads your files,
+builds the DOM, and runs your JavaScript.</div>
+
+<div class="def"><span class="word">Server</span> &mdash; another computer, somewhere else, that sends the
+browser its files and data. In this project the "server" is faked (explained later), but the code is
+written exactly as if it were real.</div>
+
+<div class="def"><span class="word">API</span> (Application Programming Interface) &mdash; the set of web
+addresses the server offers for data, for example <code>/api/employees</code>. The browser asks those
+addresses for data instead of asking for a whole page.</div>
+
+<div class="def"><span class="word">URL / route</span> &mdash; the address in the browser bar, e.g.
+<code>/employees/7/edit</code>. In this app, the part after the domain decides which screen you see.
+A <em>route</em> is one rule that maps one URL pattern to one screen.</div>
+
+<div class="def"><span class="word">localStorage</span> &mdash; a small notepad the browser keeps on your own
+computer, per website. Anything you write there survives closing the tab. This app uses it to remember
+who is signed in and which theme you chose.</div>
+
+<div class="def"><span class="word">JSON</span> &mdash; a plain-text way of writing data that looks like
+JavaScript objects: <code>{"name": "Mei", "age": 30}</code>. It is how data travels between browser and server.</div>
+
+<h3 id="d-ts">1.2 TypeScript words</h3>
+
+<div class="def"><span class="word">TypeScript</span> &mdash; JavaScript with <em>types</em> added. You write
+TypeScript; a tool converts ("compiles") it into plain JavaScript that browsers understand. The whole
+point is that mistakes are caught while you type instead of when a user clicks.</div>
+
+<div class="def"><span class="word">Type</span> &mdash; a label saying what kind of value something is:
+<code>string</code> (text), <code>number</code>, <code>boolean</code> (true/false). If you promise a
+number and hand over text, the compiler stops you.</div>
+
+<div class="def"><span class="word">interface</span> &mdash; a description of the <em>shape</em> of an object:
+which fields it must have and of what type. It is a contract only; it disappears completely when the code is
+compiled. Example from this project:
+<pre>interface Address {
+  line1: string;
+  city: string;
+  state: string;
+  pincode: string;
+}</pre>
+Now anything typed <code>Address</code> must have exactly those four text fields.</div>
+
+<div class="def"><span class="word">type alias</span> (the <code>type</code> keyword) &mdash; a nickname for a type.
+It can also list the only allowed values, which is how this project defines roles:
+<pre>type Role = 'GUEST' | 'EMPLOYEE' | 'MANAGER' | 'ADMIN';</pre>
+The <code>|</code> means "or". A <code>Role</code> can only ever be one of those four exact strings. Typing
+<code>'ADMINN'</code> becomes an error before the app ever runs.</div>
+
+<div class="def"><span class="word">class</span> &mdash; a blueprint that bundles data and the functions that
+work on it. Every screen in this project is a class.</div>
+
+<div class="def"><span class="word">readonly</span> &mdash; "this can be set once and never changed afterwards".
+A safety label.</div>
+
+<div class="def"><span class="word">private / protected / public</span> &mdash; who is allowed to touch a field.
+<code>private</code> = only this class. <code>protected</code> = this class and its HTML template.
+<code>public</code> (the default) = anyone. This project uses <code>protected</code> for anything the
+template needs and <code>private</code> for everything else.</div>
+
+<div class="def"><span class="word">Omit&lt;A, 'b'&gt;</span> &mdash; a built-in helper meaning "the type A, but
+without field b". This project writes <code>type EmployeeDraft = Omit&lt;Employee, 'id'&gt;</code>, which
+means "an employee that does not have an id yet" &mdash; exactly what you have before saving a new person,
+because the id is assigned by the server.</div>
+
+<div class="def"><span class="word">Partial&lt;A&gt;</span> &mdash; "the type A, but every field is optional".
+Used when you are updating only some fields.</div>
+
+<div class="def"><span class="word">Record&lt;K, V&gt;</span> &mdash; "an object whose keys are of type K and whose
+values are of type V". <code>Record&lt;Role, number&gt;</code> means an object with one number for each role.</div>
+
+<div class="def"><span class="word">Generic</span> (the <code>&lt;T&gt;</code> brackets) &mdash; a type with a blank
+to be filled in later. <code>Page&lt;Employee&gt;</code> means "a Page of Employees"; <code>Page&lt;Announcement&gt;</code>
+means "a Page of Announcements". One definition, many uses.</div>
+
+<div class="def"><span class="word">?.</span> (optional chaining) &mdash; "read this, but if the thing on the left
+is missing, just give me nothing instead of crashing". <code>employee?.name</code> is safe even when
+<code>employee</code> is null.</div>
+
+<div class="def"><span class="word">??</span> (nullish coalescing) &mdash; "use the left value, unless it is
+missing, in which case use the right one". <code>name ?? 'Guest'</code>.</div>
+
+<div class="def"><span class="word">...</span> (spread) &mdash; "copy everything out of this". <code>{ ...person, city: 'Pune' }</code>
+means "a new object with all of person's fields, except city is now Pune". The original is untouched &mdash;
+this is how the project changes data without editing it in place.</div>
+
+<div class="def"><span class="word">async / await / Promise</span> &mdash; a <code>Promise</code> is a receipt for a
+value that will exist later (for example, data still travelling from the server). <code>await</code> means
+"pause here until the receipt is honoured", and a function containing <code>await</code> must be marked
+<code>async</code>. It lets slow code be written in a straight line.</div>
+
+<div class="def"><span class="word">Arrow function</span> &mdash; a short way to write a function:
+<code>(x) =&gt; x * 2</code> is a function that doubles its input.</div>
+
+<h3 id="d-ng">1.3 Angular words</h3>
+
+<div class="def"><span class="word">Angular</span> &mdash; the framework this project is built with. A framework is
+a large pre-written toolkit that gives you structure: how to split a page into pieces, how to fetch data,
+how to move between screens. You write your parts; Angular runs them.</div>
+
+<div class="def"><span class="word">Component</span> &mdash; the basic building block. One component = one piece of
+screen. It has three parts: a <em>template</em> (its HTML), <em>styles</em> (its CSS), and a <em>class</em>
+(its TypeScript logic and data). A page is components inside components inside components.</div>
+
+<div class="def"><span class="word">Template</span> &mdash; a component's HTML, with extra Angular syntax mixed in
+so it can show live data.</div>
+
+<div class="def"><span class="word">Decorator</span> &mdash; a line beginning with <code>@</code> written directly
+above a class, which tells Angular what the class <em>is</em>. <code>@Component</code> says "this is a screen piece",
+<code>@Injectable</code> says "this is a shared worker", <code>@Directive</code> says "this adds behaviour to an element".
+Think of it as a label on a box.</div>
+
+<div class="def"><span class="word">selector</span> &mdash; the HTML tag name you use to place a component.
+If a component declares <code>selector: 'app-card'</code>, you drop it into any template by writing
+<code>&lt;app-card&gt;&lt;/app-card&gt;</code>.</div>
+
+<div class="def"><span class="word">Standalone component</span> &mdash; a component that lists its own dependencies in
+an <code>imports</code> array, instead of being registered in a big shared list called an NgModule. Everything
+in this project is standalone except the admin area, which deliberately uses the old NgModule style to show
+both approaches.</div>
+
+<div class="def"><span class="word">Interpolation</span> &mdash; the <code>{{ }}</code> syntax. <code>{{ name }}</code>
+in a template means "print the current value of name here". It updates automatically when the value changes.</div>
+
+<div class="def"><span class="word">Property binding</span> &mdash; square brackets: <code>[value]="total"</code>.
+It means "keep this element's <em>value</em> property equal to my <em>total</em> variable". Data flows from the
+class into the HTML.</div>
+
+<div class="def"><span class="word">Event binding</span> &mdash; round brackets: <code>(click)="save()"</code>.
+It means "when this is clicked, run my <em>save</em> function". Data flows from the HTML back into the class.
+A memory trick: <strong>[square] goes in, (round) comes out.</strong></div>
+
+<div class="def"><span class="word">@if / @for</span> &mdash; Angular's built-in template blocks.
+<code>@if (x) { ... }</code> shows the contents only when x is true. <code>@for (item of list; track item.id) { ... }</code>
+repeats the contents once per item. <code>track</code> tells Angular how to recognise each row so it can move
+existing rows instead of rebuilding the whole list.</div>
+
+<div class="def"><span class="word">Directive</span> &mdash; extra behaviour attached to an element that already
+exists, rather than a new element of its own. Two kinds:
+<strong>attribute directives</strong> change how an element looks or behaves (a tooltip);
+<strong>structural directives</strong> add or remove elements from the DOM entirely (show this button only for admins).
+Structural ones are written with a leading <code>*</code>.</div>
+
+<div class="def"><span class="word">Pipe</span> &mdash; a small formatter used inside a template with the <code>|</code>
+symbol. <code>{{ salary | currency }}</code> takes the raw number and prints it as money. Pipes only change what is
+<em>displayed</em>; the underlying data is untouched.</div>
+
+<div class="def"><span class="word">Service</span> &mdash; a plain class that does work but owns no screen:
+fetching data, keeping the session, writing logs. Components stay small by handing jobs to services.</div>
+
+<div class="def"><span class="word">Dependency Injection (DI)</span> &mdash; the system that hands a component the
+services it needs, instead of the component building them itself. You write <code>private auth = inject(AuthService)</code>,
+which means "Angular, give me the AuthService". Angular creates one and keeps reusing the same one.
+<div class="plain"><strong>In plain terms:</strong> you do not go to the kitchen and cook; you ask for the dish and it
+arrives. And because everyone asks the same kitchen, everyone gets the same food &mdash; which is exactly why
+signing in on one screen is instantly known by every other screen.</div></div>
+
+<div class="def"><span class="word">Provider</span> &mdash; the recipe that tells DI how to make something.
+<code>useClass</code> = build this class. <code>useValue</code> = just use this fixed value.
+<code>useFactory</code> = run this function to build it. <code>useExisting</code> = do not build anything,
+point at a thing that already exists.</div>
+
+<div class="def"><span class="word">Injectable / providedIn: 'root'</span> &mdash; the label on a service saying
+"DI may create me, and there should be exactly one of me for the whole application". One shared copy is called
+a <em>singleton</em>.</div>
+
+<div class="def"><span class="word">InjectionToken</span> &mdash; a unique name-tag used to inject something that is
+not a class (a settings object, a list of flags). You cannot write <code>inject(SomeInterface)</code> because
+interfaces vanish at compile time, so you make a token instead and inject that.</div>
+
+<div class="def"><span class="word">Router</span> &mdash; the part of Angular that watches the URL and swaps the
+right screen into the page, without ever reloading the browser. That is what makes it a
+<em>single-page application</em>: one page load, many screens.</div>
+
+<div class="def"><span class="word">router-outlet</span> &mdash; the placeholder tag in a template that says
+"whichever screen the URL selects, render it right here".</div>
+
+<div class="def"><span class="word">Lazy loading</span> &mdash; not downloading a screen's code until someone
+actually visits it. Written as <code>loadComponent: () =&gt; import('...')</code>. It makes the first page load
+much faster, because the admin area (which most people never open) is never sent to most people.</div>
+
+<div class="def"><span class="word">Guard</span> &mdash; a function that runs <em>before</em> a route is allowed,
+and answers yes or no. Returning <code>true</code> lets the navigation through; returning a redirect sends the
+user somewhere else. This is how "you must sign in first" is enforced.</div>
+
+<div class="def"><span class="word">Resolver</span> &mdash; a function that fetches data <em>before</em> a screen is
+shown, so the screen never has to render an empty state while waiting.</div>
+
+<div class="def"><span class="word">Lifecycle hook</span> &mdash; a method Angular calls at a fixed moment in a
+component's life. <code>ngOnDestroy()</code> runs just before the component is removed &mdash; the place to clean up
+timers. <code>ngAfterViewInit()</code> runs once the component's HTML actually exists.</div>
+
+<div class="def"><span class="word">Change detection</span> &mdash; Angular's process of checking "has any displayed
+value changed, and does the screen need updating?". <code>OnPush</code> is a setting meaning "only re-check me when
+something I actually depend on changes" &mdash; faster than checking everything constantly.</div>
+
+<div class="def"><span class="word">Zoneless</span> &mdash; this app runs without Zone.js, the older library that
+detected changes by secretly wrapping every browser function. Instead, signals report their own changes.
+Less magic, less work, faster app.</div>
+
+<div class="def"><span class="word">SSR</span> (Server-Side Rendering) &mdash; building the first version of the page
+on the server and sending finished HTML, so the user sees content immediately instead of a blank screen.</div>
+
+<div class="def"><span class="word">Hydration</span> &mdash; what happens next: the Angular app starts up in the
+browser and "adopts" the HTML the server already sent, attaching the click handlers to it rather than
+throwing it away and rebuilding.</div>
+
+<div class="def"><span class="word">ViewEncapsulation</span> &mdash; the rule about whether a component's CSS can
+escape. <em>Emulated</em> (the normal default) = my styles stay inside me. <em>None</em> = my styles leak into the
+whole page. <em>ShadowDom</em> = a sealed bubble; nothing gets in or out.</div>
+
+<div class="def"><span class="word">Content projection</span> &mdash; letting a parent pass HTML <em>into</em> a child
+component, which the child places using <code>&lt;ng-content /&gt;</code>. It is how one Card component can wrap any
+content at all.</div>
+
+<div class="def"><span class="word">Reactive forms</span> &mdash; building a form in TypeScript
+(<code>FormBuilder</code>, <code>FormGroup</code>, <code>FormControl</code>) rather than in HTML, so the rules and the
+current values live in code where they can be tested.</div>
+
+<div class="def"><span class="word">Validator</span> &mdash; a rule attached to a form field, e.g.
+<code>Validators.required</code>. A field that breaks a rule is <em>invalid</em>. <em>touched</em> means the user has
+visited and left it &mdash; the project only shows errors on touched fields, so you are not scolded before you type.</div>
+
+<div class="def"><span class="word">Sanitisation</span> &mdash; Angular automatically stripping dangerous parts out
+of HTML that came from a user (scripts, <code>onerror=</code> handlers) before putting it on screen. It prevents
+an attack called <em>XSS</em>, where someone types code into a text box and it runs on other people's computers.</div>
+
+<h3 id="d-reactive">1.4 Signals and observables</h3>
+
+<p>These two are the heart of the project, so they get more space.</p>
+
+<div class="def"><span class="word">Signal</span> &mdash; a box holding one value, which announces it when the value
+changes. You <em>read</em> it by calling it like a function:
+<pre>const count = signal(0);   <span class="cm">// create a box holding 0</span>
+count();                   <span class="cm">// read it  -> 0</span>
+count.set(5);              <span class="cm">// put 5 in the box</span>
+count.update(n =&gt; n + 1);  <span class="cm">// change it based on what is inside -> 6</span></pre>
+<div class="plain"><strong>In plain terms:</strong> a signal is a value that tells you when it changes.
+Any template that read it is redrawn automatically. This is why you will never see code in this project that
+says "now go update the screen" &mdash; the screen follows the data by itself.</div>
+<div class="warn"><strong>Watch out:</strong> the brackets matter. <code>count</code> is the box;
+<code>count()</code> is what is inside it. Forgetting the brackets in a template prints something like
+"function count()" instead of a number.</div></div>
+
+<div class="def"><span class="word">computed</span> &mdash; a signal calculated from other signals. It recalculates
+itself only when one of its ingredients changes, and caches the answer otherwise.
+<pre>const total = computed(() =&gt; employees().length);</pre>
+You never set a computed value; you only ever read it. It is derived data, and it can never go stale or
+disagree with its source.</div>
+
+<div class="def"><span class="word">effect</span> &mdash; a block of code that re-runs whenever any signal it reads
+changes. Used for side effects &mdash; things outside Angular, such as writing to localStorage or changing an
+attribute on the page. Rule of thumb: use <code>computed</code> to <em>calculate</em>, use <code>effect</code> to
+<em>act</em>.</div>
+
+<div class="def"><span class="word">asReadonly()</span> &mdash; hands out a version of a signal that can be read but
+not changed. Services use it so that outsiders can watch the value while only the service itself may set it.</div>
+
+<div class="def"><span class="word">input() / output()</span> &mdash; how components talk to each other.
+An <em>input</em> is data a parent passes down into a child. An <em>output</em> is an event a child sends up to its
+parent. <code>input.required&lt;Employee&gt;()</code> means "I must be given an employee; refuse to compile otherwise".</div>
+
+<div class="def"><span class="word">Observable</span> &mdash; a stream of values arriving over time, rather than one
+value now. A signal is a box; an observable is a pipe. HTTP responses, timers and typing events are all
+observables. Nothing happens until someone <em>subscribes</em> &mdash; an unsubscribed observable is a tap nobody opened.</div>
+
+<div class="def"><span class="word">subscribe</span> &mdash; "start listening to this stream, and here is what to do
+with each value". You may pass three named handlers, called an <em>Observer</em>:
+<pre>stream.subscribe({
+  next:     (value) =&gt; { <span class="cm">/* a value arrived */</span> },
+  error:    (err)   =&gt; { <span class="cm">/* it failed */</span> },
+  complete: ()      =&gt; { <span class="cm">/* it finished */</span> },
+});</pre></div>
+
+<div class="def"><span class="word">unsubscribe / teardown</span> &mdash; stopping the listening. This matters:
+a timer that is never stopped keeps running after you leave the screen, quietly wasting battery forever.
+That mistake is called a <em>memory leak</em>, and this project takes deliberate care to avoid it.</div>
+
+<div class="def"><span class="word">RxJS</span> &mdash; the library that provides observables and the operators below.</div>
+
+<div class="def"><span class="word">Operator</span> &mdash; a small transformation applied to a stream inside
+<code>.pipe(...)</code>. The ones used in this project:
+<table>
+  <tr><th>Operator</th><th>What it does, in plain words</th></tr>
+  <tr><td><code>map</code></td><td>Change each value into something else. "Give me just the items array out of this response envelope."</td></tr>
+  <tr><td><code>filter</code></td><td>Let only some values through. "Only even-numbered ticks."</td></tr>
+  <tr><td><code>tap</code></td><td>Peek at a value without changing it &mdash; used for logging.</td></tr>
+  <tr><td><code>takeUntil</code></td><td>Keep going until another stream fires, then stop. The standard way to end a subscription when a screen closes.</td></tr>
+  <tr><td><code>debounceTime</code></td><td>Wait for a pause. "Only search once they have stopped typing for 250ms."</td></tr>
+  <tr><td><code>distinctUntilChanged</code></td><td>Ignore a value identical to the previous one.</td></tr>
+  <tr><td><code>catchError</code></td><td>Handle a failure in the stream.</td></tr>
+  <tr><td><code>finalize</code></td><td>Run this at the very end, whether it succeeded or failed &mdash; like a "finally" block.</td></tr>
+  <tr><td><code>shareReplay</code></td><td>One shared stream for many listeners, instead of restarting it per listener.</td></tr>
+  <tr><td><code>mergeMap</code></td><td>For each value, start another stream and merge the results in.</td></tr>
+  <tr><td><code>delay</code></td><td>Hold each value back for a while &mdash; used here to fake network slowness.</td></tr>
+</table></div>
+
+<div class="def"><span class="word">Subject</span> &mdash; an observable you can push values into by hand.
+Used in this project as an on/off switch: a <code>destroy$</code> Subject that fires once when a screen closes,
+which every <code>takeUntil</code> is watching.</div>
+
+<div class="def"><span class="word">firstValueFrom</span> &mdash; converts an observable into a Promise by taking its
+first value. It lets the stores use easy <code>await</code> syntax over HTTP calls.</div>
+
+<h3 id="d-http">1.5 HTTP words</h3>
+
+<div class="def"><span class="word">HTTP</span> &mdash; the language browsers and servers speak. A request goes out,
+a response comes back.</div>
+
+<div class="def"><span class="word">HTTP methods</span> &mdash; the verb of the request:
+<strong>GET</strong> = read something, <strong>POST</strong> = create something,
+<strong>PUT</strong> = update something, <strong>DELETE</strong> = remove something.</div>
+
+<div class="def"><span class="word">Status code</span> &mdash; the three-digit result.
+<strong>200</strong> fine, <strong>201</strong> created, <strong>204</strong> done with nothing to return,
+<strong>403</strong> you are not allowed, <strong>404</strong> not found, <strong>409</strong> conflict,
+<strong>500</strong> the server broke.</div>
+
+<div class="def"><span class="word">Header</span> &mdash; extra labelled information attached to a request, such as
+who you are. This project attaches <code>Authorization</code> and <code>X-Portal-Role</code> headers.</div>
+
+<div class="def"><span class="word">Token</span> &mdash; a string that proves you are signed in, sent with every
+request so the server knows who is asking.</div>
+
+<div class="def"><span class="word">Interceptor</span> &mdash; a function every HTTP request passes through on its way
+out and every response passes through on its way back. Interceptors are stacked, so a request travels down through
+all of them and the response travels back up.
+<div class="plain"><strong>In plain terms:</strong> think of airport checkpoints. Your request walks through
+check-in, security and the gate on the way out, and back through them in reverse on the way home. Each checkpoint
+can stamp it, time it, redirect it, or turn it back.</div></div>
+
+<div class="def"><span class="word">Cache</span> &mdash; keeping a copy of an answer so the same question does not have
+to be asked twice. A <em>TTL</em> (time to live) is how long the copy stays trustworthy &mdash; 30 seconds here.</div>
+
+<div class="page-break"></div>
+<h2 id="big">2. The big picture</h2>
+
+<h3>What is this app?</h3>
+<p>
+  It is an internal website for a company's HR department &mdash; the tool staff would open at work
+  to look up colleagues and manage people. It has eight screens:
+</p>
+<table>
+  <tr><th>Screen</th><th>What you do there</th></tr>
+  <tr><td><strong>Login</strong></td><td>Sign in. Three demo accounts let you try each role.</td></tr>
+  <tr><td><strong>Dashboard</strong></td><td>The home page: headcount, attendance today, birthdays, announcements, recent activity.</td></tr>
+  <tr><td><strong>Employees</strong></td><td>The staff directory. Search, filter, sort, page through, view one person, add, edit, delete.</td></tr>
+  <tr><td><strong>Attendance</strong></td><td>Who was present, late or absent on a chosen day.</td></tr>
+  <tr><td><strong>Leave</strong></td><td>Apply for holiday; managers approve or reject requests.</td></tr>
+  <tr><td><strong>Departments</strong></td><td>The list of departments, with headcount, and a detail panel per department.</td></tr>
+  <tr><td><strong>Admin</strong></td><td>Five sub-pages: overview, announcements, system health, audit log, settings.</td></tr>
+  <tr><td><strong>Settings</strong></td><td>Your own profile, theme choice, change password.</td></tr>
+</table>
+
+<h3>The four roles</h3>
+<p>Everything in the app is shaped by <em>who you are</em>. There are four roles, ranked:</p>
+<pre>GUEST (0)  &lt;  EMPLOYEE (1)  &lt;  MANAGER (2)  &lt;  ADMIN (3)</pre>
+<p>
+  Each role can do everything the ones below it can, plus more. Giving each role a number is what makes
+  the check simple: "is my number at least as big as the number required?" That single comparison lives in
+  <code>AuthService.hasRole()</code> and is used everywhere.
+</p>
+<table>
+  <tr><th>Role</th><th>Can do</th></tr>
+  <tr><td>GUEST</td><td>See the dashboard only. Not signed in.</td></tr>
+  <tr><td>EMPLOYEE</td><td>See the directory, and <em>their own</em> attendance and leave. Apply for leave.</td></tr>
+  <tr><td>MANAGER</td><td>Everything above, plus: see everyone's attendance and leave, approve/reject leave, add and edit employees, see salaries, reach the admin area.</td></tr>
+  <tr><td>ADMIN</td><td>Everything, plus: delete employees, manage departments, and open admin settings.</td></tr>
+</table>
+
+<div class="plain">
+  <strong>The most important idea in the whole project:</strong> the role is checked in three separate places
+  &mdash; the route guard (can you open this URL?), the structural directive (does this button even exist in the
+  page?), and the fake API (will the data layer obey this request?). Hiding a button is only politeness;
+  the check on the data side is the real lock. Anyone can open the browser's developer tools and unhide a
+  button, but they cannot talk the API into deleting a record their role is not allowed to delete.
+</div>
+
+<h3>The folder map</h3>
+<pre>src/
+  main.ts                  <span class="cm">the very first line of code that runs</span>
+  index.html               <span class="cm">the empty page Angular fills in</span>
+  styles.css               <span class="cm">colours and shared styling for the whole app</span>
+  server.ts, main.server.ts <span class="cm">the server-side rendering entry points</span>
+
+  app/
+    app.ts / app.html      <span class="cm">the frame: header, nav, footer</span>
+    app.config.ts          <span class="cm">the app's setup list</span>
+    app.routes.ts          <span class="cm">which URL shows which screen</span>
+
+    core/                  <span class="cm">the brain. No screens live here at all.</span>
+      models/              <span class="cm">the shapes of the data</span>
+      tokens/              <span class="cm">named settings and contracts</span>
+      services/            <span class="cm">the workers: auth, http, theme, logging</span>
+      state/               <span class="cm">the memory: stores holding the app's data</span>
+      interceptors/        <span class="cm">the HTTP checkpoints</span>
+      guards/, resolvers/  <span class="cm">route gatekeepers and data pre-loaders</span>
+
+    shared/                <span class="cm">reusable UI pieces used by many screens</span>
+      components/          <span class="cm">card, dialog, chart, toast, bell, badge</span>
+      directives/          <span class="cm">tooltip, role check, click-outside</span>
+      pipes/               <span class="cm">initials, tenure</span>
+
+    features/              <span class="cm">the actual screens</span>
+      dashboard/ employees/ attendance/ leave/
+      departments/ admin/ auth/ settings/ misc/
+
+    testing/               <span class="cm">helpers used only by tests</span></pre>
+
+<h3>The one rule about folders</h3>
+<p>Imports may only travel <em>downwards</em>:</p>
+<pre>features/   the screens
+    |  may use
+    v
+shared/     reusable UI
+    |  may use
+    v
+core/       data, services, no UI at all</pre>
+<p>
+  So a screen may use a card; a card may use a service; but <code>core</code> may never import a button,
+  and <code>shared</code> may never import a screen. Why does this matter? Because it means you can read
+  <code>core</code> without knowing anything about the screens, and you can delete a screen without breaking
+  anything below it. When two layers may call each other freely, you eventually cannot change either one
+  safely &mdash; every file becomes tangled with every other file.
+</p>
+
+<div class="page-break"></div>
+<h2 id="story">3. One click, start to finish</h2>
+<p class="lead">
+  This is the section to understand properly. We will follow one action &mdash; an admin deleting an
+  employee &mdash; through every layer of the app. Every file mentioned here is explained in full later;
+  right now, just watch the journey.
+</p>
+
+<h3>Step 1 &mdash; The button exists at all</h3>
+<pre>&lt;button *appHasRole="'ADMIN'" (click)="askToDelete(employee)"&gt;Delete&lt;/button&gt;</pre>
+<p>
+  <code>*appHasRole="'ADMIN'"</code> is a structural directive. If you are not an admin, this button is not
+  hidden with CSS &mdash; it is <em>never created</em>. It does not exist in the DOM. A manager inspecting the
+  page with developer tools finds nothing to unhide.
+</p>
+
+<h3>Step 2 &mdash; The click is caught</h3>
+<p>
+  <code>(click)="askToDelete(employee)"</code> runs a method on the <code>EmployeeList</code> class.
+  That method does not delete anything. It stores the employee in a signal:
+</p>
+<pre>this.pendingDelete.set(employee);</pre>
+<p>
+  Because <code>pendingDelete</code> is a signal, and the template has
+  <code>@if (pendingDelete())</code> around a confirmation dialog, the dialog appears on screen by itself.
+  Nobody wrote "now show the dialog" &mdash; the screen simply follows the data.
+</p>
+
+<h3>Step 3 &mdash; The user confirms</h3>
+<p>
+  The dialog's Confirm button calls <code>confirmDelete()</code>, which clears the signal (dialog disappears)
+  and calls the store:
+</p>
+<pre>await this.store.remove(employee.id);</pre>
+
+<h3>Step 4 &mdash; The store takes over</h3>
+<p>
+  <code>EmployeeStore</code> is the app's memory for employees. Its <code>remove</code> method first records
+  that something is in progress, then asks the service to do the work:
+</p>
+<pre>patchState(store, { loading: true, error: null });
+await firstValueFrom(service.remove(id));</pre>
+
+<h3>Step 5 &mdash; The service builds the request</h3>
+<p><code>EmployeeService.remove()</code> turns that into an actual HTTP request:</p>
+<pre>this.http.delete&lt;void&gt;(`/api/employees/${id}`)</pre>
+
+<h3>Step 6 &mdash; Down through the five checkpoints</h3>
+<p>The request now travels through the interceptor chain, outermost first:</p>
+<pre>  DELETE /api/employees/7
+        |
+  1. profiling   <span class="cm">starts a stopwatch</span>
+        |
+  2. auth        <span class="cm">attaches Authorization + X-Portal-Role: ADMIN</span>
+        |
+  3. cache       <span class="cm">not a GET, so it wipes the cached lists</span>
+        |
+  4. error       <span class="cm">stands ready to catch a failure</span>
+        |
+  5. mock backend <span class="cm">answers from memory instead of a real server</span></pre>
+<p>
+  Each one is a small function that can inspect the request, change it, or answer it outright.
+  The order is chosen deliberately: profiling wraps everything so it can time even a cache hit;
+  auth runs before the cache so cached entries carry the right role; the mock backend is last so
+  everything else behaves exactly as it would against a real server.
+</p>
+
+<h3>Step 7 &mdash; The fake backend decides</h3>
+<p>The mock backend reads the role header and enforces the real rule:</p>
+<pre>if (role !== 'ADMIN') {
+  return forbidden(req.url, 'Only administrators may delete employee records.');
+}
+db.employees.splice(index, 1);
+return noContent();   <span class="cm">// 204</span></pre>
+<div class="plain">
+  <strong>This is the real lock.</strong> Even if someone forced the hidden button to appear, the request
+  would come back 403 Forbidden. That is the difference between hiding a button and enforcing a rule.
+</div>
+
+<h3>Step 8 &mdash; Back up through the checkpoints</h3>
+<p>
+  The 204 response travels back up the same chain in reverse. The error interceptor sees no error and
+  passes it through. The profiling interceptor stops its stopwatch and records the timing &mdash; which is
+  what later appears on the admin System Health page.
+</p>
+
+<h3>Step 9 &mdash; The store updates its memory</h3>
+<pre>patchState(store, (state) =&gt; ({
+  employees: state.employees.filter((e) =&gt; e.id !== id),
+  loading: false,
+}));
+notifications.success('Employee removed.');</pre>
+<p>
+  Note <code>filter</code>: it builds a <em>new</em> array without that person rather than editing the old one.
+  A new array is a new value, so the signal genuinely changed, so everything watching it is told.
+</p>
+
+<h3>Step 10 &mdash; Everything redraws itself</h3>
+<p>Because one signal changed, all of this happens with no further code:</p>
+<ul>
+  <li>the table row disappears;</li>
+  <li>the "Total employees" tile counts down &mdash; it reads a <code>computed</code> built on that same list;</li>
+  <li>the dashboard's department bar chart reshapes;</li>
+  <li>a green toast slides in at the corner;</li>
+  <li>the audit log on the admin page gains a line.</li>
+</ul>
+
+<div class="plain">
+  <strong>The whole point:</strong> nine of those ten steps are about data. Only the last one is about the
+  screen, and it is automatic. This is what people mean by "reactive": you change the data, and the interface
+  is simply a picture of the data, so the picture updates itself.
+</div>
+
+<div class="warn">
+  <strong>Worth noticing:</strong> the same journey happens for every action in the app &mdash; approving leave,
+  publishing an announcement, creating a department. Component &rarr; store &rarr; service &rarr; interceptors
+  &rarr; backend, and back. Once you have seen it once, every other feature is the same shape with different nouns.
+</div>
+
+<div class="page-break"></div>
+<h2 id="f-root">4. The starting files</h2>
+<p class="lead">These few files run before anything else. They set the app up and then get out of the way.</p>
+
+<h4>src/index.html</h4>
+<p class="filemeta">The only real HTML page in the entire project.</p>
+<div class="job"><strong>Its job:</strong> be an empty shell that Angular fills in.</div>
+<pre>&lt;body&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;
+&lt;/body&gt;</pre>
+<p>
+  <code>&lt;app-root&gt;</code> is not a real HTML tag &mdash; it is the selector of our top component.
+  Angular finds this tag and builds the entire application inside it. Everything you ever see on screen
+  lives inside those two tags.
+</p>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>&lt;base href="/"&gt;</code></td><td>Tells the browser that all addresses start from the site root. Without it, refreshing on a deep link like <code>/employees/7</code> breaks.</td></tr>
+  <tr><td><code>&lt;meta name="viewport" ...&gt;</code></td><td>Makes the page size itself correctly on a phone instead of rendering a shrunken desktop page.</td></tr>
+</table>
+
+<h4>src/main.ts</h4>
+<p class="filemeta">Seven lines. The first application code that runs in the browser.</p>
+<pre>bootstrapApplication(App, appConfig).catch((err) =&gt; console.error(err));</pre>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>bootstrapApplication(...)</code></td><td>"Start Angular." <em>Bootstrap</em> just means start up.</td></tr>
+  <tr><td><code>App</code></td><td>Which component is the root &mdash; the one that goes inside <code>&lt;app-root&gt;</code>.</td></tr>
+  <tr><td><code>appConfig</code></td><td>The settings list (next file): routing, HTTP, interceptors, providers.</td></tr>
+  <tr><td><code>.catch(...)</code></td><td>If startup itself fails, print the reason rather than failing silently.</td></tr>
+</table>
+
+<h4>src/app/app.config.ts</h4>
+<p class="filemeta">The application's setup list. Arguably the most important configuration file here.</p>
+<div class="job"><strong>Its job:</strong> switch on every Angular feature the app uses, and register every shared thing DI must know how to build.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>provideZonelessChangeDetection()</code></td><td>Run without Zone.js. Signals report their own changes, so Angular does not have to watch every browser function. Faster, and far less magic.</td></tr>
+  <tr><td><code>provideRouter(routes, ...)</code></td><td>Turn on URL-based navigation, using the route table from <code>app.routes.ts</code>.</td></tr>
+  <tr><td><code>withInMemoryScrolling({...})</code></td><td>Restore scroll position when you press Back, and jump to <code>#anchors</code>. Small touch, noticeably better feel.</td></tr>
+  <tr><td><code>withComponentInputBinding()</code></td><td>Lets a URL parameter arrive straight into a component's <code>input()</code>, with no manual reading of the route.</td></tr>
+  <tr><td><code>PathLocationStrategy</code></td><td>Clean URLs (<code>/employees</code>) rather than hash URLs (<code>/#/employees</code>).</td></tr>
+  <tr><td><code>provideHttpClient(withFetch(), ...)</code></td><td>Turn on the HTTP service, using the modern <code>fetch</code> API underneath (which SSR needs).</td></tr>
+  <tr><td><code>withInterceptors([...])</code></td><td>The five checkpoints, <strong>in order, outermost first</strong>. Order is a deliberate design decision, not an accident &mdash; see section 5.5.</td></tr>
+  <tr><td><code>provideClientHydration(withEventReplay())</code></td><td>Adopt the server-rendered HTML instead of rebuilding it. <em>Event replay</em> means a click made before the app finished loading is remembered and replayed afterwards, so early clicks are not lost.</td></tr>
+  <tr><td><code>ConsoleLogger</code><br><code>{ provide: Logger, useExisting: ConsoleLogger }</code></td><td>Two names, <strong>one object</strong>. <code>useExisting</code> points the abstract <code>Logger</code> name at the concrete logger that already exists. Using <code>useClass</code> here would quietly create a <em>second</em> logger, and half the app's log lines would vanish into the wrong one.</td></tr>
+  <tr><td><code>...provideFeatureFlags(...)</code></td><td>Register on/off switches for unfinished features. The <code>...</code> spreads an array of providers into this list.</td></tr>
+</table>
+
+<h4>src/app/app.routes.ts</h4>
+<p class="filemeta">The map from URL to screen.</p>
+<pre>{
+  path: 'employees',
+  canActivate: [authGuard],
+  loadChildren: () =&gt; import('@features/employees/employees.routes')
+                        .then((m) =&gt; m.EMPLOYEE_ROUTES),
+}</pre>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>path: 'employees'</code></td><td>Matches the URL <code>/employees</code>.</td></tr>
+  <tr><td><code>canActivate: [authGuard]</code></td><td>Before opening, ask the guard. If it says no, the navigation is cancelled or redirected.</td></tr>
+  <tr><td><code>loadChildren: () =&gt; import(...)</code></td><td>Lazy loading. The arrow function means the import does not run now &mdash; only when someone actually visits. That code is a separate download.</td></tr>
+  <tr><td><code>redirectTo: 'dashboard'</code></td><td>Visiting <code>/</code> sends you to the dashboard.</td></tr>
+  <tr><td><code>path: '**'</code></td><td>The wildcard: any URL nothing else matched. Shows the 404 page. It must be last, because the router takes the <em>first</em> match.</td></tr>
+  <tr><td><code>title: '...'</code></td><td>Sets the browser tab title per screen.</td></tr>
+</table>
+<div class="warn">
+  <strong>Careful:</strong> route order matters. If <code>'**'</code> were written first, it would swallow every
+  URL and no screen would ever load.
+</div>
+
+<h4>src/app/app.ts &amp; app.html</h4>
+<p class="filemeta">The root component &mdash; the frame around every screen.</p>
+<div class="job"><strong>Its job:</strong> draw the top bar (logo, navigation, theme button, notification bell, account menu) and leave a hole where the current screen goes.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>changeDetection: OnPush</code></td><td>Only re-check this component when something it depends on actually changes.</td></tr>
+  <tr><td><code>imports: [RouterOutlet, RouterLink, ...]</code></td><td>Standalone components must list every directive, pipe and component their template uses. Forget one and the template silently does nothing.</td></tr>
+  <tr><td><code>protected readonly auth = inject(AuthService)</code></td><td>Ask DI for the session service. <code>protected</code> so the HTML may read it.</td></tr>
+  <tr><td><code>menuOpen = signal(false)</code></td><td>Is the mobile menu open? A signal, so the template follows it automatically.</td></tr>
+  <tr><td><code>visibleNav = computed(() =&gt; NAV.filter(...))</code></td><td>Only the nav links this role may use. Because it is <code>computed</code> over <code>auth.hasRole</code>, switching role instantly reshapes the menu.</td></tr>
+  <tr><td><code>constructor() { void this.notifications.load(); }</code></td><td>Fetch notifications once at start-up. <code>void</code> says "I know this returns a Promise and I am deliberately not waiting for it".</td></tr>
+  <tr><td><code>&lt;router-outlet /&gt;</code></td><td>The hole. Whatever the URL selects is drawn here.</td></tr>
+  <tr><td><code>&lt;a class="skip-link" href="#main"&gt;</code></td><td>An accessibility feature: a keyboard user can jump straight past the navigation to the content.</td></tr>
+  <tr><td><code>i18n="@@app.brand"</code></td><td>Marks text for translation. This app ships in English and French.</td></tr>
+</table>
+
+<h4>src/server.ts, main.server.ts, app.config.server.ts, app.routes.server.ts</h4>
+<p class="filemeta">The four server-side rendering files.</p>
+<div class="job"><strong>Their job:</strong> build the first version of a page on the server so the user sees content immediately.</div>
+<table class="lines">
+  <tr><th>File</th><th>What it does</th></tr>
+  <tr><td><code>server.ts</code></td><td>A small Express web server. It serves the built files, and hands any other address to Angular to render.</td></tr>
+  <tr><td><code>main.server.ts</code></td><td>The server twin of <code>main.ts</code> &mdash; starts Angular in server mode.</td></tr>
+  <tr><td><code>app.config.server.ts</code></td><td>Takes the normal config and merges the server-only extras in. <code>mergeApplicationConfig</code> means nothing is duplicated.</td></tr>
+  <tr><td><code>app.routes.server.ts</code></td><td>Chooses <em>how</em> each route is rendered.</td></tr>
+</table>
+<p>Three rendering modes appear in <code>app.routes.server.ts</code>, and each is chosen for a reason:</p>
+<table>
+  <tr><th>Mode</th><th>Meaning</th><th>Used for</th></tr>
+  <tr><td><code>Prerender</code></td><td>Built once at build time, like a static file. Fastest possible.</td><td>The dashboard and login &mdash; same for everyone.</td></tr>
+  <tr><td><code>Server</code></td><td>Built fresh on every request.</td><td>Employees, attendance, leave &mdash; the content depends on data.</td></tr>
+  <tr><td><code>Client</code></td><td>Not rendered on the server at all; built in the browser.</td><td>Admin and settings &mdash; private, and the badge component needs a real Shadow DOM, which does not exist on a server.</td></tr>
+</table>
+
+<div class="page-break"></div>
+<h2 id="f-models">5. core/ &mdash; the brain of the app</h2>
+<p class="lead">
+  Nothing in <code>core/</code> draws anything. It holds data shapes, workers and memory. If you deleted
+  every screen, this folder would still make sense on its own.
+</p>
+
+<h3>5.1 core/models &mdash; the shapes of the data</h3>
+<p>
+  These files contain <em>no runnable logic</em> for the most part &mdash; they describe what an employee
+  <em>is</em>. Their value is that the compiler can then check every other file against them.
+</p>
+
+<h4>core/models/employee.model.ts</h4>
+<div class="job"><strong>Its job:</strong> define what an employee is, plus a few small helper functions about employees.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>type Role = 'GUEST' | 'EMPLOYEE' | 'MANAGER' | 'ADMIN'</code></td><td>The only four roles that can exist. A typo becomes a compile error.</td></tr>
+  <tr><td><code>const ROLES: readonly Role[] = [...] as const</code></td><td>The same four as a real array you can loop over in a dropdown. The <code>type</code> is for the compiler; the <code>const</code> is for the running program. Both are needed.</td></tr>
+  <tr><td><code>type EmployeeStatus = 'ACTIVE' | 'ON_LEAVE' | 'PROBATION' | 'EXITED'</code></td><td>The four states a person can be in.</td></tr>
+  <tr><td><code>interface Employee { ... }</code></td><td>The full record: personal fields, professional fields, address, bio, avatar colour. Grouped with comment headers so it reads like a form.</td></tr>
+  <tr><td><code>readonly id: number</code></td><td>The id is assigned once and never changed.</td></tr>
+  <tr><td><code>managerId: number | null</code></td><td>Points at another employee &mdash; or <code>null</code> for the person at the top who reports to nobody.</td></tr>
+  <tr><td><code>type EmployeeDraft = Omit&lt;Employee, 'id'&gt;</code></td><td>An employee-in-progress, before saving. The server assigns the id, so the draft must not have one. This one line prevents an entire class of bug.</td></tr>
+  <tr><td><code>interface EmployeeFilter</code> / <code>EMPTY_FILTER</code></td><td>The search and filter settings, plus the "nothing selected" starting value used when clearing filters.</td></tr>
+  <tr><td><code>function fullName(e)</code></td><td>Joins first and last name. Written once so 30 files do not each invent their own version.</td></tr>
+  <tr><td><code>function nextEmployeeCode(existing)</code></td><td>Finds the highest existing code number and adds one, producing <code>EMP017</code>. <code>replace(/\D/g, '')</code> strips every non-digit; <code>padStart(3, '0')</code> pads to three digits.</td></tr>
+  <tr><td><code>function birthdayWithinDays(dob, days)</code></td><td>Is this birthday coming up soon? It rebuilds the date using <em>this</em> year, and if that has already passed, adds a year &mdash; because a birthday repeats and the year in the record is the year of birth.</td></tr>
+</table>
+
+<h4>core/models/hr.model.ts</h4>
+<div class="job"><strong>Its job:</strong> the same treatment for attendance, leave, departments, documents and notifications.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>interface AttendanceRecord</code></td><td>One person, one day: check-in time, check-out time, status. Times are <code>string | null</code> because an absent person has no check-in.</td></tr>
+  <tr><td><code>interface LeaveRequest</code></td><td>A holiday request: type, dates, day count, reason, status, who decided it.</td></tr>
+  <tr><td><code>type LeaveDraft = Omit&lt;LeaveRequest, 'id' | 'status' | 'appliedOn' | 'decidedBy' | 'days'&gt;</code></td><td>What <em>you</em> fill in. Everything omitted is decided by the system, not by you &mdash; you cannot submit a request that is already approved.</td></tr>
+  <tr><td><code>interface LeaveBalance</code></td><td>How many days of each type you have left.</td></tr>
+  <tr><td><code>function countLeaveDays(from, to)</code></td><td>Counts working days between two dates. It walks day by day and skips <code>day === 0</code> (Sunday) and <code>day === 6</code> (Saturday), so a Friday-to-Monday request counts as 2 days, not 4.</td></tr>
+</table>
+
+<h4>core/models/announcement.model.ts</h4>
+<div class="job"><strong>Its job:</strong> describe a company notice.</div>
+<p>
+  Note <code>bodyHtml: string</code> &mdash; the body is rich text written by a manager, so it may contain HTML.
+  That makes it <em>untrusted input</em>, which is why it is sanitised before display (see section 7.6).
+  <code>pinned: boolean</code> keeps important notices at the top.
+</p>
+
+<h4>core/models/api.model.ts</h4>
+<div class="job"><strong>Its job:</strong> describe the envelopes that wrap data going to and from the API.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>interface Page&lt;T&gt; { items: T[]; total: number }</code></td><td>Every list endpoint returns this shape. Generic, so <code>Page&lt;Employee&gt;</code> and <code>Page&lt;LeaveRequest&gt;</code> both work from one definition.</td></tr>
+  <tr><td><code>interface ApiError</code></td><td>One tidy error shape. The error interceptor converts every kind of failure into this, so screens handle one shape instead of five.</td></tr>
+  <tr><td><code>interface HttpTiming</code></td><td>One row of the performance table: method, URL, how long it took, status.</td></tr>
+  <tr><td><code>status: number | 'CACHE' | 'ERROR'</code></td><td>Either a real HTTP number, or one of two special words this app adds.</td></tr>
+</table>
+
+<h3 id="f-tokens">5.2 core/tokens &mdash; named settings and contracts</h3>
+<p>
+  A reminder from the dictionary: you can inject a class by name, but you cannot inject an interface,
+  because interfaces vanish when the code compiles. So for anything that is not a class, you create an
+  <code>InjectionToken</code> &mdash; a unique name-tag DI can recognise.
+</p>
+
+<h4>core/tokens/app-config.token.ts</h4>
+<div class="job"><strong>Its job:</strong> hold the app's settings in one injectable place.</div>
+<pre>export const APP_CONFIG = new InjectionToken&lt;AppConfig&gt;('APP_CONFIG', {
+  providedIn: 'root',
+  factory: () =&gt; ({
+    appName: 'Employee Management Portal',
+    apiBaseUrl: '/api',
+    httpCacheTtlMs: 30_000,
+    defaultPageSize: 10,
+  }),
+});</pre>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>new InjectionToken&lt;AppConfig&gt;('APP_CONFIG')</code></td><td>Create the name-tag. The text is only for error messages.</td></tr>
+  <tr><td><code>providedIn: 'root'</code> + <code>factory</code></td><td>"If nobody supplies a value, build the default by running this function." This means the settings exist automatically &mdash; and can still be replaced in a test.</td></tr>
+  <tr><td><code>30_000</code></td><td>30000. The underscore is just a readability separator, ignored by the compiler.</td></tr>
+</table>
+<p>Any file can then write <code>private config = inject(APP_CONFIG)</code> and read <code>config.defaultPageSize</code>. Change the page size here and every screen changes at once.</p>
+
+<h4>core/tokens/logger.token.ts</h4>
+<div class="job"><strong>Its job:</strong> define what a logger must be able to do, without saying how.</div>
+<p>
+  This one is unusual: it uses an <code>abstract class</code> as the token. An abstract class is a class you
+  cannot create directly &mdash; only inherit from. That gets you two things at once: a real runtime object DI can
+  use as a token, <em>and</em> a contract listing the required methods.
+</p>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>abstract log(level, message): void</code></td><td>Any real logger must implement this. No default given.</td></tr>
+  <tr><td><code>debug() / info() / warn() / error()</code></td><td>Convenience methods with real bodies, each just calling <code>log</code>. Written once here so no subclass repeats them.</td></tr>
+  <tr><td><code>LOG_SINK</code> token, <code>factory: () =&gt; []</code></td><td>A single shared array every logger writes into &mdash; which is exactly what the admin Audit Log page reads and displays.</td></tr>
+</table>
+
+<h4>core/tokens/feature-flags.token.ts</h4>
+<div class="job"><strong>Its job:</strong> allow unfinished features to be switched on and off.</div>
+<pre>return flags.map((flag) =&gt; ({ provide: FEATURE_FLAGS, useValue: flag, multi: true }));</pre>
+<p>
+  <code>multi: true</code> is the interesting part. Normally a second provider for the same token
+  <em>replaces</em> the first. With <code>multi</code>, each one <em>appends to a list</em> instead. So the root
+  app contributes two flags, the admin module contributes two more, and anyone injecting
+  <code>FEATURE_FLAGS</code> receives all four merged together. A lazy-loaded feature can register its own
+  flags without ever touching the root configuration file.
+</p>
+
+<h4>core/tokens/analytics.token.ts</h4>
+<div class="job"><strong>Its job:</strong> demonstrate an optional dependency.</div>
+<p>
+  This token is deliberately <em>never provided</em>. Anything that wants it must ask with
+  <code>inject(ANALYTICS, { optional: true })</code>, which returns <code>null</code> instead of crashing.
+  It shows how a system copes with a service that may or may not be configured in a given deployment.
+</p>
+
+<div class="page-break"></div>
+<h3 id="f-services">5.3 core/services &mdash; the workers</h3>
+<p class="lead">
+  A service is a class that does a job but owns no screen. Every one of these is marked
+  <code>@Injectable({ providedIn: 'root' })</code>, meaning there is exactly one of it for the whole app.
+</p>
+
+<h4>core/services/auth.service.ts</h4>
+<p class="filemeta">Who is signed in. Probably the most-used file in the project.</p>
+<div class="job"><strong>Its job:</strong> remember the current session, expose the role as signals, and answer the question "is this person allowed?"</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>const RANK: Record&lt;Role, number&gt; = { GUEST: 0, EMPLOYEE: 1, MANAGER: 2, ADMIN: 3 }</code></td><td>Turns roles into numbers so they can be compared with <code>&gt;=</code>. This is the trick that makes the whole permission system one line long.</td></tr>
+  <tr><td><code>private session = signal&lt;Session | null&gt;(this.restore())</code></td><td>The one piece of truth: the current session, or <code>null</code> when signed out. It starts by trying to restore a remembered session from localStorage.</td></tr>
+  <tr><td><code>readonly currentSession = this.session.asReadonly()</code></td><td>Everyone else may <em>read</em> the session; only this service may change it. A locked display case.</td></tr>
+  <tr><td><code>isAuthenticated = computed(() =&gt; this.session() !== null)</code></td><td>Derived, never stored. It cannot disagree with the session, because it <em>is</em> the session, re-expressed.</td></tr>
+  <tr><td><code>role = computed(() =&gt; this.session()?.role ?? 'GUEST')</code></td><td>Your role, defaulting to GUEST when signed out. Note <code>?.</code> and <code>??</code> working together: safe read, then a fallback.</td></tr>
+  <tr><td><code>login(displayName, role, remember)</code></td><td>Builds a session, stores it in the signal, and writes it to localStorage <em>only</em> if "remember me" was ticked.</td></tr>
+  <tr><td><code>hasRole(required)</code></td><td>The permission check: <code>RANK[this.role()] &gt;= RANK[required]</code>. Because it reads the <code>role</code> signal, every guard, directive and template using it re-evaluates the instant the role changes.</td></tr>
+  <tr><td><code>private isBrowser = isPlatformBrowser(inject(PLATFORM_ID))</code></td><td>Am I running in a browser or on the server? Vital, because <strong>localStorage does not exist on a server</strong> &mdash; touching it there would crash the render.</td></tr>
+  <tr><td><code>try { ... } catch { ... }</code> around storage</td><td>Private browsing mode can block storage entirely. The app treats that as "just do not remember me" rather than crashing.</td></tr>
+  <tr><td><code>restore()</code> returns <code>null</code> on the server</td><td>Deliberate. Server-rendered HTML must never assume someone is signed in, or one user's page could be cached and shown to another.</td></tr>
+</table>
+
+<h4>core/services/employee.service.ts</h4>
+<div class="job"><strong>Its job:</strong> the HTTP calls about employees &mdash; and a teaching example of building an observable by hand.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>list(filters)</code></td><td>Builds query parameters, then <code>.pipe(map((page) =&gt; page.items))</code> unwraps the envelope so callers get a plain array rather than <code>{ items, total }</code>.</td></tr>
+  <tr><td><code>params = params.set('search', ...)</code></td><td>Notice the reassignment: <code>HttpParams</code> is immutable, so <code>.set()</code> returns a <em>new</em> object rather than editing the old one. Forgetting the <code>params =</code> is a classic bug &mdash; the filter silently disappears.</td></tr>
+  <tr><td><code>create / update / remove</code></td><td>POST, PUT and DELETE. Each uses <code>tap(...)</code> to write a log line without altering the data flowing through.</td></tr>
+  <tr><td><code>headcountFeed()</code></td><td>An observable written from scratch rather than with a helper. The function you pass <em>is</em> the producer: it starts a <code>setInterval</code> and calls <code>subscriber.next(...)</code> on each tick.</td></tr>
+  <tr><td><code>return () =&gt; { clearInterval(handle); }</code></td><td>The <strong>teardown</strong>. Whatever you return from that function is run automatically on unsubscribe, completion or error. This is what stops the timer &mdash; without it, the interval would run forever after you left the page.</td></tr>
+  <tr><td><code>shareReplay({ bufferSize: 1, refCount: true })</code></td><td>Share one stream between all listeners rather than starting a new timer each time. <code>refCount: true</code> means "when the last listener leaves, actually stop".</td></tr>
+  <tr><td><code>evenHeadcountLabels(notifier)</code></td><td>Composition: <code>filter</code> keeps even ticks, <code>map</code> formats them as text, <code>takeUntil(notifier)</code> ends the whole thing when the notifier fires.</td></tr>
+</table>
+
+<h4>core/services/headcount-feed.service.ts</h4>
+<div class="job"><strong>Its job:</strong> the live "online now" number on the dashboard.</div>
+<p>
+  Same hand-written-observable pattern, used for real this time. It emits immediately, then every five
+  seconds. <code>distinctUntilChanged</code> suppresses repeats, so if the number has not moved, nothing is
+  pushed and nothing redraws. The teardown clears the timer the moment you navigate away from the dashboard.
+</p>
+
+<h4>core/services/hr.service.ts</h4>
+<div class="job"><strong>Its job:</strong> one thin HTTP client for attendance, leave, departments, documents and notifications.</div>
+<pre>const items = &lt;T&gt;() =&gt; map((page: Page&lt;T&gt;) =&gt; page.items);</pre>
+<p>
+  A tiny helper defined once at the top, then reused in every method: it unwraps the
+  <code>{ items, total }</code> envelope. Without it, that same <code>map</code> line would be repeated
+  about ten times in the file.
+</p>
+<table class="lines">
+  <tr><th>Method</th><th>What it does</th></tr>
+  <tr><td><code>attendance(filters)</code></td><td>GET attendance rows, filtered by date, person or status.</td></tr>
+  <tr><td><code>applyForLeave(draft)</code></td><td>POST a new leave request.</td></tr>
+  <tr><td><code>decideLeave(id, approve, by)</code></td><td>POSTs to <code>/leave/7/approve</code> or <code>/leave/7/reject</code> &mdash; the action is part of the URL.</td></tr>
+  <tr><td><code>departments()</code>, <code>createDepartment()</code>, <code>updateDepartment()</code>, <code>deleteDepartment()</code></td><td>Full create-read-update-delete for departments.</td></tr>
+  <tr><td><code>markAllNotificationsRead()</code></td><td>One request that clears every unread notification.</td></tr>
+</table>
+
+<h4>core/services/announcement.service.ts</h4>
+<div class="job"><strong>Its job:</strong> list, create and delete announcements. The simplest service in the project &mdash; a good one to read first.</div>
+
+<h4>core/services/theme.service.ts</h4>
+<div class="job"><strong>Its job:</strong> remember whether you want light, dark, or whatever your computer uses.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>type ThemePreference = 'system' | 'light' | 'dark'</code></td><td>Three choices, not two. "System" means "follow my operating system", which is not the same as light.</td></tr>
+  <tr><td><code>constructor() { effect(() =&gt; this.apply(this.current())); }</code></td><td>An <code>effect</code>: whenever the preference signal changes, re-run <code>apply</code>. This is the correct use of an effect &mdash; touching the world outside Angular (the page element and localStorage).</td></tr>
+  <tr><td><code>root.removeAttribute('data-theme')</code></td><td>For "system", stamp <em>nothing</em> on the page, so the CSS <code>prefers-color-scheme</code> rule takes over naturally.</td></tr>
+  <tr><td><code>root.setAttribute('data-theme', preference)</code></td><td>For an explicit choice, stamp it on. The stylesheet scores that above the media query, so your choice beats the operating system in both directions.</td></tr>
+  <tr><td><code>cycle()</code></td><td>system &rarr; light &rarr; dark &rarr; system. The modulo <code>% order.length</code> wraps around at the end, so one button covers three states.</td></tr>
+</table>
+
+<h4>core/services/notification.service.ts</h4>
+<div class="job"><strong>Its job:</strong> the small coloured messages ("toasts") that appear at the corner.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>success() / error() / info()</code></td><td>Three named ways to raise a message, each calling the private <code>push</code>.</td></tr>
+  <tr><td><code>this.items.update((list) =&gt; [...list, toast])</code></td><td>Build a <em>new</em> array with the toast appended. Never <code>list.push(toast)</code> &mdash; editing the array in place would not change the signal's value, so nothing would redraw.</td></tr>
+  <tr><td><code>setTimeout(() =&gt; this.dismiss(toast.id), 4000)</code></td><td>Auto-remove after four seconds, so messages do not pile up forever.</td></tr>
+</table>
+
+<h4>core/services/logger.service.ts</h4>
+<div class="job"><strong>Its job:</strong> record what happened, so the audit page has something to show.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>class ConsoleLogger extends Logger</code></td><td>The real implementation of the abstract contract. Its <code>scope</code> is <code>'root'</code>.</td></tr>
+  <tr><td><code>this.sink.unshift(...)</code></td><td>Add to the <em>front</em> of the shared array, so newest appears first.</td></tr>
+  <tr><td><code>if (this.sink.length &gt; 50) this.sink.length = 50</code></td><td>Keep only the last 50 entries. Setting <code>.length</code> truncates an array &mdash; a compact way to cap memory use.</td></tr>
+  <tr><td><code>class ScopedLogger extends ConsoleLogger</code></td><td>The same logger but tagged with a different name, e.g. <code>'admin'</code>. The admin area provides this one, so admin actions are labelled as such in the audit log.</td></tr>
+  <tr><td><code>scopedLoggerFactory(scope)</code></td><td>Returns a <em>function that builds</em> a logger &mdash; exactly the shape a <code>useFactory</code> provider needs.</td></tr>
+</table>
+
+<h4>core/services/profiling.service.ts</h4>
+<div class="job"><strong>Its job:</strong> collect the request timings the profiling interceptor measures.</div>
+<p>
+  Everything derived is a <code>computed</code>: <code>requestCount</code>, <code>averageMs</code> (which
+  deliberately excludes cache hits, since a cache hit is not a real network measurement), and
+  <code>cacheHits</code>. It keeps only the newest 25 rows via <code>.slice(0, 25)</code>.
+</p>
+
+<h4>core/services/employee-seed.ts</h4>
+<div class="job"><strong>Its job:</strong> the starting data &mdash; 16 employees, 7 departments, attendance rows, leave requests, notifications and announcements.</div>
+<p>
+  Written as compact tuples (small fixed-length arrays) plus one function that expands each tuple into a full
+  object, rather than 16 hand-typed records. The benefit: when the <code>Employee</code> model gains a field,
+  you edit one mapper instead of sixteen objects.
+</p>
+
+<div class="page-break"></div>
+<h3 id="f-state">5.4 core/state &mdash; the app's memory</h3>
+<p class="lead">
+  A <em>store</em> holds data that more than one screen needs, in one place. Without stores, the dashboard
+  and the employee list would each fetch employees separately, and could disagree with each other.
+</p>
+
+<div class="def"><span class="word">SignalStore</span> &mdash; a store built from signals, provided by the
+<code>@ngrx/signals</code> library. It is assembled from four building blocks:
+<table>
+  <tr><th>Block</th><th>Meaning</th></tr>
+  <tr><td><code>withState({...})</code></td><td>The data it holds, and its starting values.</td></tr>
+  <tr><td><code>withComputed({...})</code></td><td>Values calculated from that data &mdash; counts, filtered lists, totals.</td></tr>
+  <tr><td><code>withMethods({...})</code></td><td>The only ways the data may be changed.</td></tr>
+  <tr><td><code>withHooks({...})</code></td><td>Code that runs when the store first starts up.</td></tr>
+</table>
+<code>patchState(store, { ... })</code> is how a method changes the data &mdash; it updates only the fields you name and leaves the rest alone.</div>
+
+<h4>core/state/employee.store.ts</h4>
+<p class="filemeta">The largest and most important store. Everything about employees flows through it.</p>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>signalStore({ providedIn: 'root' }, ...)</code></td><td>One store for the entire app. The dashboard and the directory read the very same list.</td></tr>
+  <tr><td><code>interface EmployeeState { employees, filter, selectedId, loading, error, loadedAt }</code></td><td>Everything the store remembers. Note that <code>loading</code> and <code>error</code> are stored data too &mdash; that is what lets any screen show a spinner or a message without inventing its own.</td></tr>
+  <tr><td><code>filtered = computed(() =&gt; employees().filter((e) =&gt; matches(e, filter())))</code></td><td>The visible list. It is never stored, only derived &mdash; so it can never drift out of step with the filter.</td></tr>
+  <tr><td><code>function matches(employee, filter)</code></td><td>The search rule. It builds a "haystack" string of name, code, email and title, lowercases both sides, and checks all filters with <code>&amp;&amp;</code>. Searching for "des" therefore matches a Designer <em>and</em> anyone named Desai.</td></tr>
+  <tr><td><code>headcountByDepartment</code></td><td>Counts people per department using a <code>Map</code>, converts it to an array, sorts biggest first. This one computed feeds both the dashboard chart and the admin overview.</td></tr>
+  <tr><td><code>payrollTotal = computed(() =&gt; employees().reduce((sum, e) =&gt; sum + e.salary, 0))</code></td><td><code>reduce</code> folds a list into a single value &mdash; here, adding up salaries starting from 0.</td></tr>
+  <tr><td><code>recentJoiners</code></td><td>Anyone who joined in the last 90 days. Because dates are stored as <code>YYYY-MM-DD</code> text, they can be compared with <code>&gt;=</code> directly &mdash; alphabetical order and chronological order happen to agree in that format.</td></tr>
+  <tr><td><code>designations = computed(() =&gt; [...new Set(...)])</code></td><td>A <code>Set</code> keeps only unique values; the spread turns it back into an array. This fills the job-title dropdown with no duplicates.</td></tr>
+  <tr><td><code>async load()</code></td><td>Sets <code>loading: true</code>, awaits the service, stores the result, sets <code>loading: false</code>. On failure it stores the message in <code>error</code> instead of crashing.</td></tr>
+  <tr><td><code>await firstValueFrom(service.list())</code></td><td>Turns the observable into a Promise so <code>await</code> can be used.</td></tr>
+  <tr><td><code>create / update / remove</code></td><td>Each calls the API first, then updates the local list only if the API succeeded. That ordering matters: the screen never shows a change the server rejected.</td></tr>
+  <tr><td><code>employees: state.employees.map((e) =&gt; (e.id === id ? updated : e))</code></td><td>Replace one item by building a new array. Same rule as before: new value, so the signal fires.</td></tr>
+  <tr><td><code>byId(id)</code></td><td>Look up one person from the list already in memory &mdash; no network request needed.</td></tr>
+  <tr><td><code>withHooks({ onInit(store) { if (store.employees().length === 0) void store.load(); } })</code></td><td>Load the data automatically the first time anything uses the store, but never twice. This is why no screen has to remember to fetch employees.</td></tr>
+</table>
+
+<h4>core/state/leave.store.ts</h4>
+<div class="job"><strong>Its job:</strong> leave requests and remaining balances.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>await Promise.all([firstValueFrom(service.leave()), firstValueFrom(service.leaveBalances())])</code></td><td>Fetch both at the same time rather than one after the other. Two 180ms calls take 180ms together, not 360ms.</td></tr>
+  <tr><td><code>decide(id, approve, decidedBy)</code></td><td>Approve or reject, then re-fetch the balances &mdash; because approving leave consumes someone's allowance, and the number on screen must reflect that.</td></tr>
+  <tr><td><code>pendingCount</code>, <code>approvedCount</code>, <code>rejectedCount</code></td><td>Simple computed counts driving the tiles at the top of the leave screen.</td></tr>
+</table>
+
+<h4>core/state/attendance.store.ts</h4>
+<div class="job"><strong>Its job:</strong> attendance for one selected day.</div>
+<p>
+  <code>defaultDate()</code> steps backwards from today until it lands on a weekday, so the page opens on a day
+  that actually has data instead of an empty Sunday. <code>attendanceRate</code> counts present <em>and</em> late
+  people as "here" &mdash; late is still present.
+</p>
+
+<h4>core/state/department.store.ts</h4>
+<div class="job"><strong>Its job:</strong> the department list, with full create/update/delete.</div>
+<p>
+  <code>byName</code> is a <code>computed</code> returning a <code>Map</code> from name to record, so a lookup is
+  instant rather than a search through the array each time.
+</p>
+
+<h4>core/state/announcement.store.ts</h4>
+<div class="job"><strong>Its job:</strong> company announcements.</div>
+<p>
+  Its <code>ordered</code> computed does a two-level sort: pinned items first, then newest first within each
+  group. The comparison <code>a.pinned ? -1 : 1</code> is how a sort function says "this one comes first".
+</p>
+
+<h4>core/state/notification.store.ts</h4>
+<div class="job"><strong>Its job:</strong> the bell menu in the header.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>catch { patchState(store, { loading: false }); }</code></td><td>If loading notifications fails, say nothing. The bell is a nicety &mdash; it must never interrupt the user with an error.</td></tr>
+  <tr><td><code>markRead(id)</code> updates locally <em>first</em>, then calls the API</td><td>Called an <em>optimistic update</em>: the badge number drops instantly rather than after a round trip, because the request is virtually certain to succeed.</td></tr>
+</table>
+
+<div class="page-break"></div>
+<h3 id="f-http2">5.5 core/interceptors &mdash; the HTTP checkpoints</h3>
+<p class="lead">
+  Every HTTP request in this app passes through five functions on the way out, and every response comes back
+  through the same five in reverse. Each is small and does exactly one job.
+</p>
+
+<pre>  your code calls http.get('/api/employees')
+        |
+        v
+  1. profiling      start stopwatch  ---------------------+
+        |                                                 |
+  2. auth           add token + role header               |  the response
+        |                                                 |  travels back
+  3. cache          fresh copy? answer instantly          |  up this side
+        |                                                 |
+  4. error          watch for failures                    |
+        |                                                 |
+  5. mock backend   answer from memory  ------------------+</pre>
+
+<div class="warn">
+  <strong>Why this exact order?</strong> Profiling is first so its stopwatch wraps everything &mdash; including a
+  cache hit, which never reaches the network. Auth is before cache so cached entries already carry the right
+  role. Error sits closest to the transport so it sees failures in their raw form. The mock backend is last,
+  standing exactly where a real server would &mdash; which means swapping in a real API is deleting one file.
+</div>
+
+<h4>core/interceptors/profiling.interceptor.ts</h4>
+<div class="job"><strong>Its job:</strong> measure how long every request takes.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>const startedAt = performance.now()</code></td><td>A high-precision stopwatch start, accurate to fractions of a millisecond.</td></tr>
+  <tr><td><code>tap({ next: ..., error: ... })</code></td><td>Watch what comes back without changing it: record the status code, or note that it failed.</td></tr>
+  <tr><td><code>finalize(() =&gt; { ... })</code></td><td>Runs at the very end whether it succeeded or failed &mdash; so a failed request is still timed and recorded.</td></tr>
+  <tr><td><code>durationMs &lt; 1 ? 'CACHE' : status</code></td><td>A clever inference: a response that came back in under a millisecond cannot have crossed a network, so it must have been the cache short-circuiting the chain.</td></tr>
+</table>
+
+<h4>core/interceptors/auth.interceptor.ts</h4>
+<div class="job"><strong>Its job:</strong> attach proof of identity to every outgoing request.</div>
+<pre>return next(req.clone({
+  setHeaders: {
+    Authorization: `Bearer ${token}`,
+    'X-Portal-Role': auth.role(),
+  },
+}));</pre>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>if (!token) return next(req);</code></td><td>Not signed in? Pass the request along untouched.</td></tr>
+  <tr><td><code>req.clone({ setHeaders: ... })</code></td><td><strong>Requests are immutable</strong> &mdash; you cannot edit one. You make a copy with the extra headers and send that. Trying to assign a header directly would silently do nothing.</td></tr>
+  <tr><td><code>next(...)</code></td><td>"Hand this on to the next checkpoint." Calling <code>next</code> is what continues the chain; not calling it stops the request dead.</td></tr>
+</table>
+
+<h4>core/interceptors/cache.interceptor.ts</h4>
+<div class="job"><strong>Its job:</strong> avoid asking the same question twice within 30 seconds.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>const store = new Map&lt;string, CacheEntry&gt;()</code></td><td>The cache itself, declared at module level (outside the function) so one cache serves the whole app for its whole life.</td></tr>
+  <tr><td><code>if (req.method !== 'GET') return next(req).pipe(tap(() =&gt; clearHttpCache()))</code></td><td>Any write empties the entire cache. Blunt, but always correct &mdash; after adding an employee, no stale list can survive.</td></tr>
+  <tr><td><code>const key = req.urlWithParams</code></td><td>The cache key includes the query string, so <code>?department=Design</code> and <code>?department=Sales</code> are stored separately.</td></tr>
+  <tr><td><code>if (hit &amp;&amp; Date.now() - hit.storedAt &lt; ttl) return of(hit.response.clone())</code></td><td>A fresh copy exists, so return it <em>without calling <code>next</code></em>. The request never reaches the network at all. <code>of(...)</code> wraps a plain value as an observable.</td></tr>
+  <tr><td><code>CACHE_BYPASS</code> context token</td><td>A per-request flag letting a caller demand a fresh answer, defined in <code>cache.context.ts</code>. Context travels with a request without being sent as a header.</td></tr>
+</table>
+
+<h4>core/interceptors/error.interceptor.ts</h4>
+<div class="job"><strong>Its job:</strong> turn every kind of failure into one friendly message, shown once.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>function describe(error)</code></td><td>Translates status codes into human sentences: 0 &rarr; "Network unreachable", 403 &rarr; "not permitted", 404 &rarr; "no longer exists", 500+ &rarr; "the server failed".</td></tr>
+  <tr><td><code>catchError((error) =&gt; { ... })</code></td><td>Catch anything that failed anywhere below this point in the chain.</td></tr>
+  <tr><td><code>notifications.error(apiError.message)</code></td><td>Show one toast. Because this is centralised, no individual screen needs its own error-message code.</td></tr>
+  <tr><td><code>return throwError(() =&gt; apiError)</code></td><td>Re-throw after handling, so a screen that wants to react further still can. Handling an error is not the same as swallowing it.</td></tr>
+</table>
+
+<h4>core/interceptors/mock-backend.interceptor.ts</h4>
+<p class="filemeta">The biggest file in <code>core/</code>. It is a complete fake server.</p>
+<div class="job"><strong>Its job:</strong> answer <code>/api/**</code> requests from memory, so the app runs with no real backend.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>let db: Db = seed()</code></td><td>The "database": plain arrays in memory. It resets when you refresh the page.</td></tr>
+  <tr><td><code>const clone = (rows) =&gt; rows.map((row) =&gt; ({ ...row }))</code></td><td>Hand out <em>copies</em>, never the originals. Otherwise a screen editing its own data would silently rewrite the database.</td></tr>
+  <tr><td><code>const path = new URL(req.url, 'http://localhost').pathname</code></td><td>Strip the query string so only the path is matched.</td></tr>
+  <tr><td><code>const role = req.headers.get('X-Portal-Role') ?? 'GUEST'</code></td><td>Reads the header the auth interceptor added two checkpoints earlier &mdash; this is where the two halves of the permission system meet.</td></tr>
+  <tr><td><code>/^\/api\/employees\/(\d+)$/.exec(path)</code></td><td>A regular expression: does the path look like <code>/api/employees/</code> followed by digits? The captured digits become the id.</td></tr>
+  <tr><td><code>if (role !== 'ADMIN') return forbidden(...)</code></td><td><strong>The real permission check.</strong> Hidden buttons are courtesy; this returns 403 regardless of what the interface showed.</td></tr>
+  <tr><td><code>const HANDLERS = [...]</code></td><td>A list of handler functions tried in order. Each returns a response, or <code>null</code> meaning "not mine, try the next". If all decline, the answer is 404.</td></tr>
+  <tr><td><code>delay(LATENCY_MS)</code></td><td>Adds 180ms of fake network slowness, so loading states and spinners are actually visible during development.</td></tr>
+  <tr><td><code>mergeMap(() =&gt; route(req))</code></td><td>Defers running the handler until subscription, so the delay applies to the work rather than starting before it.</td></tr>
+  <tr><td><code>if (path === '/api/boom') return fail(500, ...)</code></td><td>An endpoint that always fails on purpose, so the admin page can demonstrate error handling.</td></tr>
+  <tr><td><code>if (inUse) return fail(409, 'This department still has employees...')</code></td><td>A genuine business rule: you cannot delete a department that still has people in it.</td></tr>
+</table>
+
+<h3 id="f-guards">5.6 core/guards and core/resolvers</h3>
+
+<h4>core/guards/auth.guard.ts</h4>
+<div class="job"><strong>Its job:</strong> block a route until someone is signed in.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>if (isPlatformServer(inject(PLATFORM_ID))) return true;</code></td><td>On the server, always allow. The remembered session lives in localStorage, which the server cannot read &mdash; refusing there would bounce every signed-in user to the login page. The browser re-runs this guard immediately after loading and redirects properly then.</td></tr>
+  <tr><td><code>if (auth.isAuthenticated()) return true;</code></td><td>Signed in: proceed.</td></tr>
+  <tr><td><code>return router.createUrlTree(['/login'], { queryParams: { redirectTo: state.url } })</code></td><td>Not signed in: go to login, <em>remembering where you were trying to go</em>. After signing in you land where you meant to, not on a generic home page.</td></tr>
+</table>
+
+<h4>core/guards/role.guard.ts</h4>
+<div class="job"><strong>Its job:</strong> block a route unless your role is high enough.</div>
+<pre>export function roleGuard(...allowed: Role[]): CanActivateFn {
+  return () =&gt; { /* the actual check */ };
+}</pre>
+<p>
+  This is a <strong>factory</strong>: a function that <em>returns</em> a guard. That is why the route can say
+  <code>roleGuard('MANAGER', 'ADMIN')</code> &mdash; the required role is written in the route table where you can
+  see it, instead of buried inside the guard. One guard file therefore serves every protected route.
+</p>
+
+<h4>core/guards/unsaved-changes.guard.ts</h4>
+<div class="job"><strong>Its job:</strong> warn before leaving a half-filled form.</div>
+<p>
+  This is a <code>CanDeactivate</code> guard &mdash; it runs when you try to <em>leave</em>, not enter. It asks the
+  component itself: <code>if (!component.hasUnsavedChanges()) return true;</code>. Any component implementing the
+  <code>HasUnsavedChanges</code> interface can be protected this way, so the guard knows nothing about forms
+  specifically.
+</p>
+
+<h4>core/resolvers/employee.resolver.ts</h4>
+<div class="job"><strong>Its job:</strong> fetch one employee <em>before</em> their profile page opens.</div>
+<pre>export const employeeResolver: ResolveFn&lt;Employee&gt; = (route) =&gt;
+  inject(EmployeeService).getById(Number(route.paramMap.get('id')));</pre>
+<p>
+  Two lines with a real consequence: the detail screen never renders an empty shell while data loads, so it
+  never needs "if there is no employee yet" handling in its template. The data is guaranteed present before
+  the component is created.
+</p>
+
+<div class="page-break"></div>
+<h2 id="f-shared">6. shared/ &mdash; the reusable parts</h2>
+<p class="lead">
+  These are used by many screens. A change here is felt everywhere &mdash; which is the point.
+</p>
+
+<h3 id="f-comp">6.1 shared/components</h3>
+
+<h4>shared/components/card/card.ts</h4>
+<div class="job"><strong>Its job:</strong> the white panel that almost every block of content sits on.</div>
+<p>
+  This is the clearest example of <em>content projection</em> in the project. The card provides four slots:
+</p>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>&lt;ng-content select="[card-title]"&gt;&lt;h3&gt;{{ heading() }}&lt;/h3&gt;&lt;/ng-content&gt;</code></td><td>Put whatever the parent marked <code>card-title</code> here &mdash; and if the parent gave nothing, fall back to the plain heading text.</td></tr>
+  <tr><td><code>&lt;ng-content select="[card-actions]" /&gt;</code></td><td>A slot for buttons in the top-right corner.</td></tr>
+  <tr><td><code>&lt;ng-content /&gt;</code></td><td>The catch-all: everything else the parent passed in goes here.</td></tr>
+  <tr><td><code>.card__foot:empty { display: none; }</code></td><td>The footer collapses itself when nothing was projected into it, so callers never have to declare whether they have a footer.</td></tr>
+  <tr><td><code>encapsulation: ViewEncapsulation.Emulated</code></td><td>Stated explicitly (though it is the default) because the two components beside it deliberately choose otherwise &mdash; the contrast is the lesson.</td></tr>
+</table>
+<div class="plain">
+  <strong>The three encapsulation modes, side by side:</strong><br>
+  <strong>Emulated</strong> (card) &mdash; my styles cannot escape; page styles can still reach in. The right default.<br>
+  <strong>None</strong> (print-record) &mdash; my styles go into the whole document. Needed there because
+  <code>@page</code> print rules cannot be scoped to a component.<br>
+  <strong>ShadowDom</strong> (badge-widget) &mdash; a sealed bubble, isolated both ways. Needed for a component
+  meant to be embedded in a page it does not control.
+</div>
+
+<h4>shared/components/stat-tile/stat-tile.ts</h4>
+<div class="job"><strong>Its job:</strong> one number in a box &mdash; "Total employees: 16".</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>label = input.required&lt;string&gt;()</code></td><td>Must be supplied. Omitting it is a compile error, not a blank tile at runtime.</td></tr>
+  <tr><td><code>accent = input('#6366f1')</code></td><td>Optional, with a default &mdash; the coloured stripe down the left edge.</td></tr>
+  <tr><td><code>display = computed(...)</code></td><td>Formats the value: as currency if <code>currency</code> is true, otherwise with thousands separators via <code>toLocaleString</code>.</td></tr>
+  <tr><td><code>[style.--tile-accent]="accent()"</code></td><td>Sets a CSS custom property from TypeScript, so the CSS file can use the colour without knowing it in advance.</td></tr>
+</table>
+
+<h4>shared/components/confirm-dialog/confirm-dialog.ts and dialog-ref.ts</h4>
+<div class="job"><strong>Its job:</strong> "Are you sure?" before anything destructive.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>viewProviders: [DialogRef]</code></td><td>Not <code>providers</code>. <code>viewProviders</code> means only things inside <em>this component's own template</em> can inject it &mdash; content projected in by a parent cannot. That is precisely the boundary a dialog wants.</td></tr>
+  <tr><td><code>confirmed = output&lt;void&gt;()</code> / <code>cancelled = output&lt;void&gt;()</code></td><td>Two events sent up to the parent. The dialog itself never deletes anything; it only reports which button was pressed.</td></tr>
+  <tr><td><code>cancelButton = viewChild&lt;ElementRef&gt;('cancelButton')</code></td><td>A signal query that finds an element in this component's own template.</td></tr>
+  <tr><td><code>ngAfterViewInit() { this.cancelButton()?.nativeElement.focus(); }</code></td><td>Move focus into the dialog when it opens &mdash; onto <em>Cancel</em>, the least destructive button. A stray Enter keypress should not delete a record.</td></tr>
+  <tr><td><code>@HostListener('document:keydown.escape')</code></td><td>Escape closes the dialog, as every modal is expected to do.</td></tr>
+  <tr><td><code>&lt;button class="backdrop"&gt;</code></td><td>The dark background is a real <code>&lt;button&gt;</code>, not a <code>&lt;div&gt;</code>, so keyboard users can reach and activate it too.</td></tr>
+</table>
+
+<h4>shared/components/toast-host/toast-host.ts</h4>
+<div class="job"><strong>Its job:</strong> draw whatever toasts the NotificationService currently holds.</div>
+<p>
+  It is placed once in <code>app.html</code>, at the bottom. <code>role="status"</code> and
+  <code>aria-live="polite"</code> make a screen reader announce new messages without interrupting what the
+  user is currently doing.
+</p>
+
+<h4>shared/components/notification-bell/notification-bell.ts</h4>
+<div class="job"><strong>Its job:</strong> the 🔔 in the header, with an unread count and a dropdown.</div>
+<p>
+  Reads <code>NotificationStore</code>. Uses <code>(appClickOutside)</code> to close when you click elsewhere.
+  Each entry is rendered as a link when it has a destination and as a button when it does not &mdash; a detail
+  that matters, because a link that goes nowhere is confusing for keyboard and screen-reader users.
+</p>
+
+<h4>shared/components/bar-chart/bar-chart.ts</h4>
+<div class="job"><strong>Its job:</strong> the horizontal headcount-by-department chart.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>percent(value)</code></td><td>Each bar's width as a percentage of the largest value, so the biggest bar always fills the space.</td></tr>
+  <tr><td>One colour for all bars</td><td>Deliberate. There is only one measure being shown and each bar is already labelled, so different colours would encode no extra information.</td></tr>
+  <tr><td><code>&lt;details&gt;&lt;summary&gt;View as table&lt;/summary&gt;</code></td><td>The same numbers as a real table. A chart that can only be read visually excludes people using screen readers.</td></tr>
+  <tr><td><code>[attr.aria-label]="item.label + ': ' + item.value"</code></td><td>Every bar announces its own value aloud.</td></tr>
+</table>
+
+<h4>shared/components/badge-widget/badge-widget.ts</h4>
+<div class="job"><strong>Its job:</strong> a small shareable employee badge, designed to be embedded elsewhere.</div>
+<p>
+  Uses <code>ViewEncapsulation.ShadowDom</code>, giving it a genuine sealed shadow root. A host page cannot
+  restyle it and it cannot leak into a host page &mdash; the entire reason such a component exists. This is
+  also why the admin area is client-rendered only: a shadow root has no server-side equivalent.
+</p>
+
+<h4>shared/components/print-record/print-record.ts</h4>
+<div class="job"><strong>Its job:</strong> the printable version of an employee record.</div>
+<p>
+  Uses <code>ViewEncapsulation.None</code>, deliberately. Print rules like <code>@page { size: A4 }</code> apply
+  to the whole document &mdash; the browser's print box cannot be scoped to one component &mdash; so these styles
+  must escape into the document head. Every selector is namespaced under <code>.print-record</code> to keep
+  that escape hatch tidy.
+</p>
+
+<h3 id="f-dir">6.2 shared/directives</h3>
+<p class="lead">
+  A reminder: <strong>attribute</strong> directives change an existing element; <strong>structural</strong>
+  directives (written with <code>*</code>) add or remove elements from the page entirely.
+</p>
+
+<h4>shared/directives/has-role.directive.ts</h4>
+<p class="filemeta">Structural. The single most important directive in the project.</p>
+<div class="job"><strong>Its job:</strong> put an element in the page only if your role is high enough.</div>
+<pre>&lt;button *appHasRole="'ADMIN'; else: denied"&gt;Delete&lt;/button&gt;
+&lt;ng-template #denied&gt;Ask an administrator.&lt;/ng-template&gt;</pre>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>private templateRef = inject(TemplateRef)</code></td><td>The blueprint of the wrapped HTML. The <code>*</code> tells Angular to rewrite the line into an <code>&lt;ng-template&gt;</code> that this directive owns &mdash; so the content exists as a plan, not as page content.</td></tr>
+  <tr><td><code>private viewContainer = inject(ViewContainerRef)</code></td><td>The place where that blueprint can be stamped out into real elements.</td></tr>
+  <tr><td><code>effect(() =&gt; { ... })</code></td><td>Re-runs whenever the role signal changes. Switch role in the admin panel and buttons appear or vanish immediately, with no page reload.</td></tr>
+  <tr><td><code>this.viewContainer.createEmbeddedView(template)</code></td><td>Actually create the elements.</td></tr>
+  <tr><td><code>this.viewContainer.clear()</code></td><td>Remove them completely.</td></tr>
+  <tr><td><code>if (this.rendered === next) return;</code></td><td>Do nothing when the answer has not changed &mdash; without this, every unrelated signal change would destroy and rebuild the button, losing focus mid-interaction.</td></tr>
+</table>
+<div class="plain">
+  <strong>Why not just use CSS to hide it?</strong> Because <code>display: none</code> leaves the button in the
+  page. Anyone can open developer tools and un-hide it. With this directive the element genuinely does not
+  exist &mdash; and even if someone recreated it by hand, the mock backend still refuses the request.
+</div>
+
+<h4>shared/directives/feature-flag.directive.ts</h4>
+<p class="filemeta">Structural.</p>
+<div class="job"><strong>Its job:</strong> keep unreleased features out of the page until they are switched on.</div>
+<p>
+  Same mechanism as <code>appHasRole</code>, but it checks the <code>FEATURE_FLAGS</code> list instead of the role.
+  Used on the admin System page for an "Export payroll" button that is currently switched off.
+</p>
+
+<h4>shared/directives/tooltip.directive.ts</h4>
+<p class="filemeta">Attribute.</p>
+<div class="job"><strong>Its job:</strong> show a small label on hover or keyboard focus.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>@HostListener('mouseenter')</code> and <code>@HostListener('focus')</code></td><td>Two triggers, both shown. Mouse users hover; keyboard users focus. Supporting only hover would exclude keyboard users entirely.</td></tr>
+  <tr><td><code>this.renderer.createElement('span')</code></td><td>Builds the bubble through <code>Renderer2</code> instead of touching the DOM directly, so the same code runs safely during server-side rendering, where <code>document</code> does not exist.</td></tr>
+  <tr><td><code>this.renderer.setProperty(bubble, 'textContent', ...)</code></td><td><strong>textContent, never innerHTML.</strong> Text is inserted as text, so a tooltip can never become an injection point.</td></tr>
+  <tr><td><code>@HostBinding('attr.tabindex') tabIndex = '0'</code></td><td>Makes the element keyboard-reachable, since something that only reveals information on hover is otherwise unreachable.</td></tr>
+  <tr><td><code>@HostBinding('attr.aria-describedby')</code></td><td>Links the element to its bubble so a screen reader reads the description too.</td></tr>
+  <tr><td><code>ngOnDestroy() { this.hide(); }</code></td><td>Clean-up: never leave a stray bubble behind when the element disappears.</td></tr>
+</table>
+
+<h4>shared/directives/role-badge.directive.ts</h4>
+<p class="filemeta">Attribute.</p>
+<div class="job"><strong>Its job:</strong> append a coloured role label ("ADMIN", "MANAGER") to an element.</div>
+<p>
+  Builds a <code>&lt;span&gt;</code> with <code>Renderer2</code> and colours it from a palette lookup. An
+  <code>effect</code> keeps it in step with the role. Note it creates the badge only once and then updates its
+  text and colour, rather than destroying and rebuilding it on each change.
+</p>
+
+<h4>shared/directives/click-outside.directive.ts</h4>
+<p class="filemeta">Attribute.</p>
+<div class="job"><strong>Its job:</strong> tell the host when a click landed anywhere else on the page.</div>
+<pre>@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent): void {
+  if (target &amp;&amp; !this.host.nativeElement.contains(target)) {
+    this.appClickOutside.emit();
+  }
+}</pre>
+<p>
+  It listens on the whole document, then asks "is the thing that was clicked inside me?" using
+  <code>contains</code>. If not, it emits. This is what closes the account menu, the notification bell and the
+  row action menus when you click away.
+</p>
+
+<h4>shared/directives/dialog-close.directive.ts</h4>
+<p class="filemeta">Attribute. The most subtle file in <code>shared/</code>.</p>
+<div class="job"><strong>Its job:</strong> mark any button inside a dialog as a close button.</div>
+<pre>constructor(@Host() @Optional() private readonly dialogRef: DialogRef | null) {}</pre>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>@Host()</code></td><td>"Only look for a DialogRef in the surrounding component, do not search further up the page." Without it, a button could accidentally close some outer dialog.</td></tr>
+  <tr><td><code>@Optional()</code></td><td>"If there is none, hand me <code>null</code> rather than crashing." So using the directive outside a dialog does nothing instead of breaking the app.</td></tr>
+  <tr><td><code>this.dialogRef?.close(false)</code></td><td>The <code>?.</code> is what makes the optional case safe.</td></tr>
+</table>
+<div class="warn">
+  <strong>The connection to remember:</strong> <code>@Host()</code> can see <code>viewProviders</code> but not
+  <code>providers</code>. That is exactly why <code>ConfirmDialog</code> declares <code>DialogRef</code> in
+  <code>viewProviders</code>. Change it to <code>providers</code> and this directive silently stops finding it.
+</div>
+
+<h3 id="f-pipes">6.3 shared/pipes</h3>
+
+<h4>shared/pipes/initials.pipe.ts</h4>
+<div class="job"><strong>Its job:</strong> turn "Mei Tanaka" into "MT" for the round avatar circles.</div>
+<pre>{{ auth.displayName() | initials }}</pre>
+<p>
+  It splits on whitespace, takes the first two words, takes the first letter of each, uppercases them.
+  Returns <code>'??'</code> for empty input, so an avatar never renders blank.
+</p>
+
+<h4>shared/pipes/tenure.pipe.ts</h4>
+<div class="job"><strong>Its job:</strong> turn a joining date into "2.3 yr" or "7 mo".</div>
+<div class="plain">
+  <strong>Why a pipe and not a method?</strong> A method written in a template runs on <em>every</em> change
+  detection pass &mdash; potentially thousands of times. A <em>pure</em> pipe runs only when its input actually
+  changes, and caches the result otherwise. For a table of 16 rows this is the difference between 16
+  calculations and 16 thousand.
+</div>
+
+<div class="page-break"></div>
+<h2 id="f-feat">7. features/ &mdash; the screens</h2>
+
+<h3 id="f-login">7.1 Login</h3>
+
+<h4>features/auth/login.ts + login.html</h4>
+<div class="job"><strong>Its job:</strong> sign in, with three demo accounts to make reviewing easy.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>this.fb.nonNullable.group({...})</code></td><td>Builds the form. <code>nonNullable</code> means a cleared field returns to its starting value rather than becoming <code>null</code>, which removes a whole category of "cannot read property of null" errors.</td></tr>
+  <tr><td><code>email: ['admin@acme.io', [Validators.required, Validators.email]]</code></td><td>Field format: <code>[startingValue, [rules]]</code>. Two rules here: must be filled, must look like an email.</td></tr>
+  <tr><td><code>redirectTo = signal(route.snapshot.queryParamMap.get('redirectTo') ?? '')</code></td><td>Reads the <code>?redirectTo=</code> the auth guard added, so you return to the page you originally wanted.</td></tr>
+  <tr><td><code>showError(name)</code></td><td>Returns <code>control.invalid &amp;&amp; control.touched</code>. Errors appear only after you have visited a field &mdash; you are not told off before you have typed anything.</td></tr>
+  <tr><td><code>if (this.form.invalid) { this.form.markAllAsTouched(); return; }</code></td><td>On submitting an invalid form, mark every field touched so all errors become visible at once, then stop.</td></tr>
+  <tr><td><code>this.auth.login(account.name, account.role, remember)</code></td><td>The actual sign-in. Everything else in the app reacts to this one signal change.</td></tr>
+  <tr><td><code>[type]="showPassword() ? 'text' : 'password'"</code></td><td>The show/hide password toggle, driven by a signal.</td></tr>
+</table>
+
+<h3 id="f-dash">7.2 Dashboard</h3>
+
+<h4>features/dashboard/dashboard.ts + dashboard.html</h4>
+<div class="job"><strong>Its job:</strong> the home page &mdash; seven stat tiles, a chart, recent joiners, activity, birthdays, announcements, attendance.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>store = inject(EmployeeStore)</code> and three more stores</td><td>The dashboard owns no data of its own. It reads four stores and arranges them. That is why the tiles can never disagree with the employee list.</td></tr>
+  <tr><td><code>constructor() { void this.announcements.load(); ... }</code></td><td>Ask each store to load. The employee store loads itself via its <code>onInit</code> hook, so it is not called here.</td></tr>
+  <tr><td><code>const observer: Observer&lt;PresenceSnapshot&gt; = { next, error, complete }</code></td><td>An explicit Observer object rather than a single callback, so all three outcomes are handled by name.</td></tr>
+  <tr><td><code>this.feed.presence().pipe(takeUntil(this.destroy$)).subscribe(observer)</code></td><td>Subscribe to the live presence feed, but only until this screen closes.</td></tr>
+  <tr><td><code>ngOnDestroy() { this.destroy$.next(); this.destroy$.complete(); }</code></td><td>Firing <code>destroy$</code> makes <code>takeUntil</code> end the stream, which runs the feed's teardown, which clears the timer. Leaving the dashboard genuinely stops the work &mdash; this is the memory-leak prevention in action.</td></tr>
+  <tr><td><code>activity = computed(() =&gt; ...)</code></td><td>Merges two different sources (leave requests and new joiners) into one list, sorts by date, keeps the newest six.</td></tr>
+  <tr><td><code>*appHasRole="'EMPLOYEE'; else: signedOut"</code></td><td>Signed-in users see a welcome message; guests see a prompt to sign in.</td></tr>
+  <tr><td><code>[value]="presence()?.onlineNow ?? '—'"</code></td><td>Shows a dash until the first live value arrives, so the tile is never blank.</td></tr>
+</table>
+
+<h3 id="f-emp">7.3 Employees</h3>
+
+<h4>features/employees/employees.routes.ts</h4>
+<div class="job"><strong>Its job:</strong> the four URLs of the employee section.</div>
+<table>
+  <tr><th>URL</th><th>Screen</th><th>Protection</th></tr>
+  <tr><td><code>/employees</code></td><td>The directory list</td><td>signed in</td></tr>
+  <tr><td><code>/employees/new</code></td><td>Add form</td><td>MANAGER+, and warns on unsaved changes</td></tr>
+  <tr><td><code>/employees/7</code></td><td>Profile</td><td>data pre-loaded by the resolver</td></tr>
+  <tr><td><code>/employees/7/edit</code></td><td>Edit form</td><td>MANAGER+, and warns on unsaved changes</td></tr>
+</table>
+<div class="warn">
+  <strong>Order matters here too:</strong> <code>'new'</code> is listed before <code>':id'</code>. If reversed,
+  the router would read "new" as an id and try to load employee number "new".
+</div>
+
+<h4>features/employees/employee-list/employee-list.ts</h4>
+<p class="filemeta">The main working screen: search, five filters, sorting, paging, row menus, delete.</p>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>private searchInput$ = new Subject&lt;string&gt;()</code></td><td>A stream fed by every keystroke.</td></tr>
+  <tr><td><code>.pipe(debounceTime(250), distinctUntilChanged(), takeUntil(this.destroy$))</code></td><td>Three operators doing three jobs: wait for a 250ms pause in typing; ignore a term identical to the last; stop entirely when the screen closes. Typing "Engineering" causes one filter operation, not eleven.</td></tr>
+  <tr><td><code>sorted = computed(() =&gt; [...this.store.filtered()].sort(...))</code></td><td>Note <code>[...]</code> &mdash; sorting a <em>copy</em>, because <code>.sort()</code> rearranges the original array in place, which would corrupt the store's data.</td></tr>
+  <tr><td><code>visible = computed(() =&gt; this.sorted().slice(start, start + pageSize))</code></td><td>One page's worth of rows. Three computeds chained: store filters &rarr; component sorts &rarr; component pages.</td></tr>
+  <tr><td><code>sortBy(key)</code></td><td>Clicking the same column again flips the direction; clicking a new column sorts ascending.</td></tr>
+  <tr><td><code>this.page.set(1)</code> after every filter change</td><td>Return to page 1. Without it you could be stranded on page 4 of a 1-page result and see nothing.</td></tr>
+  <tr><td><code>pendingDelete = signal&lt;Employee | null&gt;(null)</code></td><td>Which employee the confirmation dialog is asking about. <code>null</code> means no dialog is open.</td></tr>
+</table>
+
+<h4>features/employees/employee-form/employee-form.ts</h4>
+<p class="filemeta">One component used for both adding and editing &mdash; 20 fields with full validation.</p>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>isEdit = computed(() =&gt; this.employeeId() !== null)</code></td><td>Is there an id in the URL? That single question decides the heading, the button text, and whether it creates or updates. One component, two jobs.</td></tr>
+  <tr><td><code>function adultValidator(control)</code></td><td>A custom validator: rejects a date of birth under 18 years ago. It returns <code>null</code> when valid and <code>{ tooYoung: true }</code> when not &mdash; that is the required shape.</td></tr>
+  <tr><td><code>function notFutureValidator(control)</code></td><td>Rejects a joining date in the future.</td></tr>
+  <tr><td><code>Validators.pattern(/^[+]?[\d\s-]{8,18}$/)</code></td><td>Phone format: an optional +, then 8&ndash;18 digits, spaces or dashes.</td></tr>
+  <tr><td><code>hasUnsavedChanges() { return this.form.dirty &amp;&amp; !this.saving(); }</code></td><td>What the leave-warning guard asks. <em>dirty</em> means the user has actually edited something. The <code>!saving</code> stops it warning you while it is in the middle of a successful save.</td></tr>
+  <tr><td><code>this.form.markAsPristine()</code> before navigating</td><td>Clears the dirty flag after saving, so a successful save does not trigger the "unsaved changes" warning on the way out.</td></tr>
+  <tr><td><code>skills: value.skills.split(',').map((s) =&gt; s.trim()).filter(Boolean)</code></td><td>Turns "Figma, CSS, " into <code>['Figma', 'CSS']</code>. <code>filter(Boolean)</code> drops empty strings left by trailing commas.</td></tr>
+  <tr><td><code>focusFirstError()</code></td><td>Finds the first invalid field and moves focus to it, so the error is never off-screen below the fold.</td></tr>
+  <tr><td><code>toSignal(this.route.paramMap, { requireSync: true })</code></td><td>Converts the router's observable into a signal. <code>requireSync</code> promises a value is available immediately, so the code never has to handle "no id yet".</td></tr>
+</table>
+
+<h4>features/employees/employee-detail/employee-detail.ts</h4>
+<div class="job"><strong>Its job:</strong> one person's full profile, with five tabs.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>employee = toSignal(this.route.data.pipe(map((d) =&gt; d['employee'])), { requireSync: true })</code></td><td>Reads what the <em>resolver</em> already fetched. The data is guaranteed present, so the template needs no loading state at all.</td></tr>
+  <tr><td><code>tab = signal&lt;Tab&gt;('personal')</code></td><td>Which tab is showing. Tab switching is just a signal change.</td></tr>
+  <tr><td><code>manager = computed(...)</code> / <code>teammates = computed(...)</code></td><td>Found from the store already in memory &mdash; no extra network requests to show who someone reports to.</td></tr>
+  <tr><td><code>print() { this.showPrint.set(true); setTimeout(() =&gt; globalThis.print?.(), 0); }</code></td><td>Show the printable block first, then open the print dialog. The <code>setTimeout(..., 0)</code> gives the browser one moment to render it before printing.</td></tr>
+</table>
+
+<h4>features/employees/employee-profile/employee-profile.ts</h4>
+<p class="filemeta">Deliberately written with <em>both</em> the old and new Angular APIs, side by side, to show the difference.</p>
+<table class="lines">
+  <tr><th>Old way (decorator)</th><th>New way (signal)</th></tr>
+  <tr><td><code>@Input({ required: true }) employee!: Employee;</code></td><td><code>dense = input(false)</code></td></tr>
+  <tr><td><code>@Output() edit = new EventEmitter&lt;Employee&gt;()</code></td><td><code>remove = output&lt;Employee&gt;()</code></td></tr>
+  <tr><td><code>@ViewChild('noteBox') noteBoxRef?</code></td><td><code>headerRef = viewChild(...)</code></td></tr>
+  <tr><td><code>@ViewChildren('skillChip') skillChips?: QueryList</code></td><td><code>skillChipSignals = viewChildren(...)</code></td></tr>
+</table>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>showSalary = input(true, { transform: ... })</code></td><td>A transform lets the input accept both a real boolean binding and a plain string attribute (<code>showSalary="false"</code>), normalising both.</td></tr>
+  <tr><td><code>onSkillKeydown(event)</code></td><td>Arrow-key navigation across skill chips &mdash; the reason <code>@ViewChildren</code> is needed, since the handler needs the live list of elements to decide which to focus next. <code>%</code> wraps around at the ends.</td></tr>
+  <tr><td><code>ngAfterViewInit()</code></td><td><code>@ViewChild</code> results only exist from this hook onwards &mdash; reading them in the constructor gives <code>undefined</code>. Signal queries have no such restriction, which is the main reason they were introduced.</td></tr>
+</table>
+
+<h4>features/employees/employee-documents/employee-documents.ts</h4>
+<div class="job"><strong>Its job:</strong> the documents held against an employee.</div>
+<p>
+  The file itself is never uploaded &mdash; this portal has no storage backend &mdash; but the metadata genuinely
+  round-trips through the API, so the list, the counts and the delete are real. Upload is
+  <code>*appHasRole="['MANAGER','ADMIN']"</code>; delete is <code>*appHasRole="'ADMIN'"</code>.
+</p>
+
+<h3 id="f-dept">7.4 Departments</h3>
+
+<h4>features/departments/departments.routes.ts</h4>
+<div class="job"><strong>Its job:</strong> show how <em>nested</em> routes work.</div>
+<p>
+  The list screen is the parent, and the detail screen is its <em>child</em>. Visiting
+  <code>/departments/Engineering</code> keeps the list on screen and renders the detail panel inside it,
+  because the list template contains its own <code>&lt;router-outlet /&gt;</code>. Contrast this with employees,
+  where the detail page <em>replaces</em> the list entirely.
+</p>
+
+<h4>features/departments/department-list.ts</h4>
+<div class="job"><strong>Its job:</strong> list departments with headcounts, plus a create/edit form and delete confirmation.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>headcounts = computed(() =&gt; ...Map...)</code></td><td>Counts employees per department once, into a Map, so each row is an instant lookup rather than a fresh scan of every employee.</td></tr>
+  <tr><td><code>Validators.pattern(/^[A-Z]{2,5}$/)</code></td><td>Department codes must be 2&ndash;5 capital letters, e.g. <code>ENG</code>.</td></tr>
+  <tr><td><code>editing = signal&lt;DepartmentRecord | null&gt;(null)</code></td><td>Whether the form is editing an existing record or creating a new one &mdash; one form serving both, exactly as the employee form does.</td></tr>
+  <tr><td><code>startEdit(department)</code></td><td>Fills the form with the existing values via <code>form.reset({...})</code> and opens it.</td></tr>
+</table>
+
+<h4>features/departments/department-detail.ts</h4>
+<div class="job"><strong>Its job:</strong> everyone in one department.</div>
+<p>
+  Reads the department name from the URL with <code>toSignal(this.route.paramMap)</code>, then filters the
+  employee store. The payroll total is shown only to managers, guarded by
+  <code>@if (auth.hasRole('MANAGER'))</code>.
+</p>
+
+<h3 id="f-att">7.5 Attendance and Leave</h3>
+
+<h4>features/attendance/attendance-page.ts</h4>
+<div class="job"><strong>Its job:</strong> who was present, late, absent or on leave on a chosen day.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>effect(() =&gt; { this.store.date(); void this.store.load(); })</code></td><td>Reading <code>date()</code> registers it as a dependency, so changing the date automatically refetches. The read looks pointless but is exactly what makes the effect fire.</td></tr>
+  <tr><td><code>const scoped = this.auth.hasRole('MANAGER') ? this.store.forDate() : this.store.forDate().filter(r =&gt; r.employeeId === this.ownEmployeeId())</code></td><td>Managers see everyone; an employee sees only their own rows. The same rule is enforced in the API.</td></tr>
+  <tr><td><code>ownEmployeeId = computed(...)</code></td><td>Matches the signed-in display name against a directory record. A demo shortcut &mdash; a real system would carry the employee id inside the session token.</td></tr>
+</table>
+
+<h4>features/leave/leave-page.ts</h4>
+<div class="job"><strong>Its job:</strong> apply for leave, and let managers approve or reject.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>requestedDays = computed(() =&gt; countLeaveDays(from, to))</code></td><td>Live working-day count as you pick dates, so you see the cost before submitting.</td></tr>
+  <tr><td><code>if (countLeaveDays(from, to) === 0) { this.form.controls.to.setErrors({ range: true }); }</code></td><td>A cross-field check that cannot be a simple validator: zero working days means the range is backwards or entirely a weekend. The error is attached to the field it concerns.</td></tr>
+  <tr><td><code>rows = computed(...)</code></td><td>Same scoping rule as attendance: employees see their own requests, managers see all.</td></tr>
+  <tr><td><code>approve()</code> vs <code>rejecting</code> signal</td><td>Approving is one click. Rejecting opens a confirmation dialog first &mdash; the destructive action gets the extra step.</td></tr>
+  <tr><td><code>Validators.minLength(8)</code> on reason</td><td>Forces a real explanation rather than "x".</td></tr>
+</table>
+
+<h3 id="f-admin">7.6 The admin area</h3>
+<p class="lead">
+  This section is deliberately built the <em>old</em> way &mdash; with NgModules &mdash; while the rest of the app is
+  standalone. It shows both styles, and gives the module its own injector scope.
+</p>
+
+<h4>features/admin/admin.module.ts</h4>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>@NgModule({ imports: [...] })</code></td><td>The older way of grouping. The components appear under <code>imports</code> rather than <code>declarations</code> because they are themselves standalone.</td></tr>
+  <tr><td><code>{ provide: Logger, useFactory: scopedLoggerFactory('admin') }</code></td><td>Inside the admin area, <code>Logger</code> resolves to a logger tagged <code>'admin'</code> instead of the root one. The rest of the app is unaffected. This is <em>hierarchical injection</em>: a closer provider wins.</td></tr>
+  <tr><td><code>...provideFeatureFlags(...)</code></td><td>Two more flags, <em>added</em> to the root ones because of <code>multi: true</code>. The admin Settings page shows all four merged.</td></tr>
+</table>
+
+<h4>features/admin/admin-routing.module.ts</h4>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>RouterModule.forChild(routes)</code></td><td><code>forChild</code> (not <code>forRoot</code>) because this is a feature area adding routes to an app that already has a router.</td></tr>
+  <tr><td><code>canActivateChild: [roleGuard('MANAGER', 'ADMIN')]</code></td><td>Checked on <em>every</em> move between admin sub-pages, not just on entry. So dropping your role mid-session takes effect immediately rather than at the next full reload.</td></tr>
+  <tr><td><code>{ path: 'settings', canActivate: [roleGuard('ADMIN')] }</code></td><td>One page inside the area demands a higher role than the area itself.</td></tr>
+</table>
+
+<h4>features/admin/pages/admin-shell.ts</h4>
+<div class="job"><strong>Its job:</strong> the sub-navigation bar and the outlet all admin pages render into.</div>
+<p>
+  The shell is created once and stays put while you move between admin pages &mdash; only the content inside its
+  <code>&lt;router-outlet /&gt;</code> is swapped. It injects <code>Logger</code> and receives the
+  <em>admin-scoped</em> one, proving the module's provider took effect.
+</p>
+
+<h4>features/admin/pages/admin-overview.ts</h4>
+<div class="job"><strong>Its job:</strong> headcount, active count, annual payroll, department bars.</div>
+<p>Pure presentation &mdash; every number is a <code>computed</code> already living in <code>EmployeeStore</code>.</p>
+
+<h4>features/admin/pages/admin-announcements.ts</h4>
+<p class="filemeta">The most security-relevant screen in the project.</p>
+<div class="job"><strong>Its job:</strong> write announcements, and show live what sanitisation will keep.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>[innerHTML]="bodyValue()"</code></td><td>Renders the author's HTML. Angular sanitises it automatically here &mdash; scripts, <code>onerror=</code> handlers and <code>javascript:</code> URLs are stripped before they reach the page.</td></tr>
+  <tr><td><code>sanitised = computed(() =&gt; this.sanitizer.sanitize(SecurityContext.HTML, this.bodyValue()))</code></td><td>Runs the sanitiser explicitly so the result can be <em>displayed</em> to the author.</td></tr>
+  <tr><td><code>wasModified = computed(() =&gt; sanitised().replace(/\s+/g,'') !== bodyValue().replace(/\s+/g,''))</code></td><td>Compares before and after, ignoring whitespace. If they differ, something was removed, and the author is told so.</td></tr>
+</table>
+<div class="plain">
+  <strong>Why this matters:</strong> if a manager could save <code>&lt;script&gt;steal()&lt;/script&gt;</code> into an
+  announcement, it would run on the computer of every employee who opened the dashboard. That attack is called
+  XSS. Angular blocks it by default &mdash; the danger is only when a developer deliberately disables the
+  protection with <code>bypassSecurityTrustHtml</code>. This project never does, and that choice is documented
+  in the file's own comment.
+</div>
+
+<h4>features/admin/pages/admin-system.ts</h4>
+<div class="job"><strong>Its job:</strong> the operational view &mdash; request count, average latency, cache hits, recent requests.</div>
+<p>
+  Every number here comes from the interceptors: the profiling interceptor measured it, the profiling service
+  stored it. Cache hits appear as green rows, errors as red. The "Export payroll" button is wrapped in
+  <code>*appFeatureFlag="'admin.payroll-export'"</code>, and since that flag is off, the button is not in the
+  page at all.
+</p>
+
+<h4>features/admin/pages/admin-audit.ts</h4>
+<div class="job"><strong>Its job:</strong> show everything the loggers recorded this session.</div>
+<p>
+  It injects <code>LOG_SINK</code> &mdash; the shared array every logger writes into. Entries from the admin area
+  are tagged <code>admin</code>; the rest are tagged <code>root</code>. Seeing both scopes in one list is the
+  visible proof that hierarchical injection worked.
+</p>
+
+<h4>features/admin/pages/admin-settings.ts</h4>
+<div class="job"><strong>Its job:</strong> show resolved configuration, all merged feature flags, and let an admin preview other roles.</div>
+<p>
+  The role-switch buttons call <code>auth.switchRole(role)</code>. Because the role is a signal, the entire
+  interface reshapes instantly &mdash; nav links disappear, buttons vanish from the DOM, permission-gated panels
+  close. It is the fastest way to see the whole permission system working at once.
+</p>
+
+<h3 id="f-misc">7.7 Settings and error pages</h3>
+
+<h4>features/settings/settings-page.ts</h4>
+<div class="job"><strong>Its job:</strong> your profile, theme choice, and change password.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>function passwordsMatch(group)</code></td><td>A <em>group-level</em> validator: it compares two fields against each other, which a single-field validator cannot do. It is passed as <code>{ validators: passwordsMatch }</code> on the group, not on a control.</td></tr>
+  <tr><td><code>Validators.minLength(8)</code> on the new password</td><td>Stricter than the current-password rule, which only needs 6 &mdash; new passwords should be better than old ones.</td></tr>
+</table>
+<div class="warn">
+  <strong>Honest limitation:</strong> the password change is simulated. This portal has no credential store,
+  so the form validates properly and then does nothing. The comment in the file says so plainly.
+</div>
+
+<h4>features/misc/forbidden.ts and not-found.ts</h4>
+<p>
+  Two small screens. <code>forbidden</code> (403) is where the role guard sends you, and it tells you which
+  role you currently hold so the problem is obvious. <code>not-found</code> (404) is caught by the
+  <code>'**'</code> wildcard route.
+</p>
+
+<h4>features/announcements/announcement-panel.ts</h4>
+<div class="job"><strong>Its job:</strong> the announcements block on the dashboard.</div>
+<p>
+  Takes a <code>limit</code> input so a compact surface can show only three. It also offers a
+  <code>[panel-actions]</code> projection slot, which the dashboard fills with a "Manage" link &mdash; but only
+  for managers, using <code>*appHasRole</code> on the projected content itself.
+</p>
+
+<div class="page-break"></div>
+<h2 id="f-test">8. Testing files</h2>
+<p class="lead">
+  There are 160 tests across 18 files. A test is code that runs your code and checks the result, so that a
+  change which breaks something is caught immediately rather than by a user.
+</p>
+
+<div class="def"><span class="word">describe / it / expect</span> &mdash; the three words every test uses.
+<code>describe</code> groups related tests, <code>it</code> is one test, <code>expect</code> is the actual check:
+<pre>it('returns initials', () =&gt; {
+  expect(new InitialsPipe().transform('Mei Tanaka')).toBe('MT');
+});</pre></div>
+
+<div class="def"><span class="word">TestBed</span> &mdash; Angular's test harness. It builds a miniature version of
+the application so components can be created and inspected in isolation.</div>
+
+<h4>src/app/testing/test-setup.ts</h4>
+<div class="job"><strong>Its job:</strong> one function that wires up a realistic test environment.</div>
+<p>
+  <code>configureFeatureTest('MANAGER')</code> resets the fake database, clears the cache, installs the
+  <em>real</em> interceptor chain, and signs in at the requested role. Screens are therefore tested through the
+  same stack the real app uses &mdash; so a passing test means the store, the HTTP chain and the role rules all
+  genuinely agree, not just that a mock was called.
+</p>
+
+<h4>src/app/testing/employee.fixture.ts</h4>
+<div class="job"><strong>Its job:</strong> one sample employee, in one place.</div>
+<p>
+  <code>makeEmployee({ status: 'EXITED' })</code> gives the standard record with one field changed. When the
+  model gains a field, you edit this file once instead of every test. Notice its
+  <code>bioHtml</code> deliberately contains <code>&lt;img src="x" onerror="alert(1)"&gt;</code> &mdash; a real
+  attack string, so the sanitisation tests have something genuine to strip.
+</p>
+
+<h4>What the test files cover</h4>
+<table>
+  <tr><th>File</th><th>What it checks</th></tr>
+  <tr><td><code>core/di.spec.ts</code></td><td>Dependency injection: that <code>useExisting</code> really shares one instance, that multi-providers merge, that optional injection returns null.</td></tr>
+  <tr><td><code>core/change-detection.spec.ts</code></td><td>That OnPush and signals update the screen when expected.</td></tr>
+  <tr><td><code>core/guards/guards.spec.ts</code></td><td>That guards allow, redirect and block correctly per role.</td></tr>
+  <tr><td><code>core/interceptors/interceptors.spec.ts</code></td><td>That the token is attached, the cache short-circuits, errors are normalised, timings are recorded.</td></tr>
+  <tr><td><code>core/services/auth.service.spec.ts</code></td><td>Sign in, sign out, remember-me, role ranking.</td></tr>
+  <tr><td><code>core/state/employee.store.spec.ts</code></td><td>Loading, filtering, creating, updating, removing.</td></tr>
+  <tr><td><code>features/*/*.spec.ts</code></td><td>Each screen: that it renders, filters, validates and respects roles.</td></tr>
+  <tr><td><code>shared/**/*.spec.ts</code></td><td>Pipes, directives and the dialog in isolation.</td></tr>
+</table>
+<p>Run them with <code>npm test</code>.</p>
+
+<div class="page-break"></div>
+<h2 id="f-config">9. Configuration files</h2>
+
+<h4>package.json</h4>
+<div class="job"><strong>Its job:</strong> list the project's libraries and its command shortcuts.</div>
+<table>
+  <tr><th>Command</th><th>What it does</th></tr>
+  <tr><td><code>npm start</code></td><td>Run the app locally with live reload.</td></tr>
+  <tr><td><code>npm test</code></td><td>Run all 160 tests.</td></tr>
+  <tr><td><code>npm run build</code></td><td>Produce the optimised production files.</td></tr>
+  <tr><td><code>npm run lint</code></td><td>Check code style and common mistakes.</td></tr>
+  <tr><td><code>npm run format</code></td><td>Auto-format every file with Prettier.</td></tr>
+  <tr><td><code>npm run serve:ssr</code></td><td>Run the built server-rendered version.</td></tr>
+  <tr><td><code>npm run start:fr</code></td><td>Run the app in French.</td></tr>
+</table>
+<p>
+  <code>dependencies</code> are libraries the running app needs (Angular, RxJS, Express).
+  <code>devDependencies</code> are tools needed only while building and testing (TypeScript, ESLint, Vitest,
+  Playwright). Users never download the second group.
+</p>
+
+<h4>tsconfig.json</h4>
+<div class="job"><strong>Its job:</strong> tell TypeScript how strict to be, and set up path shortcuts.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>"paths": { "@core/*": ["./src/app/core/*"], ... }</code></td><td>Import aliases. You write <code>@core/services/auth.service</code> instead of <code>../../../core/services/auth.service</code>. Moving a file no longer breaks a dozen relative paths.</td></tr>
+  <tr><td><code>noImplicitReturns</code></td><td>Every path through a function must return something. Catches the branch you forgot.</td></tr>
+  <tr><td><code>noFallthroughCasesInSwitch</code></td><td>Catches a missing <code>break</code> in a switch.</td></tr>
+  <tr><td><code>strictInjectionParameters</code></td><td>Angular refuses to inject something whose type it cannot determine.</td></tr>
+  <tr><td><code>tsconfig.app.json</code> / <code>tsconfig.spec.json</code></td><td>Two variants: the app build <em>excludes</em> test files, the test build includes only them.</td></tr>
+</table>
+
+<h4>project.json and nx.json</h4>
+<div class="job"><strong>Its job:</strong> tell Nx how to build, serve, test and lint this project.</div>
+<table class="lines">
+  <tr><th>Line</th><th>What it means</th></tr>
+  <tr><td><code>"budgets": [{ "type": "initial", "maximumError": "1MB" }]</code></td><td>Fail the build if the first download grows beyond 1MB. A guard rail against accidentally shipping something enormous.</td></tr>
+  <tr><td><code>"outputMode": "server"</code>, <code>"ssr": { "entry": "src/server.ts" }</code></td><td>Build the server-rendered version too.</td></tr>
+  <tr><td><code>"i18n": { "locales": { "fr": ... } }</code></td><td>Registers French as a second language, using the translation file in <code>src/locale/</code>.</td></tr>
+  <tr><td><code>"cache": true</code> (nx.json)</td><td>Nx remembers previous results and skips work whose inputs have not changed, so a repeat build is near-instant.</td></tr>
+</table>
+
+<h4>eslint.config.js, .prettierrc, .editorconfig</h4>
+<p>
+  Three style tools. <strong>ESLint</strong> finds likely mistakes and enforces conventions.
+  <strong>Prettier</strong> formats code automatically (100-character lines, single quotes) so nobody argues
+  about spacing. <strong>.editorconfig</strong> makes every editor agree on indentation and line endings.
+</p>
+
+<h4>src/styles.css</h4>
+<div class="job"><strong>Its job:</strong> the design tokens and shared styling for the whole app.</div>
+<p>
+  It defines CSS custom properties &mdash; <code>--bg</code>, <code>--surface</code>, <code>--text</code>,
+  <code>--accent</code> &mdash; once, and everything else refers to them. Dark mode simply redefines those same
+  names, so the entire app switches theme without a single component knowing it happened. Status colours
+  (<code>--good</code>, <code>--danger</code>) are deliberately <em>not</em> themed and are always paired with a
+  text label, so meaning never depends on colour alone.
+</p>
+
+<h4>src/locale/messages.xlf and messages.fr.xlf</h4>
+<p>
+  The translation files. Any text marked <code>i18n="@@some.id"</code> in a template is extracted into
+  <code>messages.xlf</code>; <code>messages.fr.xlf</code> holds the French wording. Running
+  <code>npm run start:fr</code> builds a completely separate French version of the app.
+</p>
+
+<div class="page-break"></div>
+<h2 id="recap">10. Recap tables</h2>
+
+<h3>Where does each kind of thing live?</h3>
+<table>
+  <tr><th>If you want to...</th><th>Look in</th></tr>
+  <tr><td>change what data looks like</td><td><code>core/models/</code></td></tr>
+  <tr><td>change an API call</td><td><code>core/services/</code></td></tr>
+  <tr><td>change what the app remembers</td><td><code>core/state/</code></td></tr>
+  <tr><td>change something about every request</td><td><code>core/interceptors/</code></td></tr>
+  <tr><td>change who may open a page</td><td><code>core/guards/</code> and <code>app.routes.ts</code></td></tr>
+  <tr><td>change a reusable UI piece</td><td><code>shared/components/</code></td></tr>
+  <tr><td>change one screen</td><td><code>features/&lt;name&gt;/</code></td></tr>
+  <tr><td>change colours or spacing</td><td><code>src/styles.css</code></td></tr>
+  <tr><td>change app-wide settings</td><td><code>core/tokens/app-config.token.ts</code></td></tr>
+</table>
+
+<h3>Signals: the four things you will write</h3>
+<table>
+  <tr><th>Code</th><th>Meaning</th></tr>
+  <tr><td><code>signal(0)</code></td><td>A value that announces its own changes.</td></tr>
+  <tr><td><code>computed(() =&gt; ...)</code></td><td>A value derived from other signals. Read-only.</td></tr>
+  <tr><td><code>effect(() =&gt; ...)</code></td><td>Code that re-runs on change. For side effects only.</td></tr>
+  <tr><td><code>x.asReadonly()</code></td><td>A read-only view others may watch but not change.</td></tr>
+</table>
+
+<h3>The three places a role is enforced</h3>
+<table>
+  <tr><th>Where</th><th>What it stops</th><th>Strength</th></tr>
+  <tr><td>Route guard</td><td>Opening the URL at all</td><td>Real, but only for navigation</td></tr>
+  <tr><td><code>*appHasRole</code></td><td>The control existing in the page</td><td>Courtesy &mdash; good design, not security</td></tr>
+  <tr><td>Mock backend</td><td>The action actually happening</td><td><strong>The real lock</strong></td></tr>
+</table>
+
+<h3>Common mistakes this project deliberately avoids</h3>
+<table>
+  <tr><th>Mistake</th><th>What this project does instead</th></tr>
+  <tr><td><code>list.push(item)</code> on a signal</td><td><code>update((l) =&gt; [...l, item])</code> &mdash; a new array, so the signal actually changes.</td></tr>
+  <tr><td><code>array.sort()</code> on stored data</td><td><code>[...array].sort()</code> &mdash; sort a copy, because sort rearranges in place.</td></tr>
+  <tr><td>Forgetting <code>params = params.set(...)</code></td><td>Reassigns, because <code>HttpParams</code> is immutable.</td></tr>
+  <tr><td>A timer that never stops</td><td><code>takeUntil(destroy$)</code> plus a real teardown function.</td></tr>
+  <tr><td>Calling a method from a template</td><td>A pure pipe or a <code>computed</code>, so it does not run on every check.</td></tr>
+  <tr><td>Trusting the browser for permissions</td><td>Checking the role again in the data layer.</td></tr>
+  <tr><td>Touching <code>localStorage</code> during SSR</td><td>Checking <code>isPlatformBrowser</code> first.</td></tr>
+  <tr><td><code>innerHTML</code> with user text</td><td><code>textContent</code> via <code>Renderer2</code>, or Angular's sanitiser.</td></tr>
+</table>
+
+<h3>The five-sentence summary</h3>
+<div class="plain">
+  <strong>If you remember nothing else:</strong><br><br>
+  1. A <strong>component</strong> is one piece of screen; the app is components inside components.<br>
+  2. A <strong>signal</strong> is a value that announces its own changes, so the screen redraws itself and no
+  code ever says "now update the display".<br>
+  3. A <strong>store</strong> holds shared data in one place, so two screens can never disagree.<br>
+  4. Every HTTP request passes through five <strong>interceptors</strong> that time it, sign it, cache it,
+  catch its errors, and finally answer it.<br>
+  5. <strong>Roles</strong> are checked three times &mdash; at the route, in the page, and in the data layer &mdash;
+  and only the last one is a real lock.
+</div>
+
+</body>
+</html>
