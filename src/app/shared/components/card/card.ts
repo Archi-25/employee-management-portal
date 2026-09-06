@@ -1,16 +1,31 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
 
 /**
- * MODULE 1 — content projection.
+ * The surface every panel in the portal sits on.
  *
  * Three projection slots: a `select`-ed header, a `select`-ed actions area, and
  * the catch-all `<ng-content>` for the body. Projected content is compiled in
  * the PARENT's context, so the parent's bindings and change-detection strategy
  * govern it — not this component's.
+ *
+ * `ViewEncapsulation.Emulated` is stated explicitly rather than left implicit,
+ * because the two components beside it in this folder deliberately choose
+ * otherwise and the contrast is the point:
+ *
+ *   Emulated  (here)              Angular rewrites `.card` to `.card[_ngcontent-x]`
+ *                                 and stamps the attribute on this view's nodes.
+ *                                 Styles cannot leak out; page styles still reach
+ *                                 in. The right default for almost everything.
+ *   None      (print-record)      Styles are injected into document.head verbatim.
+ *                                 Needed there because `@page` rules are not
+ *                                 scopeable to a component.
+ *   ShadowDom (badge-widget)      A real shadow root: isolated in BOTH directions,
+ *                                 so a host page cannot restyle an embedded badge.
  */
 @Component({
   selector: 'app-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.Emulated,
   template: `
     <section class="card">
       <header class="card__head">

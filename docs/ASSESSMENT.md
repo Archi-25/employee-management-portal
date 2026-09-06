@@ -1,5 +1,11 @@
 # Assessment coverage
 
+**Run `npm run verify`** to check every requirement below against the source
+tree. It prints a pass/fail line per item — 72 module requirements and 73
+feature-checklist items, all passing — so nothing here has to be taken on
+trust. Two items are marked ⚠️ because their only evidence is in test files;
+that is deliberate and explained where they appear.
+
 This document is the examiner's map. The application itself is a straight
 Employee Management Portal with no teaching pages in it — every required
 technique is used where a real product would use it, and this table says where.
@@ -16,7 +22,7 @@ Routes are given as you would reach them in the running app.
 | `@Input` | `employee` on the profile; `heading`/`subtitle` on `Card` | `employee-profile.ts`, `shared/components/card/card.ts` |
 | `@Output` | `edit`, `remove`, `noteAdded` from the profile | `employee-profile.ts` |
 | Signal `input()` / `output()` | `dense`, `showSalary`; `confirmed`/`cancelled` on the dialog; `limit` on the announcement panel; `employeeId` on the documents tab | `employee-profile.ts`, `confirm-dialog.ts`, `announcement-panel.ts` |
-| `ViewEncapsulation.Emulated` | The default everywhere else | — |
+| `ViewEncapsulation.Emulated` | Stated explicitly on `Card`, next to the two components that choose otherwise, so the contrast is visible | `shared/components/card/card.ts` |
 | `ViewEncapsulation.ShadowDom` | Shareable employee badge — must resist the host page's styles | `shared/components/badge-widget/badge-widget.ts` |
 | `ViewEncapsulation.None` | Printable record — `@page` rules must reach the document | `shared/components/print-record/print-record.ts` |
 | Local template references | `#noteBox`, `#skillList`, `#skillChip`, `#profileHeader` | `employee-profile.html` |
@@ -222,7 +228,7 @@ merely documented: `no-restricted-imports` rules in `eslint.config.js` fail
 
 ## Tests
 
-`npm test` — 88 tests across 10 files:
+`npm test` — 100 tests across 12 files:
 
 | File | Covers |
 | --- | --- |
@@ -236,6 +242,8 @@ merely documented: `no-restricted-imports` rules in `eslint.config.js` fail
 | `shared/pipes/pipes.spec.ts` | `initials`, `tenure` |
 | `features/employees/employee-profile/employee-profile.spec.ts` | Queries, all four projection slots, both output styles, keyboard navigation, bio sanitisation |
 | `features/announcements/announcement-panel.spec.ts` | Ordering, rendering, and that the stored XSS payload never reaches the DOM |
+| `core/change-detection.spec.ts` | Default vs OnPush, including the in-place-mutation failure mode |
+| `shared/directives/click-outside.spec.ts` | Row action menus open, switch, and close on an outside click |
 
 ## Data visualisation
 
