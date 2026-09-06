@@ -20,7 +20,8 @@
     "nx:build": "nx build employee-management-portal",
     "nx:graph": "nx graph",
     "serve:ssr:fr": "node dist/employee-management-portal/server/fr/server.mjs",
-    "verify": "bash scripts/verify-requirements.sh"
+    "verify": "bash scripts/verify-requirements.sh",
+    "viva": "node scripts/build-viva-pdf.mjs"
   },
   "private": true,
   "packageManager": "npm@12.0.2",

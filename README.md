@@ -9,7 +9,9 @@ signal-based state, server-side rendering, and build-time internationalisation.
 
 > Built for the **Angular Advanced Training – Practical Assessment**.
 > [`docs/ASSESSMENT.md`](docs/ASSESSMENT.md) maps every requirement in the brief
-> to the place in this application where it is used.
+> to the place in this application where it is used, and
+> [`docs/VIVA-GUIDE.pdf`](docs/VIVA-GUIDE.pdf) is a 23-page walkthrough of the
+> whole codebase written for an oral defence.
 
 ---
 
@@ -121,6 +123,7 @@ Sign in with any of the demo accounts shown on the login page; the password is
 | `npm run serve:ssr` | Run the built SSR server (port 4000) |
 | `npm test` | Unit tests with coverage |
 | `npm run verify` | Check every assessment requirement against the source |
+| `npm run viva` | Rebuild `docs/VIVA-GUIDE.pdf` from `docs/viva-guide.html` |
 | `npm run lint` | ESLint over TypeScript and templates |
 | `npm run extract-i18n` | Re-extract translatable strings |
 | `npm run sonar` | SonarQube scan |
