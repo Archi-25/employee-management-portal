@@ -95,24 +95,11 @@
       <div><dt>API base</dt><dd><code>{{ config.apiBaseUrl }}</code></dd></div>
       <div><dt>Rows per page</dt><dd>{{ config.defaultPageSize }}</dd></div>
     </dl>
+
+    <p *appHasRole="'ADMIN'" class="hint">
+      Administrators can preview the portal as another role from
+      <a routerLink="/admin/settings">Admin &rsaquo; Settings</a>.
+    </p>
   </app-card>
 
-  <app-card heading="Preview as another role" subtitle="Check what each role can see before rolling out a change">
-    <p class="hint">
-      This affects only your session. Guards, menus and action buttons all follow the selected
-      role immediately.
-    </p>
-    <div class="roles">
-      @for (role of roles; track role) {
-        <button
-          type="button"
-          class="btn btn--ghost btn--sm"
-          [class.is-current]="auth.role() === role"
-          (click)="switchRole(role)"
-        >
-          {{ role }}
-        </button>
-      }
-    </div>
-  </app-card>
 </div>

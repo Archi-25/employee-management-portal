@@ -17,6 +17,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { Employee, fullName } from '@core/models/employee.model';
+import { HasRoleDirective } from '@shared/directives/has-role.directive';
 import { TooltipDirective } from '@shared/directives/tooltip.directive';
 import { RoleBadgeDirective } from '@shared/directives/role-badge.directive';
 import { InitialsPipe } from '@shared/pipes/initials.pipe';
@@ -44,6 +45,7 @@ export interface ProfileNote {
     DatePipe,
     InitialsPipe,
     TenurePipe,
+    HasRoleDirective,
     TooltipDirective,
     RoleBadgeDirective,
   ],

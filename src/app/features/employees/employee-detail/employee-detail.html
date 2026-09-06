@@ -15,13 +15,6 @@
       {{ showBadge() ? 'Hide badge' : 'Badge' }}
     </button>
     <button type="button" class="btn btn--ghost btn--sm" (click)="print()">Print</button>
-    <button *appHasRole="['MANAGER', 'ADMIN']" type="button" class="btn btn--sm" (click)="edit()">
-      Edit
-    </button>
-    <button *appHasRole="'ADMIN'" type="button" class="btn btn--danger btn--sm"
-            (click)="confirmingDelete.set(true)">
-      Delete
-    </button>
   </div>
 </header>
 

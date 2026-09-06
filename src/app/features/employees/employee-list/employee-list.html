@@ -96,7 +96,7 @@
       }
     </div>
   } @else {
-    <div class="table-wrap">
+    <div class="table-wrap" (appClickOutside)="openMenuId.set(null)">
       <table class="grid">
         <thead>
           <tr>
@@ -172,12 +172,14 @@
                 <td class="num">{{ employee.salary | number }}</td>
               }
               <td class="actions">
-                <div class="menu" (appClickOutside)="openMenuId.set(null)">
+                <!-- The menu only holds privileged actions, so roles without any
+                     never get the trigger. Viewing is what clicking the row does. -->
+                <div *appHasRole="['MANAGER', 'ADMIN']" class="menu">
                   <button
                     type="button"
                     class="menu__trigger"
                     [attr.aria-expanded]="openMenuId() === employee.id"
-                    aria-label="Row actions"
+                    [attr.aria-label]="'Actions for ' + displayName(employee)"
                     (click)="toggleMenu(employee.id)"
                   >
                     ⋯
@@ -185,11 +187,7 @@
 
                   @if (openMenuId() === employee.id) {
                     <div class="menu__panel" role="menu">
-                      <a role="menuitem" [routerLink]="['/employees', employee.id]">View profile</a>
-                      <button *appHasRole="['MANAGER', 'ADMIN']" type="button" role="menuitem"
-                              (click)="edit(employee)">
-                        Edit
-                      </button>
+                      <button type="button" role="menuitem" (click)="edit(employee)">Edit</button>
                       <button *appHasRole="'ADMIN'" type="button" role="menuitem" class="danger"
                               (click)="askToDelete(employee)">
                         Remove

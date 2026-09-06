@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-import { ROLES, Role, fullName } from '@core/models/employee.model';
+import { fullName } from '@core/models/employee.model';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ThemeService, ThemePreference } from '@core/services/theme.service';
 import { EmployeeStore } from '@core/state/employee.store';
 import { APP_CONFIG } from '@core/tokens/app-config.token';
+import { RouterLink } from '@angular/router';
 import { Card } from '@shared/components/card/card';
+import { HasRoleDirective } from '@shared/directives/has-role.directive';
 import { InitialsPipe } from '@shared/pipes/initials.pipe';
 
 /** Confirms the two password fields agree. */
@@ -26,7 +28,7 @@ const THEMES: readonly { value: ThemePreference; label: string; hint: string }[]
 @Component({
   selector: 'app-settings-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, Card, InitialsPipe],
+  imports: [ReactiveFormsModule, RouterLink, Card, HasRoleDirective, InitialsPipe],
   templateUrl: './settings-page.html',
   styleUrl: './settings-page.css',
 })
@@ -39,7 +41,6 @@ export class SettingsPage {
   private readonly fb = inject(FormBuilder);
 
   protected readonly themes = THEMES;
-  protected readonly roles: readonly Role[] = ROLES;
   protected readonly passwordSaved = signal(false);
 
   /** The directory record behind the signed-in session, if there is one. */
@@ -75,10 +76,5 @@ export class SettingsPage {
 
   protected setTheme(value: ThemePreference): void {
     this.theme.set(value);
-  }
-
-  protected switchRole(role: Role): void {
-    this.auth.switchRole(role);
-    this.notifications.info(`Now previewing the portal as ${role}.`);
   }
 }

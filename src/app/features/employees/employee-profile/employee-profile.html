@@ -23,8 +23,14 @@
 
     <div class="profile__actions">
       <ng-content select="[profile-actions]" />
-      <button type="button" class="btn" (click)="edit.emit(employee)">Edit</button>
-      <button type="button" class="btn btn--danger" (click)="remove.emit(employee)">
+      <!-- Editing needs manager rights; removing needs admin. Anyone else
+           never receives the button at all. -->
+      <button *appHasRole="['MANAGER', 'ADMIN']" type="button" class="btn"
+              (click)="edit.emit(employee)">
+        Edit
+      </button>
+      <button *appHasRole="'ADMIN'" type="button" class="btn btn--danger"
+              (click)="remove.emit(employee)">
         Remove
       </button>
     </div>

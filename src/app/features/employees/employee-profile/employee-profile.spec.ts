@@ -2,6 +2,8 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Employee } from '@core/models/employee.model';
 import { makeEmployee } from '../../../testing/employee.fixture';
+import { AuthService } from '@core/services/auth.service';
+import { Role } from '@core/models/employee.model';
 import { ConsoleLogger } from '@core/services/logger.service';
 import { Logger } from '@core/tokens/logger.token';
 import { EmployeeProfile, ProfileNote } from './employee-profile';
@@ -34,13 +36,25 @@ class ProfileHost {
 }
 
 describe('EmployeeProfile', () => {
-  async function setup() {
+  async function setup(role: Role = 'ADMIN') {
     TestBed.configureTestingModule({
       providers: [ConsoleLogger, { provide: Logger, useExisting: ConsoleLogger }],
     });
+    if (role === 'GUEST') {
+      TestBed.inject(AuthService).logout();
+    } else {
+      TestBed.inject(AuthService).login('Tester', role);
+    }
     const fixture = TestBed.createComponent(ProfileHost);
     await fixture.whenStable();
     return { fixture, element: fixture.nativeElement as HTMLElement };
+  }
+
+  /** Buttons are removed from the DOM, not disabled — so query by text. */
+  function buttonNamed(element: HTMLElement, text: string): HTMLButtonElement | undefined {
+    return [...element.querySelectorAll('button')].find(
+      (button) => button.textContent?.trim() === text,
+    );
   }
 
   it('renders the @Input record', async () => {
@@ -103,10 +117,7 @@ describe('EmployeeProfile', () => {
     const textarea = element.querySelector('textarea') as HTMLTextAreaElement;
 
     textarea.value = 'Discussed promotion';
-    const save = [...element.querySelectorAll('button')].find(
-      (button) => button.textContent?.trim() === 'Save note',
-    );
-    save?.click();
+    buttonNamed(element, 'Save note')?.click();
     await fixture.whenStable();
     expect(element.querySelectorAll('.notes__list li').length).toBe(1);
 
@@ -123,10 +134,7 @@ describe('EmployeeProfile', () => {
   it('emits the decorator @Output when Edit is pressed', async () => {
     const { fixture, element } = await setup();
 
-    const edit = [...element.querySelectorAll('button')].find(
-      (button) => button.textContent?.trim() === 'Edit',
-    );
-    edit?.click();
+    buttonNamed(element, 'Edit')?.click();
     await fixture.whenStable();
 
     expect(fixture.componentInstance.edited()?.id).toBe(42);
@@ -135,10 +143,7 @@ describe('EmployeeProfile', () => {
   it('emits the signal output() when Remove is pressed', async () => {
     const { fixture, element } = await setup();
 
-    const remove = [...element.querySelectorAll('button')].find(
-      (button) => button.textContent?.trim() === 'Remove',
-    );
-    remove?.click();
+    buttonNamed(element, 'Remove')?.click();
     await fixture.whenStable();
 
     expect(fixture.componentInstance.removed()?.id).toBe(42);
@@ -150,10 +155,7 @@ describe('EmployeeProfile', () => {
     const textarea = element.querySelector('textarea') as HTMLTextAreaElement;
     textarea.value = 'Promotion discussed';
 
-    const save = [...element.querySelectorAll('button')].find(
-      (button) => button.textContent?.trim() === 'Save note',
-    );
-    save?.click();
+    buttonNamed(element, 'Save note')?.click();
     await fixture.whenStable();
 
     expect(fixture.componentInstance.note()).toMatchObject({
@@ -166,10 +168,7 @@ describe('EmployeeProfile', () => {
   it('ignores an empty note', async () => {
     const { fixture, element } = await setup();
 
-    const save = [...element.querySelectorAll('button')].find(
-      (button) => button.textContent?.trim() === 'Save note',
-    );
-    save?.click();
+    buttonNamed(element, 'Save note')?.click();
     await fixture.whenStable();
 
     expect(fixture.componentInstance.note()).toBeNull();
@@ -193,5 +192,39 @@ describe('EmployeeProfile', () => {
     expect(bio?.querySelector('p')).not.toBeNull();
     // ...and the event handler does not reach the DOM.
     expect(bio?.innerHTML).not.toContain('onerror');
+  });
+
+  describe('role-gated actions', () => {
+    it('gives an employee neither Edit nor Remove', async () => {
+      const { element } = await setup('EMPLOYEE');
+
+      expect(buttonNamed(element, 'Edit')).toBeUndefined();
+      expect(buttonNamed(element, 'Remove')).toBeUndefined();
+      // The record itself is still readable.
+      expect(element.querySelector('.identity__name')).not.toBeNull();
+    });
+
+    it('gives a manager Edit but not Remove', async () => {
+      const { element } = await setup('MANAGER');
+
+      expect(buttonNamed(element, 'Edit')).toBeDefined();
+      expect(buttonNamed(element, 'Remove')).toBeUndefined();
+    });
+
+    it('gives an admin both', async () => {
+      const { element } = await setup('ADMIN');
+
+      expect(buttonNamed(element, 'Edit')).toBeDefined();
+      expect(buttonNamed(element, 'Remove')).toBeDefined();
+    });
+
+    it('removes the button from the DOM rather than disabling it', async () => {
+      const { element } = await setup('EMPLOYEE');
+
+      // A disabled button would still be findable and still be a leak of intent.
+      const disabled = [...element.querySelectorAll('button')].filter((b) => b.disabled);
+      expect(disabled.length).toBe(0);
+      expect(element.innerHTML).not.toContain('Remove');
+    });
   });
 });
