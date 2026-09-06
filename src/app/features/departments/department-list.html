@@ -1,0 +1,132 @@
+<header class="page-head dept-head">
+  <div>
+    <h1 i18n="@@departments.title">Departments</h1>
+    <p i18n="@@departments.subtitle">
+      Team structure, headcount and who leads each department.
+    </p>
+  </div>
+  <button *appHasRole="'ADMIN'" type="button" class="btn" (click)="startCreate()">
+    Add department
+  </button>
+</header>
+
+@if (showForm()) {
+  <app-card
+    [heading]="editing() ? 'Edit department' : 'New department'"
+    subtitle="Departments group employees and drive the org chart"
+  >
+    <form [formGroup]="form" (ngSubmit)="save()" class="form" novalidate>
+      <label class="field">
+        <span>Name <b aria-hidden="true">*</b></span>
+        <input formControlName="name" placeholder="Engineering"
+               [class.is-invalid]="showError('name')" />
+        @if (showError('name')) { <em class="error">A name of at least 2 characters is required.</em> }
+      </label>
+
+      <label class="field">
+        <span>Code <b aria-hidden="true">*</b></span>
+        <input formControlName="code" placeholder="ENG" maxlength="5"
+               [class.is-invalid]="showError('code')" />
+        @if (showError('code')) { <em class="error">2–5 uppercase letters, e.g. ENG.</em> }
+      </label>
+
+      <label class="field">
+        <span>Department head</span>
+        <select formControlName="headId">
+          <option [ngValue]="null">— Not assigned —</option>
+          @for (manager of managers(); track manager.id) {
+            <option [ngValue]="manager.id">{{ manager.firstName }} {{ manager.lastName }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field field--wide">
+        <span>Description</span>
+        <input formControlName="description" placeholder="What this team is responsible for" />
+      </label>
+
+      <div class="form__actions">
+        <button type="submit" class="btn" [disabled]="store.loading()">
+          {{ editing() ? 'Save changes' : 'Create department' }}
+        </button>
+        <button type="button" class="btn btn--ghost" (click)="showForm.set(false)">Cancel</button>
+      </div>
+    </form>
+  </app-card>
+}
+
+<div class="layout">
+  <div class="col">
+    <app-card heading="All departments" [subtitle]="store.count() + ' teams'">
+      @if (store.loading() && store.count() === 0) {
+        <p class="hint">Loading departments…</p>
+      } @else {
+        <ul class="teams">
+          @for (department of store.departments(); track department.id) {
+            <li>
+              <a class="teams__link" [routerLink]="[department.name]" routerLinkActive="is-active">
+                <span class="teams__code">{{ department.code }}</span>
+                <span class="teams__body">
+                  <strong>{{ department.name }}</strong>
+                  <small>{{ headName(department.headId) }}</small>
+                </span>
+                <span class="teams__count">{{ countFor(department.name) }}</span>
+              </a>
+
+              <span *appHasRole="'ADMIN'" class="teams__actions">
+                <button type="button" class="link" (click)="startEdit(department)">Edit</button>
+                <button type="button" class="link link--danger" (click)="deleting.set(department)">
+                  Delete
+                </button>
+              </span>
+            </li>
+          }
+        </ul>
+      }
+    </app-card>
+
+    <app-card heading="Headcount" subtitle="Employees per department">
+      <app-bar-chart
+        [data]="chartData()"
+        [compact]="true"
+        unit="employees"
+        categoryLabel="Department"
+        caption="Employee headcount by department"
+      />
+    </app-card>
+  </div>
+
+  <div class="detail">
+    <!-- Child route: /departments/:name -->
+    <router-outlet #deptOutlet="outlet" />
+
+    @if (!deptOutlet.isActivated) {
+      <app-card heading="Select a department" subtitle="Pick a team on the left to see its members">
+        <p class="placeholder">
+          Each department lists the people assigned to it, their designation and their status.
+          @if (auth.hasRole('ADMIN')) {
+            Administrators can also rename a department or change who leads it.
+          }
+        </p>
+      </app-card>
+    }
+  </div>
+</div>
+
+@if (deleting(); as department) {
+  <app-confirm-dialog
+    heading="Delete department?"
+    confirmLabel="Delete"
+    (confirmed)="confirmDelete()"
+    (cancelled)="deleting.set(null)"
+  >
+    <p>
+      <strong>{{ department.name }}</strong> will be removed. Departments that still have
+      employees assigned cannot be deleted.
+    </p>
+    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
+            (click)="deleting.set(null)">
+      Not now
+    </button>
+  </app-confirm-dialog>
+}

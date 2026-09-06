@@ -15,7 +15,7 @@
         <target> Se déconnecter </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.html</context>
-          <context context-type="linenumber">47,49</context>
+          <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="app.signin" datatype="html">
@@ -23,7 +23,7 @@
         <target>Se connecter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.html</context>
-          <context context-type="linenumber">50,53</context>
+          <context context-type="linenumber">73,76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="admin.title" datatype="html">
@@ -42,44 +42,68 @@
           <context context-type="linenumber">20,22</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="attendance.title" datatype="html">
+        <source>Attendance</source>
+        <target>Présence</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/attendance/attendance-page.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="attendance.subtitle" datatype="html">
+        <source> Daily check-in and check-out records for the organisation. </source>
+        <target> Pointages d'entrée et de sortie quotidiens pour l'organisation. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/attendance/attendance-page.html</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="login.title" datatype="html">
         <source>Sign in</source>
         <target>Se connecter</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/auth/login.ts</context>
-          <context context-type="linenumber">14,15</context>
+          <context context-type="sourcefile">src/app/features/auth/login.html</context>
+          <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.subtitle" datatype="html">
-        <source> No password required — pick a role and the whole portal reacts: guards, structural directives, the Authorization header and the salary column all follow it. </source>
-        <target> Aucun mot de passe requis — choisissez un rôle pour prévisualiser le portail tel que cet utilisateur le voit. </target>
+        <source> Welcome back. Sign in to manage your organisation. </source>
+        <target> Bon retour. Connectez-vous pour gérer votre organisation. </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/auth/login.ts</context>
-          <context context-type="linenumber">16,19</context>
+          <context context-type="sourcefile">src/app/features/auth/login.html</context>
+          <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="login.name" datatype="html">
-        <source>Display name</source>
-        <target>Nom affiché</target>
+      <trans-unit id="login.email" datatype="html">
+        <source>Email</source>
+        <target>E-mail</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/auth/login.ts</context>
-          <context context-type="linenumber">23,24</context>
+          <context context-type="sourcefile">src/app/features/auth/login.html</context>
+          <context context-type="linenumber">17,19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="login.role" datatype="html">
-        <source>Role</source>
-        <target>Rôle</target>
+      <trans-unit id="login.password" datatype="html">
+        <source>Password</source>
+        <target>Mot de passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/auth/login.ts</context>
-          <context context-type="linenumber">28,29</context>
+          <context context-type="sourcefile">src/app/features/auth/login.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.remember" datatype="html">
+        <source>Remember me on this device</source>
+        <target>Se souvenir de moi sur cet appareil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/login.html</context>
+          <context context-type="linenumber">62,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.submit" datatype="html">
-        <source>Sign in</source>
+        <source> Sign in </source>
         <target>Se connecter</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/auth/login.ts</context>
-          <context context-type="linenumber">38,39</context>
+          <context context-type="sourcefile">src/app/features/auth/login.html</context>
+          <context context-type="linenumber">66,69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.title" datatype="html">
@@ -91,19 +115,19 @@
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.subtitle" datatype="html">
-        <source> Headcount, recent joiners and company announcements at a glance. </source>
-        <target> Effectif, nouvelles recrues et annonces de l'entreprise en un coup d'œil. </target>
+        <source> Headcount, attendance and what needs your attention today. </source>
+        <target> Effectif, présence et ce qui requiert votre attention aujourd'hui. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
           <context context-type="linenumber">4,8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tile.headcount" datatype="html">
-        <source>Headcount</source>
+        <source>Total employees</source>
         <target>Effectif</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">10</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
@@ -115,7 +139,7 @@
         <target>Actifs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">13</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
@@ -126,16 +150,16 @@
         <source>Departments</source>
         <target>Services</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/departments/department-list.ts</context>
-          <context context-type="linenumber">17,18</context>
+          <context context-type="sourcefile">src/app/features/departments/department-list.html</context>
+          <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="departments.subtitle" datatype="html">
-        <source> Headcount and payroll split by team. Select a department to see its members. </source>
-        <target> Effectif et masse salariale par équipe. Sélectionnez un service pour voir ses membres. </target>
+        <source> Team structure, headcount and who leads each department. </source>
+        <target> Structure des équipes, effectif et responsable de chaque service. </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/departments/department-list.ts</context>
-          <context context-type="linenumber">19,23</context>
+          <context context-type="sourcefile">src/app/features/departments/department-list.html</context>
+          <context context-type="linenumber">5,8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="directory.title" datatype="html">
@@ -183,7 +207,39 @@
         <target>Statut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/features/employees/employee-list/employee-list.html</context>
-          <context context-type="linenumber">52,53</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="leave.title" datatype="html">
+        <source>Leave</source>
+        <target>Congés</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/leave/leave-page.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="leave.subtitle" datatype="html">
+        <source> Balances, requests and approvals. </source>
+        <target> Soldes, demandes et approbations. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/leave/leave-page.html</context>
+          <context context-type="linenumber">5,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.title" datatype="html">
+        <source>Profile &amp; settings</source>
+        <target>Profil et paramètres</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings-page.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.subtitle" datatype="html">
+        <source> Your account, appearance and company information. </source>
+        <target> Votre compte, l'apparence et les informations de l'entreprise. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings-page.html</context>
+          <context context-type="linenumber">4,8</context>
         </context-group>
       </trans-unit>
     </body>

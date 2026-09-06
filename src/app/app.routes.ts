@@ -31,6 +31,26 @@ export const routes: Routes = [
     loadChildren: () =>
       import('@features/departments/departments.routes').then((m) => m.DEPARTMENT_ROUTES),
   },
+  {
+    path: 'attendance',
+    title: 'Attendance · Employee Management Portal',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('@features/attendance/attendance-page').then((m) => m.AttendancePage),
+  },
+  {
+    path: 'leave',
+    title: 'Leave · Employee Management Portal',
+    canActivate: [authGuard],
+    loadComponent: () => import('@features/leave/leave-page').then((m) => m.LeavePage),
+  },
+  {
+    path: 'settings',
+    title: 'Settings · Employee Management Portal',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('@features/settings/settings-page').then((m) => m.SettingsPage),
+  },
 
   // The admin area is a lazily loaded NgModule with its own environment injector.
   {

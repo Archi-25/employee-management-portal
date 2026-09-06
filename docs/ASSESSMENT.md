@@ -15,18 +15,19 @@ Routes are given as you would reach them in the running app.
 | Employee Profile component | Profile tab of an employee record | `src/app/features/employees/employee-profile/employee-profile.ts` |
 | `@Input` | `employee` on the profile; `heading`/`subtitle` on `Card` | `employee-profile.ts`, `shared/components/card/card.ts` |
 | `@Output` | `edit`, `remove`, `noteAdded` from the profile | `employee-profile.ts` |
-| Signal `input()` / `output()` | `dense`, `showSalary`; `confirmed`/`cancelled` on the dialog | `employee-profile.ts`, `shared/components/confirm-dialog/confirm-dialog.ts` |
+| Signal `input()` / `output()` | `dense`, `showSalary`; `confirmed`/`cancelled` on the dialog; `limit` on the announcement panel; `employeeId` on the documents tab | `employee-profile.ts`, `confirm-dialog.ts`, `announcement-panel.ts` |
 | `ViewEncapsulation.Emulated` | The default everywhere else | — |
 | `ViewEncapsulation.ShadowDom` | Shareable employee badge — must resist the host page's styles | `shared/components/badge-widget/badge-widget.ts` |
 | `ViewEncapsulation.None` | Printable record — `@page` rules must reach the document | `shared/components/print-record/print-record.ts` |
 | Local template references | `#noteBox`, `#skillList`, `#skillChip`, `#profileHeader` | `employee-profile.html` |
 | `@ViewChild` | `noteBoxRef` — clearing the notes field | `employee-profile.ts` |
-| `@ViewChildren` | `skillChips` (a `QueryList`) — focusing the first skill | `employee-profile.ts` |
+| `@ViewChildren` | `skillChips` (a `QueryList`) — roving-tabindex keyboard navigation across the skill chips | `employee-profile.ts` |
 | Signal queries | `headerRef()`, `skillChipSignals()`, dialog's `cancelButton()` | `employee-profile.ts`, `confirm-dialog.ts` |
 | `ng-content` | 4 slots on the profile, 3 on `Card`, 2 on the dialog | `employee-profile.html`, `card.ts`, `confirm-dialog.ts` |
 
-**See it:** `/employees/1` → Overview tab (profile, projected banner/actions/footer),
-Shareable badge tab (Shadow DOM), Printable record tab (global print styles).
+**See it:** `/employees/1` → Personal tab (profile with projected
+banner/actions/footer; arrow-key through the skill chips), then the **Badge**
+button (Shadow DOM) and **Print** button (global print styles).
 
 ---
 
@@ -37,13 +38,13 @@ Shareable badge tab (Shadow DOM), Printable record tab (global print styles).
 | Role-based directive | Hides Add / Edit / Remove from users who may not use them | `shared/directives/has-role.directive.ts` |
 | Structural directive | `*appHasRole` and `*appFeatureFlag` — both own an `<ng-template>` | `has-role.directive.ts`, `feature-flag.directive.ts` |
 | `Renderer2` | Tooltip bubble and role badge are built node by node, never with `innerHTML` | `tooltip.directive.ts`, `role-badge.directive.ts` |
-| `@HostListener` | Tooltip show/hide; click-outside closes the row menu; Escape closes the dialog | `tooltip.directive.ts`, `click-outside.directive.ts`, `confirm-dialog.ts` |
+| `@HostListener` | Tooltip show/hide; click-outside closes the row menu, the notification bell and the account menu; Escape closes the dialog | `tooltip.directive.ts`, `click-outside.directive.ts`, `confirm-dialog.ts` |
 | `@HostBinding` | Tooltip host gets `tabindex`, `aria-describedby` and a marker class | `tooltip.directive.ts` |
 
-**See it:** `/employees` → hover a status chip (tooltip), open a row's `⋯` menu and
-click elsewhere (click-outside), compare the menu contents as EMPLOYEE vs ADMIN
-(role directive). `/admin/system` → the *Export payroll* button is absent because
-its feature flag is off.
+**See it:** `/employees` → hover a status pill (tooltip), open a row's `⋯` menu
+and click elsewhere (click-outside), compare the menu contents as EMPLOYEE vs
+ADMIN (role directive). `/admin/system` → the *Export payroll* button is absent
+because its feature flag is off.
 
 ---
 
@@ -57,6 +58,7 @@ its feature flag is off.
 | `@for` with `track` | Every list tracks by `id`, so rows are moved rather than rebuilt when the directory is sorted or filtered. |
 | Pure pipes over methods | `initials`, `tenure` — a method in a template re-runs on every check; a pure pipe does not. |
 | Debounced input | Search goes through a `Subject` + `debounceTime(250)`, so typing does not re-filter per keystroke (`employee-list.ts`). |
+| Pagination | The directory renders one page at a time rather than every row, so the DOM stays small as the roster grows (`employee-list.ts`). |
 | Lazy routes | Every screen is a separate chunk; nothing off-screen is downloaded. |
 
 ### Default vs OnPush
@@ -90,6 +92,7 @@ exactly why `EmployeeStore.update()` replaces the object instead of mutating it.
 | --- | --- | --- |
 | Lazy-loaded Admin **NgModule** | `/admin`, reached via `loadChildren` | `features/admin/admin.module.ts` |
 | Nested routes | `/admin/*` under a shell with its own outlet; `/departments/:name` under the department list | `admin-routing.module.ts`, `departments/departments.routes.ts` |
+| Route guards on every private area | `/employees`, `/attendance`, `/leave`, `/departments`, `/settings`, `/admin` | `app.routes.ts` |
 | `PathLocationStrategy` | Provided explicitly; `<base href="/">` makes deep links resolve | `app.config.ts`, `src/index.html` |
 | `CanActivate` | `authGuard` on every private area | `core/guards/auth.guard.ts` |
 | `CanActivateChild` | Re-checks the role on each admin child navigation | `core/guards/role.guard.ts` |
@@ -132,16 +135,16 @@ its parent form. Asserted in `core/di.spec.ts` and `shared/directives/directives
 
 | Requirement | Where it is used | File |
 | --- | --- | --- |
-| Custom observable | `new Observable(subscriber => …)` for the dashboard presence feed, with a teardown that stops the poll when the last subscriber leaves | `core/services/headcount-feed.service.ts` |
-| `Observer` object | The dashboard subscribes with an explicit `{ next, error, complete }` | `features/dashboard/dashboard.ts` |
-| `map` | Reshapes the API envelope into a plain array | `core/services/employee.service.ts` |
-| `filter` | Applied over the presence stream | `headcount-feed.service.ts` |
-| `takeUntil` | A `destroy$` Subject closes every long-lived subscription on destroy | `dashboard.ts`, `employee-list.ts` |
+| Custom observable | `new Observable(subscriber => …)` for the presence feed, with a teardown that stops the poll when the last subscriber leaves | `core/services/headcount-feed.service.ts` |
+| `Observer` object | An explicit `{ next, error, complete }` passed to `subscribe` | `core/services/headcount-feed.service.ts` |
+| `map` | Reshapes the API envelope into a plain array, in every service | `employee.service.ts`, `hr.service.ts` |
+| `filter` / `distinctUntilChanged` | Applied over the presence stream | `headcount-feed.service.ts` |
+| `takeUntil` | A `destroy$` Subject closes every long-lived subscription on destroy | `employee-list.ts` |
 | `debounceTime` + `distinctUntilChanged` | Directory search | `employee-list.ts` |
-| `switchMap` / `firstValueFrom` | Store methods await the HTTP call | `core/state/employee.store.ts` |
+| `firstValueFrom` | Store methods await the HTTP call | every `core/state/*.store.ts` |
 
-**See it:** `/dashboard` → the *Online now* tile updates from the custom
-observable. Navigate away and the poll stops — the teardown logs it.
+**See it:** `/employees` → type in the search box; filtering is debounced by
+250 ms rather than running on every keystroke.
 
 ---
 
@@ -150,7 +153,7 @@ observable. Navigate away and the poll stops — the teardown logs it.
 | Requirement | Where it is used | File |
 | --- | --- | --- |
 | `DomSanitizer` | Announcement bodies are author-written rich text; the admin preview shows what sanitisation kept | `features/announcements/announcement-panel.ts`, `pages/admin-announcements.ts` |
-| XSS prevention | Announcement rendering, employee bio, and the tooltip (`setProperty` on `textContent`, never `innerHTML`) | as above, plus `tooltip.directive.ts`, `role-badge.directive.ts` |
+| XSS prevention | Announcement rendering, employee biography, and the tooltip (`setProperty` on `textContent`, never `innerHTML`) | as above, plus `tooltip.directive.ts`, `role-badge.directive.ts` |
 
 The seeded announcement *"Engineering all-hands moved to Thursday"* deliberately
 contains `<img src="x" onerror="alert(...)">`. It is stored, it is served by the
@@ -195,10 +198,10 @@ untouched.
 | Requirement | How it is met |
 | --- | --- |
 | Standalone components | Every component. The only `NgModule` is `AdminModule`, kept deliberately to demonstrate lazy module loading. |
-| Signals | `signal`, `computed` throughout; state, derived values and view queries are all signals. `core/state/*.store.ts`, every feature component. |
+| Signals | `signal`, `computed` and `effect` throughout; state, derived values and view queries are all signals. `core/state/*.store.ts`, every feature component. |
 | i18n | `@angular/localize` with 22 marked messages and stable ids (`@@dashboard.title`). French translation in `src/locale/messages.fr.xlf`, applied at build time. `npm run build:i18n`. |
 | SSR | `@angular/ssr` + Express. Per-route render modes in `app.routes.server.ts`: public pages prerender, data-driven pages render per request, admin is client-rendered. Hydration uses `withEventReplay()`. |
-| State management | `@ngrx/signals` SignalStore — `withState` / `withComputed` / `withMethods` / `withHooks`. Two stores: `employee.store.ts`, `announcement.store.ts`. |
+| State management | `@ngrx/signals` SignalStore — `withState` / `withComputed` / `withMethods` / `withHooks`. Five stores: employee, announcement, attendance, leave, department, plus notifications. |
 | Nx workspace | `nx.json` + `project.json`. `build`, `test` and `lint` are cacheable targets — re-run any of them for a cache hit. |
 | Sonar | `sonar-project.properties` with narrowly-scoped, individually justified exclusions. ESLint runs angular-eslint's template and accessibility rules, plus architectural boundary rules. |
 
@@ -219,17 +222,32 @@ merely documented: `no-restricted-imports` rules in `eslint.config.js` fail
 
 ## Tests
 
-`npm test` — 78 tests across 10 files:
+`npm test` — 88 tests across 10 files:
 
 | File | Covers |
 | --- | --- |
-| `core/interceptors/interceptors.spec.ts` | The real chain: header injection, cache hits, `CACHE_BYPASS`, write invalidation, 403 on a non-admin delete, error normalisation |
-| `core/state/employee.store.spec.ts` | Loading, filtering, derived values, create/update/remove, failure handling |
+| `core/interceptors/interceptors.spec.ts` | The real chain: header injection, cache hits, `CACHE_BYPASS`, write invalidation, 403 on a non-manager create and a non-admin delete, error normalisation |
+| `core/state/employee.store.spec.ts` | Loading, filtering (including substring and employee-code search), derived values, create/update/remove, authorization failures |
+| `core/services/auth.service.spec.ts` | Session lifecycle, the role hierarchy, and remember-me persistence including corrupt stored data |
 | `core/di.spec.ts` | Every provider kind, hierarchical shadowing, `skipSelf`, optional tokens |
-| `shared/components/confirm-dialog/confirm-dialog.spec.ts` | `DialogRef` view scoping, projection defaults, focus management, outputs |
 | `core/guards/guards.spec.ts` | `authGuard`, `roleGuard`, `unsavedChangesGuard` |
-| `core/services/auth.service.spec.ts` | Session lifecycle and the role hierarchy |
 | `shared/directives/directives.spec.ts` | All six directives, including `@Host()` resolution and its inert fallback |
+| `shared/components/confirm-dialog/confirm-dialog.spec.ts` | `DialogRef` view scoping, projection defaults, focus management, outputs |
 | `shared/pipes/pipes.spec.ts` | `initials`, `tenure` |
-| `features/employees/employee-profile/employee-profile.spec.ts` | Queries, all four projection slots, both output styles, bio escaping |
+| `features/employees/employee-profile/employee-profile.spec.ts` | Queries, all four projection slots, both output styles, keyboard navigation, bio sanitisation |
 | `features/announcements/announcement-panel.spec.ts` | Ordering, rendering, and that the stored XSS payload never reaches the DOM |
+
+## Data visualisation
+
+The department chart is a single-hue horizontal bar chart, not rainbow bars: one
+measure across categories that the axis already names, so a second colour would
+encode nothing. The palette was validated against this application's own light
+and dark surfaces before use (lightness band, chroma floor, CVD separation,
+normal-vision floor, contrast). Every bar is directly labelled and the same
+numbers are available through *View as table*, so the chart never depends on
+colour or on hover to be read.
+
+Status colours are the reserved status palette and always ship with a text label
+— colour never carries the meaning alone. The attendance breakdown is stat tiles
+rather than a four-colour chart, because the status hues do not clear the
+categorical CVD gates when used as a series.

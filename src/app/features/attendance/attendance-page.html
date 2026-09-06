@@ -1,0 +1,98 @@
+<header class="page-head">
+  <h1 i18n="@@attendance.title">Attendance</h1>
+  <p i18n="@@attendance.subtitle">
+    Daily check-in and check-out records for the organisation.
+  </p>
+</header>
+
+<div class="tiles">
+  <app-stat-tile label="Present" [value]="store.present()" accent="#0ca30c" />
+  <app-stat-tile label="Late" [value]="store.late()" accent="#fab219" />
+  <app-stat-tile label="Absent" [value]="store.absent()" accent="#d03b3b" />
+  <app-stat-tile label="On leave" [value]="store.onLeave()" accent="#6b7383" />
+  <app-stat-tile
+    label="Attendance rate"
+    [value]="store.attendanceRate() + '%'"
+    hint="present or late"
+    accent="#2a78d6" />
+</div>
+
+<app-card heading="Filters" subtitle="Pick a date, then narrow the list">
+  <div class="filters">
+    <label class="field">
+      <span>Date</span>
+      <input type="date" [value]="store.date()" (change)="onDate($any($event.target).value)" />
+    </label>
+
+    <label class="field">
+      <span>Status</span>
+      <select [value]="store.status()" (change)="onStatus($any($event.target).value)">
+        <option value="ALL">All statuses</option>
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ label(status) }}</option>
+        }
+      </select>
+    </label>
+
+    @if (auth.hasRole('MANAGER')) {
+      <label class="field">
+        <span>Employee</span>
+        <input
+          type="search"
+          placeholder="Name or employee ID"
+          [value]="search()"
+          (input)="search.set($any($event.target).value)"
+        />
+      </label>
+    }
+  </div>
+</app-card>
+
+<app-card heading="Records" [subtitle]="rows().length + ' record(s) on ' + store.date()">
+  @if (store.loading() && rows().length === 0) {
+    <p class="hint">Loading attendance…</p>
+  } @else if (rows().length === 0) {
+    <p class="hint">
+      No attendance recorded for this day. Weekends have no records — try a weekday.
+    </p>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Employee</th>
+            <th scope="col">Date</th>
+            <th scope="col">Check in</th>
+            <th scope="col">Check out</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (record of rows(); track record.id) {
+            <tr>
+              <td>
+                <a class="person" [routerLink]="['/employees', record.employeeId]">
+                  <span class="person__avatar" [style.background]="avatarColor(record.employeeId)">
+                    {{ employeeName(record.employeeId) | initials }}
+                  </span>
+                  <span class="person__text">
+                    <strong>{{ employeeName(record.employeeId) }}</strong>
+                    <small>{{ employeeCode(record.employeeId) }}</small>
+                  </span>
+                </a>
+              </td>
+              <td>{{ record.date | date: 'd MMM y' }}</td>
+              <td class="time">{{ record.checkIn ?? '—' }}</td>
+              <td class="time">{{ record.checkOut ?? '—' }}</td>
+              <td>
+                <span class="status" [class]="'status ' + statusClass(record.status)">
+                  {{ label(record.status) }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</app-card>

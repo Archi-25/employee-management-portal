@@ -1,0 +1,31 @@
+:host { display: block; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+app-card + app-card { display: block; margin-top: 1rem; }
+
+.filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+.field { display: grid; gap: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+.field input, .field select {
+  font: inherit;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+th { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; }
+tbody tr:hover { background: var(--surface-2); }
+.time { font-variant-numeric: tabular-nums; }
+
+.person { display: flex; align-items: center; gap: 0.55rem; text-decoration: none; color: inherit; }
+.person__avatar {
+  width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+  color: #fff; font-size: 0.62rem; font-weight: 700; flex: none;
+}
+.person__text { display: grid; }
+.person__text strong { font-size: 0.85rem; }
+.person__text small { color: var(--muted); font-size: 0.7rem; }
+.person:hover strong { text-decoration: underline; }

@@ -1,6 +1,9 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { PLATFORM_ID, Injectable, computed, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Role } from '@core/models/employee.model';
 import { Logger } from '@core/tokens/logger.token';
+
+const STORAGE_KEY = 'emp-portal-session';
 
 export interface Session {
   userId: number;
@@ -18,7 +21,10 @@ const RANK: Record<Role, number> = { GUEST: 0, EMPLOYEE: 1, MANAGER: 2, ADMIN: 3
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly logger = inject(Logger);
-  private readonly session = signal<Session | null>(null);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  /** Restored from storage when the last sign-in asked to be remembered. */
+  private readonly session = signal<Session | null>(this.restore());
 
   readonly currentSession = this.session.asReadonly();
   readonly isAuthenticated = computed(() => this.session() !== null);
@@ -26,7 +32,7 @@ export class AuthService {
   readonly displayName = computed(() => this.session()?.displayName ?? 'Guest');
   readonly token = computed(() => this.session()?.token ?? null);
 
-  login(displayName: string, role: Role): Session {
+  login(displayName: string, role: Role, remember = false): Session {
     const session: Session = {
       userId: 1,
       displayName,
@@ -34,6 +40,7 @@ export class AuthService {
       token: `emp-portal.${role.toLowerCase()}.${Date.now().toString(36)}`,
     };
     this.session.set(session);
+    this.persist(remember ? session : null);
     this.logger.info(`Signed in as ${displayName} (${role})`);
     return session;
   }
@@ -45,13 +52,70 @@ export class AuthService {
       this.login('Demo User', role);
       return;
     }
-    this.session.set({ ...current, role, token: `emp-portal.${role.toLowerCase()}` });
+    const next: Session = { ...current, role, token: `emp-portal.${role.toLowerCase()}` };
+    this.session.set(next);
+    // Keep a remembered session in step with the role being previewed.
+    if (this.isRemembered()) {
+      this.persist(next);
+    }
     this.logger.info(`Role switched to ${role}`);
   }
 
   logout(): void {
     this.logger.info('Signed out');
     this.session.set(null);
+    this.persist(null);
+  }
+
+  private isRemembered(): boolean {
+    if (!this.isBrowser) {
+      return false;
+    }
+    try {
+      return localStorage.getItem(STORAGE_KEY) !== null;
+    } catch {
+      return false;
+    }
+  }
+
+  /** Writes the session for "remember me", or clears it when passed null. */
+  private persist(session: Session | null): void {
+    if (!this.isBrowser) {
+      return;
+    }
+    try {
+      if (session) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    } catch {
+      // Blocked storage: the session still holds for this tab.
+    }
+  }
+
+  private restore(): Session | null {
+    if (!this.isBrowser) {
+      // Never restore on the server — rendered HTML must not assume a session.
+      return null;
+    }
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        return null;
+      }
+      const parsed = JSON.parse(raw) as Partial<Session>;
+      return parsed.displayName && parsed.role
+        ? {
+            userId: parsed.userId ?? 1,
+            displayName: parsed.displayName,
+            role: parsed.role,
+            token: parsed.token ?? `emp-portal.${parsed.role.toLowerCase()}`,
+          }
+        : null;
+    } catch {
+      return null;
+    }
   }
 
   /** True when the active role is at least as privileged as `required`. */

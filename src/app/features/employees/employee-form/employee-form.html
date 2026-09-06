@@ -1,97 +1,248 @@
-<header class="page-head">
-  <h1>{{ isEdit() ? 'Edit employee' : 'New employee' }}</h1>
-  <p>
-    Reactive form with typed controls. Navigating away with unsaved edits is blocked by
-    <code>unsavedChangesGuard</code>.
-  </p>
+<header class="page-head form-head">
+  <div>
+    <a class="back" routerLink="/employees">← Directory</a>
+    <h1>{{ isEdit() ? 'Edit employee' : 'Add employee' }}</h1>
+    <p>{{ isEdit() ? editingName() : 'Create a new record in the directory.' }}</p>
+  </div>
 </header>
 
-<app-card heading="Record" [subtitle]="isEdit() ? 'Editing #' + employeeId() : 'Creating a new record'">
-  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-    <label class="field">
-      <span>First name</span>
-      <input formControlName="firstName" autocomplete="given-name" />
-      @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
-        <em class="error">At least 2 characters.</em>
-      }
-    </label>
-
-    <label class="field">
-      <span>Last name</span>
-      <input formControlName="lastName" autocomplete="family-name" />
-      @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
-        <em class="error">At least 2 characters.</em>
-      }
-    </label>
-
-    <label class="field">
-      <span>Email</span>
-      <input formControlName="email" type="email" autocomplete="email" />
-      @if (form.controls.email.touched && form.controls.email.invalid) {
-        <em class="error">A valid address is required.</em>
-      }
-    </label>
-
-    <label class="field">
-      <span>Title</span>
-      <input formControlName="title" />
-    </label>
-
-    <label class="field">
-      <span>Department</span>
-      <select formControlName="department">
-        @for (department of departments; track department) {
-          <option [value]="department">{{ department }}</option>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <app-card heading="Personal information" subtitle="How to identify and contact this person">
+    <div class="grid">
+      <label class="field">
+        <span>First name <b aria-hidden="true">*</b></span>
+        <input formControlName="firstName" autocomplete="given-name"
+               [class.is-invalid]="showError('firstName')" />
+        @if (showError('firstName')) {
+          <em class="error">
+            @if (form.controls.firstName.hasError('required')) { First name is required. }
+            @else { Use at least 2 characters. }
+          </em>
         }
-      </select>
-    </label>
+      </label>
 
-    <label class="field">
-      <span>Status</span>
-      <select formControlName="status">
-        @for (status of statuses; track status) {
-          <option [value]="status">{{ status }}</option>
+      <label class="field">
+        <span>Last name <b aria-hidden="true">*</b></span>
+        <input formControlName="lastName" autocomplete="family-name"
+               [class.is-invalid]="showError('lastName')" />
+        @if (showError('lastName')) {
+          <em class="error">
+            @if (form.controls.lastName.hasError('required')) { Last name is required. }
+            @else { Use at least 2 characters. }
+          </em>
         }
-      </select>
-    </label>
+      </label>
 
-    <label class="field">
-      <span>Role</span>
-      <select formControlName="role">
-        <option value="EMPLOYEE">EMPLOYEE</option>
-        <option value="MANAGER">MANAGER</option>
-        <option value="ADMIN">ADMIN</option>
-      </select>
-    </label>
+      <label class="field">
+        <span>Email <b aria-hidden="true">*</b></span>
+        <input formControlName="email" type="email" autocomplete="email"
+               placeholder="name@acme.io" [class.is-invalid]="showError('email')" />
+        @if (showError('email')) {
+          <em class="error">
+            @if (form.controls.email.hasError('required')) { Email is required. }
+            @else { Enter a valid email address. }
+          </em>
+        }
+      </label>
 
-    <label class="field">
-      <span>Salary (USD)</span>
-      <input formControlName="salary" type="number" min="0" step="1000" />
-    </label>
+      <label class="field">
+        <span>Phone <b aria-hidden="true">*</b></span>
+        <input formControlName="phone" type="tel" autocomplete="tel"
+               placeholder="+91 98765 43210" [class.is-invalid]="showError('phone')" />
+        @if (showError('phone')) {
+          <em class="error">
+            @if (form.controls.phone.hasError('required')) { Phone number is required. }
+            @else { 8–18 digits, optionally starting with +. }
+          </em>
+        }
+      </label>
 
-    <label class="field">
-      <span>Joined on</span>
-      <input formControlName="joinedOn" type="date" />
-    </label>
+      <label class="field">
+        <span>Date of birth <b aria-hidden="true">*</b></span>
+        <input formControlName="dateOfBirth" type="date" [max]="maxDob"
+               [class.is-invalid]="showError('dateOfBirth')" />
+        @if (showError('dateOfBirth')) {
+          <em class="error">
+            @if (form.controls.dateOfBirth.hasError('required')) { Date of birth is required. }
+            @else { Employees must be at least 18 years old. }
+          </em>
+        }
+      </label>
 
-    <label class="field">
-      <span>Location</span>
-      <input formControlName="location" />
-    </label>
+      <label class="field">
+        <span>Gender</span>
+        <select formControlName="gender">
+          @for (option of genders; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </label>
+    </div>
+  </app-card>
 
-    <label class="field field--wide">
-      <span>Skills (comma separated)</span>
-      <input formControlName="skills" placeholder="Angular, RxJS, Testing" />
-    </label>
+  <app-card heading="Professional information" subtitle="Role, reporting line and compensation">
+    <div class="grid">
+      @if (isEdit()) {
+        <label class="field">
+          <span>Employee ID</span>
+          <input [value]="store.selected()?.code ?? ''" disabled />
+          <em class="hint-inline">Generated automatically and never changes.</em>
+        </label>
+      }
 
-    <div class="actions">
+      <label class="field">
+        <span>Designation <b aria-hidden="true">*</b></span>
+        <input formControlName="title" placeholder="Senior Frontend Engineer"
+               [class.is-invalid]="showError('title')" />
+        @if (showError('title')) {
+          <em class="error">A designation of at least 2 characters is required.</em>
+        }
+      </label>
+
+      <label class="field">
+        <span>Department <b aria-hidden="true">*</b></span>
+        <select formControlName="department">
+          @for (option of departments; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Employment type <b aria-hidden="true">*</b></span>
+        <select formControlName="employmentType">
+          @for (option of employmentTypes; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Joining date <b aria-hidden="true">*</b></span>
+        <input formControlName="joinedOn" type="date" [max]="today"
+               [class.is-invalid]="showError('joinedOn')" />
+        @if (showError('joinedOn')) {
+          <em class="error">
+            @if (form.controls.joinedOn.hasError('required')) { Joining date is required. }
+            @else { Joining date cannot be in the future. }
+          </em>
+        }
+      </label>
+
+      <label class="field">
+        <span>Reporting manager</span>
+        <select formControlName="managerId">
+          <option [ngValue]="null">— None —</option>
+          @for (manager of managers(); track manager.id) {
+            <option [ngValue]="manager.id">
+              {{ manager.firstName }} {{ manager.lastName }} · {{ manager.title }}
+            </option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Salary (USD) <b aria-hidden="true">*</b></span>
+        <input formControlName="salary" type="number" min="1" step="1000"
+               [class.is-invalid]="showError('salary')" />
+        @if (showError('salary')) {
+          <em class="error">Enter a salary greater than zero.</em>
+        }
+      </label>
+
+      <label class="field">
+        <span>Status <b aria-hidden="true">*</b></span>
+        <select formControlName="status">
+          @for (option of statuses; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Portal access <b aria-hidden="true">*</b></span>
+        <select formControlName="role">
+          <option value="EMPLOYEE">Employee</option>
+          <option value="MANAGER">Manager</option>
+          <option value="ADMIN">Administrator</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Work location <b aria-hidden="true">*</b></span>
+        <input formControlName="location" placeholder="Bengaluru"
+               [class.is-invalid]="showError('location')" />
+        @if (showError('location')) {
+          <em class="error">Work location is required.</em>
+        }
+      </label>
+
+      <label class="field field--wide">
+        <span>Skills</span>
+        <input formControlName="skills" placeholder="Angular, RxJS, Testing" />
+        <em class="hint-inline">Separate with commas.</em>
+      </label>
+    </div>
+  </app-card>
+
+  <app-card heading="Address" subtitle="Used for payroll and statutory records">
+    <div class="grid">
+      <label class="field field--wide">
+        <span>Address <b aria-hidden="true">*</b></span>
+        <input formControlName="line1" autocomplete="address-line1"
+               [class.is-invalid]="showError('line1')" />
+        @if (showError('line1')) {
+          <em class="error">Address is required.</em>
+        }
+      </label>
+
+      <label class="field">
+        <span>City <b aria-hidden="true">*</b></span>
+        <input formControlName="city" autocomplete="address-level2"
+               [class.is-invalid]="showError('city')" />
+        @if (showError('city')) {
+          <em class="error">City is required.</em>
+        }
+      </label>
+
+      <label class="field">
+        <span>State <b aria-hidden="true">*</b></span>
+        <input formControlName="state" autocomplete="address-level1"
+               [class.is-invalid]="showError('state')" />
+        @if (showError('state')) {
+          <em class="error">State is required.</em>
+        }
+      </label>
+
+      <label class="field">
+        <span>Pincode <b aria-hidden="true">*</b></span>
+        <input formControlName="pincode" inputmode="numeric" autocomplete="postal-code"
+               [class.is-invalid]="showError('pincode')" />
+        @if (showError('pincode')) {
+          <em class="error">
+            @if (form.controls.pincode.hasError('required')) { Pincode is required. }
+            @else { Use 4–8 digits. }
+          </em>
+        }
+      </label>
+    </div>
+  </app-card>
+
+  <div class="form-actions">
+    @if (submitted() && form.invalid) {
+      <p class="form-error" role="alert">
+        Some fields still need attention — they are marked in red above.
+      </p>
+    }
+    <div class="row">
       <button type="submit" class="btn" [disabled]="saving()">
         {{ saving() ? 'Saving…' : isEdit() ? 'Save changes' : 'Create employee' }}
       </button>
+      <button type="button" class="btn btn--ghost" (click)="reset()">Reset</button>
       <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
       @if (form.dirty) {
         <span class="hint">Unsaved changes</span>
       }
     </div>
-  </form>
-</app-card>
+  </div>
+</form>

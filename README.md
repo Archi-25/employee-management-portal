@@ -28,29 +28,66 @@ most of the portal, or **ADMIN** for all of it.
 ## What's in it
 
 ### Dashboard
-Headcount, active staff and people on leave at a glance, a live *online now*
-counter, headcount split by department, the newest joiners, and the company
-announcement feed.
+Six KPI tiles (headcount, active, on leave, new joiners, attendance rate, pending
+approvals), a headcount-by-department chart, recent joiners, a combined activity
+feed, upcoming birthdays, today's attendance breakdown, and the announcement feed.
 
 ### Employees
-The main working screen. Search by name, email or job title; filter by department
-and status; sort any column; page through the results. Each row has an action
-menu for viewing, editing or removing a record — the options shown depend on your
-role.
+The main working screen. Search by name, employee ID, email or job title; filter
+by department, status, employment type and designation; sort any column; page
+through the results. Each row has an action menu for viewing, editing or removing
+a record — the options shown depend on your role, and deletes go through a
+confirmation dialog.
 
-Open a record for the full profile: personal details, skills, private notes, and
-their team. Two extra views are available — a **shareable badge** designed to be
-embedded in other internal tools, and a **printable record** for HR files.
+Open a record for a tabbed profile:
+
+| Tab | Contents |
+| --- | --- |
+| **Personal** | Identity, contact details, skills, private notes, address |
+| **Professional** | Designation, department, employment type, reporting manager, salary |
+| **Attendance** | Last ten recorded days with a present/late/absent summary |
+| **Leave** | Full leave history for that employee |
+| **Documents** | Resumes, offer letters and certificates — upload, download, delete |
+
+Two extra views are available: a **shareable badge** designed to be embedded in
+other internal tools, and a **printable record** for HR files.
+
+### Add / edit employee
+One reactive form in three sections — personal, professional and address — with
+required, email, phone-pattern, length, minimum-age and not-in-the-future
+validation. Errors appear inline on blur or on submit, focus jumps to the first
+invalid field, and Save / Reset / Cancel sit in a sticky action bar. Leaving with
+unsaved edits prompts first.
+
+### Attendance
+Daily check-in and check-out records with present / late / absent / on-leave
+tiles and an attendance rate. Filter by date, status and employee. Employees see
+only their own row; managers see everyone.
+
+### Leave
+Leave balances per type, an apply-for-leave form that counts working days as you
+pick dates, and full request history. Managers get **Approve** and **Reject** on
+pending rows; approving draws the days down from the right balance.
 
 ### Departments
-Headcount and payroll broken down by team. Select a department to see its members.
+Full CRUD for administrators — create, rename, reassign the department head, and
+delete (blocked while employees are still assigned). Select a team to see its
+members and payroll.
 
 ### Admin *(managers and administrators)*
 - **Overview** — organisation summary
 - **Announcements** — compose and publish company notices, with a live preview
 - **System health** — API request volume, latency, cache effectiveness
 - **Audit log** — activity recorded across the portal
-- **Settings** — configuration and access simulation *(administrators only)*
+- **Settings** — configuration *(administrators only)*
+
+### Profile & settings
+Your profile, a change-password form, a **theme switcher** (system / light /
+dark), company information, and a role preview for checking what each role sees.
+
+### Notifications
+A bell in the header with an unread count, a dropdown of recent items, deep links
+to the relevant page, and mark-one / mark-all-read.
 
 ---
 
@@ -59,13 +96,17 @@ Headcount and payroll broken down by team. Select a department to see its member
 | Role | Can do |
 | --- | --- |
 | `GUEST` | Dashboard only |
-| `EMPLOYEE` | Browse the directory and departments |
-| `MANAGER` | The above, plus salaries, adding and editing employees, and the admin area |
-| `ADMIN` | Everything, including removing employees and changing settings |
+| `EMPLOYEE` | Own profile, own attendance, apply for leave, view leave history, browse the directory and departments |
+| `MANAGER` | The above, plus salaries, all attendance, approving and rejecting leave, adding and editing employees, and the admin area |
+| `ADMIN` | Everything, including deleting employees, department CRUD and settings |
 
 Roles are enforced in three places: route guards block navigation, the
 `*appHasRole` directive keeps unavailable actions out of the DOM entirely, and the
-API rejects a request whose role header is insufficient.
+API rejects a request whose role header is insufficient — so hiding a button is
+never the only thing standing between a user and an action they may not take.
+
+Sign in with any of the demo accounts shown on the login page; the password is
+`portal123`. Tick **Remember me** and the session survives a reload.
 
 ---
 
@@ -119,8 +160,10 @@ Every screen reads from a signal store; stores call services; services use
 interceptors all run for real against it, exactly as they would against a live
 server. Swapping in a real API means deleting one interceptor.
 
-**Data resets on reload.** Authentication is simulated — the session lives in a
-signal, not in storage, so it does not survive a refresh either.
+**Data resets on reload**, because the "database" is a module-level object.
+Authentication is simulated: there is no credential check, and the session lives
+in a signal. Ticking *Remember me* persists it to `localStorage` so it survives a
+refresh; leaving it unticked keeps it to the tab.
 
 ---
 

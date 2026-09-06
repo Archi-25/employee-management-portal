@@ -1,0 +1,118 @@
+<header class="page-head">
+  <h1 i18n="@@settings.title">Profile &amp; settings</h1>
+  <p i18n="@@settings.subtitle">
+    Your account, appearance and company information.
+  </p>
+</header>
+
+<div class="grid">
+  <app-card heading="Your profile" subtitle="How you appear across the portal">
+    <div class="me">
+      <span class="me__avatar" [style.background]="me()?.avatarColor || 'var(--accent)'">
+        {{ auth.displayName() | initials }}
+      </span>
+      <div class="me__text">
+        <strong>{{ auth.displayName() }}</strong>
+        @if (me(); as record) {
+          <small>{{ record.title }} · {{ record.department }}</small>
+          <small class="muted">{{ record.email }} · {{ record.code }}</small>
+        } @else {
+          <small class="muted">Not linked to a directory record</small>
+        }
+      </div>
+    </div>
+
+    <dl class="kv">
+      <div><dt>Access level</dt><dd>{{ auth.role() }}</dd></div>
+      @if (me(); as record) {
+        <div><dt>Phone</dt><dd>{{ record.phone }}</dd></div>
+        <div><dt>Work location</dt><dd>{{ record.location }}</dd></div>
+        <div><dt>Joined</dt><dd>{{ record.joinedOn }}</dd></div>
+      }
+    </dl>
+  </app-card>
+
+  <app-card heading="Change password" subtitle="Simulated — no credentials are stored">
+    <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="form" novalidate>
+      <label class="field">
+        <span>Current password</span>
+        <input formControlName="currentPassword" type="password" autocomplete="current-password"
+               [class.is-invalid]="showError('currentPassword')" />
+        @if (showError('currentPassword')) {
+          <em class="error">Enter your current password.</em>
+        }
+      </label>
+
+      <label class="field">
+        <span>New password</span>
+        <input formControlName="nextPassword" type="password" autocomplete="new-password"
+               [class.is-invalid]="showError('nextPassword')" />
+        @if (showError('nextPassword')) {
+          <em class="error">Use at least 8 characters.</em>
+        }
+      </label>
+
+      <label class="field">
+        <span>Confirm new password</span>
+        <input formControlName="confirmPassword" type="password" autocomplete="new-password"
+               [class.is-invalid]="showError('confirmPassword')" />
+        @if (passwordForm.hasError('mismatch') && passwordForm.controls.confirmPassword.touched) {
+          <em class="error">The two passwords do not match.</em>
+        }
+      </label>
+
+      <div class="form__actions">
+        <button type="submit" class="btn">Update password</button>
+        @if (passwordSaved()) {
+          <span class="ok">Password updated.</span>
+        }
+      </div>
+    </form>
+  </app-card>
+
+  <app-card heading="Appearance" subtitle="Applies to this browser only">
+    <div class="themes" role="radiogroup" aria-label="Theme">
+      @for (option of themes; track option.value) {
+        <button
+          type="button"
+          role="radio"
+          class="theme"
+          [class.is-active]="theme.preference() === option.value"
+          [attr.aria-checked]="theme.preference() === option.value"
+          (click)="setTheme(option.value)"
+        >
+          <strong>{{ option.label }}</strong>
+          <small>{{ option.hint }}</small>
+        </button>
+      }
+    </div>
+  </app-card>
+
+  <app-card heading="Company" subtitle="Read-only in this build">
+    <dl class="kv">
+      <div><dt>Organisation</dt><dd>Acme Corporation</dd></div>
+      <div><dt>Portal</dt><dd>{{ config.appName }}</dd></div>
+      <div><dt>API base</dt><dd><code>{{ config.apiBaseUrl }}</code></dd></div>
+      <div><dt>Rows per page</dt><dd>{{ config.defaultPageSize }}</dd></div>
+    </dl>
+  </app-card>
+
+  <app-card heading="Preview as another role" subtitle="Check what each role can see before rolling out a change">
+    <p class="hint">
+      This affects only your session. Guards, menus and action buttons all follow the selected
+      role immediately.
+    </p>
+    <div class="roles">
+      @for (role of roles; track role) {
+        <button
+          type="button"
+          class="btn btn--ghost btn--sm"
+          [class.is-current]="auth.role() === role"
+          (click)="switchRole(role)"
+        >
+          {{ role }}
+        </button>
+      }
+    </div>
+  </app-card>
+</div>

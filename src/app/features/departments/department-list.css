@@ -1,0 +1,68 @@
+:host { display: block; }
+.dept-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; }
+.field { display: grid; gap: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+.field--wide { grid-column: 1 / -1; }
+.field > span b { color: var(--danger); }
+.field input, .field select {
+  font: inherit;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+.field input.is-invalid { border-color: var(--danger); background: var(--danger-soft); }
+.error { color: var(--danger); font-style: normal; font-size: 0.75rem; }
+.form__actions { grid-column: 1 / -1; display: flex; gap: 0.5rem; }
+
+.layout { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: 1rem; align-items: start; margin-top: 1rem; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+.col { display: grid; gap: 1rem; }
+.detail { display: grid; gap: 1rem; }
+
+.teams { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
+.teams li { display: grid; gap: 0.15rem; }
+.teams__link {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid transparent;
+}
+.teams__link:hover { background: var(--surface-2); }
+.teams__link.is-active { border-color: var(--accent); background: var(--accent-soft); }
+.teams__code {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 6px;
+  padding: 0.18rem 0.3rem;
+  text-align: center;
+}
+.teams__body { display: grid; min-width: 0; }
+.teams__body strong { font-size: 0.87rem; }
+.teams__body small { color: var(--muted); font-size: 0.73rem; }
+.teams__count { font-size: 0.85rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--muted); }
+
+.teams__actions { display: flex; gap: 0.6rem; padding: 0 0.55rem 0.25rem 3.05rem; }
+.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 0.73rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+.link--danger { color: var(--danger); }
+.link:hover { text-decoration: underline; }
+
+.placeholder { margin: 0; font-size: 0.86rem; color: var(--muted); line-height: 1.6; }

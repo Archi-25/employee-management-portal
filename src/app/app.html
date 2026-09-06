@@ -2,7 +2,7 @@
 
 <header class="topbar">
   <a class="brand" routerLink="/dashboard">
-    <span class="brand__mark">EMP</span>
+    <span class="brand__mark" aria-hidden="true">EMP</span>
     <span class="brand__name" i18n="@@app.brand">Employee Management Portal</span>
   </a>
 
@@ -16,7 +16,7 @@
     ☰
   </button>
 
-  <nav class="nav" [class.is-open]="menuOpen()">
+  <nav class="nav" [class.is-open]="menuOpen()" aria-label="Main">
     @for (item of visibleNav(); track item.path) {
       <a
         [routerLink]="item.path"
@@ -24,28 +24,51 @@
         [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
         (click)="menuOpen.set(false)"
       >
+        <span class="nav__icon" aria-hidden="true">{{ item.icon }}</span>
         {{ item.label }}
       </a>
     }
   </nav>
 
   <div class="session">
-    <span [appRoleBadge]="auth.role()" class="session__badge"></span>
-    <select
-      class="session__role"
-      [value]="auth.role()"
-      (change)="switchRole($any($event.target).value)"
-      aria-label="Simulate role"
+    <button
+      type="button"
+      class="icon-btn"
+      (click)="theme.cycle()"
+      [attr.aria-label]="'Theme: ' + themeLabel() + '. Change theme.'"
+      [attr.title]="'Theme: ' + themeLabel()"
     >
-      @for (role of roles; track role) {
-        <option [value]="role">{{ role }}</option>
-      }
-    </select>
+      <span aria-hidden="true">{{ themeIcon() }}</span>
+    </button>
 
     @if (auth.isAuthenticated()) {
-      <button type="button" class="btn btn--ghost btn--sm" (click)="signOut()" i18n="@@app.signout">
-        Sign out
-      </button>
+      <app-notification-bell />
+
+      <div class="account" (appClickOutside)="accountOpen.set(false)">
+        <button
+          type="button"
+          class="account__trigger"
+          [attr.aria-expanded]="accountOpen()"
+          (click)="accountOpen.set(!accountOpen())"
+        >
+          <span class="account__avatar">{{ auth.displayName() | initials }}</span>
+          <span class="account__who">
+            <strong>{{ auth.displayName() }}</strong>
+            <small>{{ auth.role() }}</small>
+          </span>
+        </button>
+
+        @if (accountOpen()) {
+          <div class="account__menu" role="menu">
+            <a role="menuitem" routerLink="/settings" (click)="accountOpen.set(false)">
+              Profile &amp; settings
+            </a>
+            <button role="menuitem" type="button" (click)="signOut()" i18n="@@app.signout">
+              Sign out
+            </button>
+          </div>
+        }
+      </div>
     } @else {
       <a class="btn btn--sm" routerLink="/login" i18n="@@app.signin">Sign in</a>
     }
@@ -58,8 +81,6 @@
 
 <footer class="footer">
   <span>{{ config.appName }}</span>
-  <span class="footer__sep">·</span>
-  <span>Angular 22 · standalone · zoneless · SSR</span>
 </footer>
 
 <app-toast-host />

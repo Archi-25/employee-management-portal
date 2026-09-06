@@ -1,134 +1,235 @@
 <header class="page-head detail-head">
-  <div>
+  <div class="detail-head__id">
     <a class="back" routerLink="/employees">← Directory</a>
     <h1>{{ displayName() }}</h1>
-    <p>{{ employee().title }} · {{ employee().department }} · {{ employee().location }}</p>
+    <p>
+      {{ employee().title }} · {{ employee().department }} ·
+      <span class="status" [class]="'status ' + statusClass(employee().status)">
+        {{ label(employee().status) }}
+      </span>
+    </p>
   </div>
 
   <div class="detail-head__actions">
-    <button type="button" class="btn btn--ghost btn--sm" (click)="print()">Print record</button>
+    <button type="button" class="btn btn--ghost btn--sm" (click)="showBadge.set(!showBadge())">
+      {{ showBadge() ? 'Hide badge' : 'Badge' }}
+    </button>
+    <button type="button" class="btn btn--ghost btn--sm" (click)="print()">Print</button>
     <button *appHasRole="['MANAGER', 'ADMIN']" type="button" class="btn btn--sm" (click)="edit()">
       Edit
     </button>
-    <button
-      *appHasRole="'ADMIN'"
-      type="button"
-      class="btn btn--danger btn--sm"
-      (click)="confirmingDelete.set(true)"
-    >
-      Remove
+    <button *appHasRole="'ADMIN'" type="button" class="btn btn--danger btn--sm"
+            (click)="confirmingDelete.set(true)">
+      Delete
     </button>
   </div>
 </header>
 
-<nav class="tabs" role="tablist">
-  <button type="button" role="tab" [attr.aria-selected]="tab() === 'overview'"
-          [class.is-active]="tab() === 'overview'" (click)="tab.set('overview')">
-    Overview
-  </button>
-  <button type="button" role="tab" [attr.aria-selected]="tab() === 'badge'"
-          [class.is-active]="tab() === 'badge'" (click)="tab.set('badge')">
-    Shareable badge
-  </button>
-  <button type="button" role="tab" [attr.aria-selected]="tab() === 'print'"
-          [class.is-active]="tab() === 'print'" (click)="tab.set('print')">
-    Printable record
-  </button>
+@if (showBadge()) {
+  <app-card heading="Shareable badge" subtitle="Isolated in a shadow root so host styles cannot alter it">
+    <div class="badge-frame"><app-badge-widget [employee]="employee()" /></div>
+  </app-card>
+}
+
+@if (showPrint()) {
+  <app-card heading="Printable record" subtitle="Uses the document-level print stylesheet">
+    <div class="print-host"><app-print-record [employee]="employee()" /></div>
+  </app-card>
+}
+
+<nav class="tabs" role="tablist" aria-label="Employee record sections">
+  @for (item of tabs; track item.id) {
+    <button
+      type="button"
+      role="tab"
+      [id]="'tab-' + item.id"
+      [attr.aria-selected]="tab() === item.id"
+      [attr.aria-controls]="'panel-' + item.id"
+      [class.is-active]="tab() === item.id"
+      (click)="select(item.id)"
+    >
+      {{ item.label }}
+    </button>
+  }
 </nav>
 
-@switch (tab()) {
-  @case ('overview') {
-    <div class="layout">
-      <app-card heading="Profile">
-        <app-employee-profile
-          [employee]="employee()"
-          [showSalary]="auth.hasRole('MANAGER')"
-          (edit)="edit()"
-          (remove)="confirmingDelete.set(true)"
-          (noteAdded)="onNoteAdded($event)"
-        >
-          <!-- Projected into the profile's named slots -->
-          <div profile-banner class="banner">
-            Record #{{ employee().id }} · last reviewed by People Ops
-          </div>
-
-          <a profile-actions class="btn btn--ghost btn--sm"
-             [routerLink]="['/departments', employee().department]">
-            View team
-          </a>
-
-          <small profile-footer class="hint">
-            Salary is visible to managers and administrators only.
-          </small>
-        </app-employee-profile>
-      </app-card>
-
-      <aside class="side">
-        <app-card heading="Team" [subtitle]="employee().department">
-          @if (teammates().length) {
-            <ul class="mates">
-              @for (mate of teammates(); track mate.id) {
-                <li>
-                  <a [routerLink]="['/employees', mate.id]">
-                    {{ mate.firstName }} {{ mate.lastName }}
-                  </a>
-                  <small>{{ mate.title }}</small>
-                </li>
-              }
-            </ul>
-          } @else {
-            <p class="hint">No other members in this department.</p>
-          }
+<div class="panel" role="tabpanel" [id]="'panel-' + tab()" [attr.aria-labelledby]="'tab-' + tab()">
+  @switch (tab()) {
+    @case ('personal') {
+      <div class="layout">
+        <app-card heading="Profile">
+          <app-employee-profile
+            [employee]="employee()"
+            [showSalary]="auth.hasRole('MANAGER')"
+            (edit)="edit()"
+            (remove)="confirmingDelete.set(true)"
+            (noteAdded)="onNoteAdded($event)"
+          >
+            <div profile-banner class="banner">
+              {{ employee().code }} · last reviewed by People Ops
+            </div>
+            <a profile-actions class="btn btn--ghost btn--sm"
+               [routerLink]="['/departments', employee().department]">
+              View team
+            </a>
+            <small profile-footer class="hint">
+              Salary is visible to managers and administrators only.
+            </small>
+          </app-employee-profile>
         </app-card>
 
-        @if (savedNotes().length) {
-          <app-card heading="Notes added this session" [subtitle]="savedNotes().length + ' note(s)'">
-            <ul class="notes">
-              @for (note of savedNotes(); track note.at) {
-                <li>{{ note.text }}</li>
-              }
-            </ul>
+        <aside class="side">
+          <app-card heading="Contact">
+            <dl class="kv">
+              <div><dt>Email</dt><dd><a [href]="'mailto:' + employee().email">{{ employee().email }}</a></dd></div>
+              <div><dt>Phone</dt><dd>{{ employee().phone }}</dd></div>
+              <div><dt>Date of birth</dt><dd>{{ employee().dateOfBirth }}</dd></div>
+              <div><dt>Gender</dt><dd>{{ employee().gender }}</dd></div>
+            </dl>
           </app-card>
+
+          <app-card heading="Address">
+            <address class="address">
+              {{ employee().address.line1 }}<br />
+              {{ employee().address.city }}, {{ employee().address.state }}<br />
+              {{ employee().address.pincode }}
+            </address>
+          </app-card>
+        </aside>
+      </div>
+    }
+
+    @case ('professional') {
+      <div class="layout">
+        <app-card heading="Employment" subtitle="Role, reporting line and compensation">
+          <dl class="kv kv--wide">
+            <div><dt>Employee ID</dt><dd>{{ employee().code }}</dd></div>
+            <div><dt>Designation</dt><dd>{{ employee().title }}</dd></div>
+            <div><dt>Department</dt><dd>{{ employee().department }}</dd></div>
+            <div><dt>Employment type</dt><dd>{{ employee().employmentType }}</dd></div>
+            <div><dt>Joining date</dt><dd>{{ employee().joinedOn }}</dd></div>
+            <div><dt>Work location</dt><dd>{{ employee().location }}</dd></div>
+            <div>
+              <dt>Reporting manager</dt>
+              <dd>
+                @if (manager(); as boss) {
+                  <a [routerLink]="['/employees', boss.id]">{{ boss.firstName }} {{ boss.lastName }}</a>
+                } @else { — }
+              </dd>
+            </div>
+            <div><dt>Portal access</dt><dd>{{ employee().role }}</dd></div>
+            @if (auth.hasRole('MANAGER')) {
+              <div><dt>Salary</dt><dd>{{ employee().salary.toLocaleString('en-US') }} USD</dd></div>
+            }
+          </dl>
+        </app-card>
+
+        <aside class="side">
+          <app-card heading="Team" [subtitle]="employee().department">
+            @if (teammates().length) {
+              <ul class="mates">
+                @for (mate of teammates(); track mate.id) {
+                  <li>
+                    <a [routerLink]="['/employees', mate.id]">{{ mate.firstName }} {{ mate.lastName }}</a>
+                    <small>{{ mate.title }}</small>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="hint">No other members in this department.</p>
+            }
+          </app-card>
+        </aside>
+      </div>
+    }
+
+    @case ('attendance') {
+      <app-card heading="Recent attendance" subtitle="Last 10 recorded days">
+        <div class="mini-tiles">
+          <span class="mini"><b>{{ attendanceSummary().present }}</b> present</span>
+          <span class="mini"><b>{{ attendanceSummary().late }}</b> late</span>
+          <span class="mini"><b>{{ attendanceSummary().absent }}</b> absent</span>
+        </div>
+
+        @if (attendance().length) {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th scope="col">Date</th><th scope="col">Check in</th><th scope="col">Check out</th><th scope="col">Status</th></tr>
+              </thead>
+              <tbody>
+                @for (record of attendance(); track record.id) {
+                  <tr>
+                    <td>{{ record.date }}</td>
+                    <td class="time">{{ record.checkIn ?? '—' }}</td>
+                    <td class="time">{{ record.checkOut ?? '—' }}</td>
+                    <td>
+                      <span class="status" [class]="'status ' + statusClass(record.status)">
+                        {{ label(record.status) }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <p class="hint">No attendance recorded for this employee.</p>
         }
-      </aside>
-    </div>
-  }
+      </app-card>
+    }
 
-  @case ('badge') {
-    <app-card
-      heading="Shareable badge"
-      subtitle="Rendered in a shadow root so host styles cannot alter it"
-    >
-      <div class="badge-frame">
-        <app-badge-widget [employee]="employee()" />
-      </div>
-      <p class="hint">
-        This widget is designed to be embedded in other internal tools, so it is isolated from
-        whatever stylesheet surrounds it.
-      </p>
-    </app-card>
-  }
+    @case ('leave') {
+      <app-card heading="Leave history" [subtitle]="leave().length + ' request(s)'">
+        @if (leave().length) {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th scope="col">Type</th><th scope="col">From</th><th scope="col">To</th><th scope="col" class="num">Days</th><th scope="col">Reason</th><th scope="col">Status</th></tr>
+              </thead>
+              <tbody>
+                @for (request of leave(); track request.id) {
+                  <tr>
+                    <td>{{ request.type }}</td>
+                    <td>{{ request.from }}</td>
+                    <td>{{ request.to }}</td>
+                    <td class="num">{{ request.days }}</td>
+                    <td class="reason" [title]="request.reason">{{ request.reason }}</td>
+                    <td>
+                      <span class="status" [class]="'status ' + statusClass(request.status)">
+                        {{ request.status }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <p class="hint">This employee has not requested any leave.</p>
+        }
+      </app-card>
+    }
 
-  @case ('print') {
-    <app-card heading="Printable record" subtitle="Uses the document-level print stylesheet">
-      <div class="print-host">
-        <app-print-record [employee]="employee()" />
-      </div>
-      <div class="row">
-        <button type="button" class="btn btn--ghost btn--sm" (click)="print()">Print now</button>
-      </div>
-    </app-card>
+    @case ('documents') {
+      <app-card heading="Documents" subtitle="Resumes, offer letters and certificates">
+        <app-employee-documents [employeeId]="employee().id" />
+      </app-card>
+    }
   }
-}
+</div>
 
 @if (confirmingDelete()) {
   <app-confirm-dialog
-    heading="Remove employee?"
-    confirmLabel="Remove"
+    heading="Delete employee?"
+    confirmLabel="Delete"
     (confirmed)="remove()"
     (cancelled)="confirmingDelete.set(false)"
   >
-    <p><strong>{{ displayName() }}</strong> will be removed from the directory.</p>
+    <p>
+      <strong>{{ displayName() }}</strong> ({{ employee().code }}) will be removed from the
+      directory. This action cannot be undone.
+    </p>
     <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
             (click)="confirmingDelete.set(false)">
       Not now

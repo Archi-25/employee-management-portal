@@ -1,0 +1,32 @@
+:host { display: block; }
+.docs__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.7rem; }
+.docs__head .hint { margin: 0; }
+.upload { cursor: pointer; }
+
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.55rem 0.7rem;
+  background: var(--surface);
+}
+.icon { font-size: 1.05rem; flex: none; }
+.meta { display: grid; flex: 1; min-width: 0; }
+.meta strong { font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.meta small { color: var(--muted); font-size: 0.73rem; }
+.actions { display: flex; gap: 0.6rem; flex: none; }
+.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 0.76rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+.link--danger { color: var(--danger); }
+.link:hover { text-decoration: underline; }
+.empty { margin: 0; color: var(--muted); font-size: 0.84rem; }

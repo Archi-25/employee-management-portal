@@ -1,0 +1,91 @@
+<div class="login">
+  <section class="login__panel">
+    <span class="login__mark" aria-hidden="true">EMP</span>
+    <h1 i18n="@@login.title">Sign in</h1>
+    <p class="login__lede" i18n="@@login.subtitle">
+      Welcome back. Sign in to manage your organisation.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      @if (failed()) {
+        <p class="alert" role="alert">
+          We could not sign you in with those details. Try one of the demo accounts below.
+        </p>
+      }
+
+      <label class="field">
+        <span i18n="@@login.email">Email</span>
+        <input
+          formControlName="email"
+          type="email"
+          autocomplete="username"
+          placeholder="you@acme.io"
+          [class.is-invalid]="showError('email')"
+        />
+        @if (showError('email')) {
+          <em class="error">
+            @if (form.controls.email.hasError('required')) { Email is required. }
+            @else { Enter a valid email address. }
+          </em>
+        }
+      </label>
+
+      <label class="field">
+        <span i18n="@@login.password">Password</span>
+        <span class="password">
+          <input
+            formControlName="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            autocomplete="current-password"
+            [class.is-invalid]="showError('password')"
+          />
+          <button
+            type="button"
+            class="password__toggle"
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+            [attr.aria-pressed]="showPassword()"
+            (click)="showPassword.set(!showPassword())"
+          >
+            {{ showPassword() ? 'Hide' : 'Show' }}
+          </button>
+        </span>
+        @if (showError('password')) {
+          <em class="error">
+            @if (form.controls.password.hasError('required')) { Password is required. }
+            @else { Use at least 6 characters. }
+          </em>
+        }
+      </label>
+
+      <label class="remember">
+        <input type="checkbox" formControlName="remember" />
+        <span i18n="@@login.remember">Remember me on this device</span>
+      </label>
+
+      <button type="submit" class="btn btn--block" [disabled]="submitting()" i18n="@@login.submit">
+        Sign in
+      </button>
+
+      @if (redirectTo()) {
+        <p class="hint">You will return to <code>{{ redirectTo() }}</code> afterwards.</p>
+      }
+    </form>
+  </section>
+
+  <aside class="login__demo">
+    <h2>Demo accounts</h2>
+    <p>No real credentials — pick a role to explore. The password is <code>portal123</code>.</p>
+
+    <ul>
+      @for (account of accounts; track account.email) {
+        <li>
+          <button type="button" (click)="useAccount(account)">
+            <strong>{{ account.role }}</strong>
+            <span class="email">{{ account.email }}</span>
+            <small>{{ account.blurb }}</small>
+          </button>
+        </li>
+      }
+    </ul>
+  </aside>
+</div>

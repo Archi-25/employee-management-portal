@@ -7,6 +7,7 @@ import { mockBackendInterceptor, resetMockBackend } from '@core/interceptors/moc
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { errorInterceptor } from '@core/interceptors/error.interceptor';
 import { EmployeeStore } from './employee.store';
+import { makeEmployeeDraft } from '../../testing/employee.fixture';
 
 describe('EmployeeStore', () => {
   let store: InstanceType<typeof EmployeeStore>;
@@ -43,13 +44,24 @@ describe('EmployeeStore', () => {
     );
   });
 
-  it('filters by search term across name, email and title', () => {
-    store.setFilter({ search: 'Riya' });
+  it('filters by search term across name, code, email and title', () => {
+    store.setFilter({ search: 'sharma' });
     expect(store.filtered().length).toBe(1);
     expect(store.filtered()[0].firstName).toBe('Riya');
 
     store.setFilter({ search: 'principal' });
     expect(store.filtered()[0].title).toContain('Principal');
+
+    // Employee code is searchable too.
+    store.setFilter({ search: 'EMP003' });
+    expect(store.filtered().length).toBe(1);
+    expect(store.filtered()[0].code).toBe('EMP003');
+  });
+
+  it('matches a search term anywhere in the name, not only at the start', () => {
+    // "riya" is a substring of both Riya Sharma and Priya Nair — by design.
+    store.setFilter({ search: 'riya' });
+    expect(store.filtered().length).toBe(2);
   });
 
   it('combines department and status filters', () => {
@@ -89,29 +101,20 @@ describe('EmployeeStore', () => {
   });
 
   it('adds a created employee to the head of the list', async () => {
+    // Creating requires manager rights; the API rejects anyone else.
+    TestBed.inject(AuthService).login('Riya', 'MANAGER');
     const before = store.total();
 
-    await store.create({
-      firstName: 'Nina',
-      lastName: 'Berg',
-      email: 'nina.berg@acme.io',
-      title: 'SRE',
-      department: 'Engineering',
-      role: 'EMPLOYEE',
-      status: 'ACTIVE',
-      salary: 125000,
-      joinedOn: '2026-02-01',
-      location: 'Oslo',
-      skills: ['Kubernetes'],
-      bioHtml: '',
-      avatarColor: '#111',
-    });
+    await store.create(
+      makeEmployeeDraft({ firstName: 'Nina', lastName: 'Berg', email: 'nina.berg@acme.io', title: 'SRE' }),
+    );
 
     expect(store.total()).toBe(before + 1);
     expect(store.employees()[0].firstName).toBe('Nina');
   });
 
   it('replaces the record on update rather than mutating it', async () => {
+    TestBed.inject(AuthService).login('Riya', 'MANAGER');
     const target = store.employees()[0];
     const original = { ...target };
 
@@ -120,6 +123,15 @@ describe('EmployeeStore', () => {
     const updated = store.employees().find((employee) => employee.id === target.id);
     expect(updated?.title).toBe('Distinguished Engineer');
     expect(updated).not.toBe(original);
+  });
+
+  it('refuses to create an employee without manager rights', async () => {
+    const before = store.total();
+
+    await store.create(makeEmployeeDraft({ firstName: 'Mallory' }));
+
+    expect(store.total()).toBe(before);
+    expect(store.error()).not.toBeNull();
   });
 
   it('surfaces an error and stops loading when a delete is forbidden', async () => {

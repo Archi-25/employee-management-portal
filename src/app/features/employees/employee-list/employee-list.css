@@ -59,6 +59,10 @@ app-card + app-card { margin-top: 1rem; display: block; }
 .person__text { display: grid; min-width: 0; }
 .person__text strong { font-size: 0.87rem; }
 .person__text small { color: var(--muted); font-size: 0.74rem; }
+.code { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-2); }
+.type { display: block; color: var(--muted); font-size: 0.71rem; }
+.empty { text-align: center; padding: 1.5rem 0; display: grid; gap: 0.7rem; justify-items: center; }
+.empty p { margin: 0; font-size: 0.9rem; }
 .person:hover strong { text-decoration: underline; }
 
 .actions { width: 44px; }

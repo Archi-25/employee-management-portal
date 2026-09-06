@@ -12,6 +12,9 @@ export const serverRoutes: ServerRoute[] = [
   // Parameterised and data-driven screens render per request.
   { path: 'employees/**', renderMode: RenderMode.Server },
   { path: 'departments/**', renderMode: RenderMode.Server },
+  { path: 'attendance', renderMode: RenderMode.Server },
+  { path: 'leave', renderMode: RenderMode.Server },
+  { path: 'settings', renderMode: RenderMode.Client },
   // The admin area is private and interactive; there is nothing to gain from
   // prerendering it, and the badge widget needs a real Shadow DOM root.
   { path: 'admin/**', renderMode: RenderMode.Client },

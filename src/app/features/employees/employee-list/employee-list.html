@@ -42,6 +42,7 @@
     <label class="field">
       <span i18n="@@filter.department">Department</span>
       <select [value]="store.filter().department" (change)="onDepartment($any($event.target).value)">
+        <option value="ALL">All departments</option>
         @for (department of departments; track department) {
           <option [value]="department">{{ department }}</option>
         }
@@ -51,8 +52,31 @@
     <label class="field">
       <span i18n="@@filter.status">Status</span>
       <select [value]="store.filter().status" (change)="onStatus($any($event.target).value)">
+        <option value="ALL">All statuses</option>
         @for (status of statuses; track status) {
-          <option [value]="status">{{ status }}</option>
+          <option [value]="status">{{ label(status) }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="field">
+      <span>Employment type</span>
+      <select [value]="store.filter().employmentType"
+              (change)="onEmploymentType($any($event.target).value)">
+        <option value="ALL">All types</option>
+        @for (type of employmentTypes; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="field">
+      <span>Designation</span>
+      <select [value]="store.filter().designation"
+              (change)="onDesignation($any($event.target).value)">
+        <option value="ALL">All designations</option>
+        @for (designation of store.designations(); track designation) {
+          <option [value]="designation">{{ designation }}</option>
         }
       </select>
     </label>
@@ -63,7 +87,14 @@
   @if (store.loading() && store.total() === 0) {
     <p class="hint">Loading directory…</p>
   } @else if (sorted().length === 0) {
-    <p class="hint">No employee matches the current filters.</p>
+    <div class="empty">
+      <p><strong>No employees match these filters.</strong></p>
+      @if (hasActiveFilters()) {
+        <button type="button" class="btn btn--ghost btn--sm" (click)="clearFilters()">
+          Clear all filters
+        </button>
+      }
+    </div>
   } @else {
     <div class="table-wrap">
       <table class="grid">
@@ -75,8 +106,18 @@
               </button>
             </th>
             <th scope="col">
+              <button type="button" class="sort" (click)="sortBy('code')">
+                ID{{ sortKey() === 'code' ? (sortAsc() ? ' ▲' : ' ▼') : '' }}
+              </button>
+            </th>
+            <th scope="col">
               <button type="button" class="sort" (click)="sortBy('department')">
                 Department{{ sortKey() === 'department' ? (sortAsc() ? ' ▲' : ' ▼') : '' }}
+              </button>
+            </th>
+            <th scope="col">
+              <button type="button" class="sort" (click)="sortBy('title')">
+                Designation{{ sortKey() === 'title' ? (sortAsc() ? ' ▲' : ' ▼') : '' }}
               </button>
             </th>
             <th scope="col">
@@ -107,19 +148,24 @@
                   </span>
                   <span class="person__text">
                     <strong>{{ displayName(employee) }}</strong>
-                    <small>{{ employee.title }}</small>
+                    <small>{{ employee.email }}</small>
                   </span>
                 </a>
               </td>
+              <td class="code">{{ employee.code }}</td>
               <td>{{ employee.department }}</td>
+              <td>
+                {{ employee.title }}
+                <small class="type">{{ employee.employmentType }}</small>
+              </td>
               <td>{{ employee.joinedOn | tenure }}</td>
               <td>
                 <span
-                  class="chip chip--status"
-                  [attr.data-status]="employee.status"
+                  class="status"
+                  [class]="'status ' + statusClass(employee.status)"
                   [appTooltip]="statusHint(employee.status)"
                 >
-                  {{ employee.status }}
+                  {{ label(employee.status) }}
                 </span>
               </td>
               @if (auth.hasRole('MANAGER')) {

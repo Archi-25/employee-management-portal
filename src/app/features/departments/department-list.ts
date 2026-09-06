@@ -1,93 +1,143 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { fullName } from '@core/models/employee.model';
+import { DepartmentRecord } from '@core/models/hr.model';
+import { AuthService } from '@core/services/auth.service';
+import { DepartmentStore } from '@core/state/department.store';
 import { EmployeeStore } from '@core/state/employee.store';
+import { BarChart, BarDatum } from '@shared/components/bar-chart/bar-chart';
 import { Card } from '@shared/components/card/card';
-import { StatTile } from '@shared/components/stat-tile/stat-tile';
+import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
+import { DialogCloseDirective } from '@shared/directives/dialog-close.directive';
+import { HasRoleDirective } from '@shared/directives/has-role.directive';
 
-/**
- * Departments overview. Parent of the `/departments/:name` child route, so it
- * owns a `<router-outlet>` of its own.
- */
 @Component({
   selector: 'app-department-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, Card, StatTile],
-  template: `
-    <header class="page-head">
-      <h1 i18n="@@departments.title">Departments</h1>
-      <p i18n="@@departments.subtitle">
-        Headcount and payroll split by team. Select a department to see its members.
-      </p>
-    </header>
-
-    <div class="tiles">
-      <app-stat-tile label="Departments" [value]="departments().length" accent="#6366f1" />
-      <app-stat-tile label="Total headcount" [value]="store.total()" accent="#0ea5e9" />
-      <app-stat-tile label="Largest team" [value]="largest()" accent="#16a34a" />
-      <app-stat-tile
-        label="Annual payroll"
-        [value]="store.payrollTotal()"
-        [currency]="true"
-        accent="#f59e0b"
-      />
-    </div>
-
-    <div class="layout">
-      <app-card heading="All teams" [subtitle]="departments().length + ' teams'">
-        <ul class="teams">
-          @for (team of departments(); track team.department) {
-            <li>
-              <a [routerLink]="[team.department]" routerLinkActive="is-active">
-                <span class="teams__name">{{ team.department }}</span>
-                <span class="teams__bar">
-                  <span class="teams__fill" [style.width.%]="share(team.count)"></span>
-                </span>
-                <span class="teams__count">{{ team.count }}</span>
-              </a>
-            </li>
-          }
-        </ul>
-      </app-card>
-
-      <div class="detail">
-        <!-- Child route renders here -->
-        <router-outlet />
-      </div>
-    </div>
-  `,
-  styles: `
-    :host { display: block; }
-    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-    .layout { display: grid; grid-template-columns: minmax(240px, 340px) 1fr; gap: 1rem; align-items: start; }
-    @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
-    .teams { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
-    .teams a {
-      display: grid;
-      grid-template-columns: 1fr 70px 26px;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.45rem 0.55rem;
-      border-radius: 8px;
-      text-decoration: none;
-      color: inherit;
-      border: 1px solid transparent;
-    }
-    .teams a:hover { background: var(--surface-2); }
-    .teams a.is-active { border-color: var(--accent); background: var(--surface-2); }
-    .teams__name { font-size: 0.87rem; font-weight: 500; }
-    .teams__bar { background: var(--surface-2); border-radius: 999px; height: 6px; overflow: hidden; }
-    .teams__fill { display: block; height: 100%; background: var(--accent); }
-    .teams__count { text-align: right; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .detail { display: grid; gap: 1rem; }
-  `,
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
+    BarChart,
+    Card,
+    ConfirmDialog,
+    DialogCloseDirective,
+    HasRoleDirective,
+  ],
+  templateUrl: './department-list.html',
+  styleUrl: './department-list.css',
 })
 export class DepartmentList {
-  protected readonly store = inject(EmployeeStore);
-  protected readonly departments = computed(() => this.store.headcountByDepartment());
-  protected readonly largest = computed(() => this.departments()[0]?.department ?? '—');
+  protected readonly store = inject(DepartmentStore);
+  protected readonly employees = inject(EmployeeStore);
+  protected readonly auth = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
 
-  protected share(count: number): number {
-    const total = this.store.total();
-    return total === 0 ? 0 : (count / total) * 100;
+  protected readonly editing = signal<DepartmentRecord | null>(null);
+  protected readonly deleting = signal<DepartmentRecord | null>(null);
+  protected readonly showForm = signal(false);
+
+  protected readonly form = this.fb.nonNullable.group({
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(40)]],
+    code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2,5}$/)]],
+    headId: [null as number | null],
+    description: ['', Validators.maxLength(160)],
+  });
+
+  constructor() {
+    void this.store.load();
+  }
+
+  protected readonly headcounts = computed(() => {
+    const counts = new Map<string, number>();
+    for (const employee of this.employees.employees()) {
+      counts.set(employee.department, (counts.get(employee.department) ?? 0) + 1);
+    }
+    return counts;
+  });
+
+  protected readonly chartData = computed<BarDatum[]>(() =>
+    this.store
+      .departments()
+      .map((department) => ({
+        label: department.name,
+        value: this.headcounts().get(department.name) ?? 0,
+      }))
+      .sort((a, b) => b.value - a.value),
+  );
+
+  protected readonly managers = computed(() =>
+    this.employees
+      .employees()
+      .filter((employee) => employee.role === 'MANAGER' || employee.role === 'ADMIN'),
+  );
+
+  protected countFor(name: string): number {
+    return this.headcounts().get(name) ?? 0;
+  }
+
+  protected headName(headId: number | null): string {
+    if (headId === null) {
+      return 'Not assigned';
+    }
+    const head = this.employees.byId(headId);
+    return head ? fullName(head) : 'Not assigned';
+  }
+
+  protected startCreate(): void {
+    this.editing.set(null);
+    this.form.reset({ name: '', code: '', headId: null, description: '' });
+    this.showForm.set(true);
+  }
+
+  protected startEdit(department: DepartmentRecord): void {
+    this.editing.set(department);
+    this.form.reset({
+      name: department.name,
+      code: department.code,
+      headId: department.headId,
+      description: department.description,
+    });
+    this.showForm.set(true);
+  }
+
+  protected showError(name: 'name' | 'code'): boolean {
+    const control = this.form.controls[name];
+    return control.invalid && control.touched;
+  }
+
+  protected async save(): Promise<void> {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const value = this.form.getRawValue();
+    const draft = {
+      name: value.name.trim(),
+      code: value.code.trim().toUpperCase(),
+      headId: value.headId ? Number(value.headId) : null,
+      description: value.description.trim(),
+    };
+
+    const existing = this.editing();
+    if (existing) {
+      await this.store.update(existing.id, draft);
+    } else {
+      await this.store.create(draft);
+    }
+
+    this.showForm.set(false);
+    this.editing.set(null);
+  }
+
+  protected async confirmDelete(): Promise<void> {
+    const department = this.deleting();
+    this.deleting.set(null);
+    if (department) {
+      await this.store.remove(department.id);
+    }
   }
 }

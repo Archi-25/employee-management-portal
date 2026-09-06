@@ -14,6 +14,7 @@ import {
   Employee,
   EmployeeDraft,
   EmployeeFilter,
+  birthdayWithinDays,
 } from '@core/models/employee.model';
 import { EmployeeService } from '@core/services/employee.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -38,13 +39,16 @@ const initialState: EmployeeState = {
 
 function matches(employee: Employee, filter: EmployeeFilter): boolean {
   const term = filter.search.trim().toLowerCase();
+  // Searchable by name, employee code, email and job title.
   const haystack =
-    `${employee.firstName} ${employee.lastName} ${employee.email} ${employee.title}`.toLowerCase();
+    `${employee.firstName} ${employee.lastName} ${employee.code} ${employee.email} ${employee.title}`.toLowerCase();
 
   return (
     (term === '' || haystack.includes(term)) &&
     (filter.department === 'ALL' || employee.department === filter.department) &&
-    (filter.status === 'ALL' || employee.status === filter.status)
+    (filter.status === 'ALL' || employee.status === filter.status) &&
+    (filter.employmentType === 'ALL' || employee.employmentType === filter.employmentType) &&
+    (filter.designation === 'ALL' || employee.title === filter.designation)
   );
 }
 
@@ -74,8 +78,34 @@ export const EmployeeStore = signalStore(
     activeCount: computed(
       () => employees().filter((employee) => employee.status === 'ACTIVE').length,
     ),
+    onLeaveCount: computed(
+      () => employees().filter((employee) => employee.status === 'ON_LEAVE').length,
+    ),
     payrollTotal: computed(() =>
       employees().reduce((sum, employee) => sum + employee.salary, 0),
+    ),
+    /** Everyone who joined in the last 90 days. */
+    recentJoiners: computed(() => {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - 90);
+      const iso = cutoff.toISOString().slice(0, 10);
+      return employees()
+        .filter((employee) => employee.joinedOn >= iso)
+        .sort((a, b) => b.joinedOn.localeCompare(a.joinedOn));
+    }),
+    /** Distinct job titles, for the designation filter. */
+    designations: computed(() =>
+      [...new Set(employees().map((employee) => employee.title))].sort((a, b) =>
+        a.localeCompare(b),
+      ),
+    ),
+    upcomingBirthdays: computed(() =>
+      employees()
+        .filter(
+          (employee) =>
+            employee.status !== 'EXITED' && birthdayWithinDays(employee.dateOfBirth, 14),
+        )
+        .sort((a, b) => a.dateOfBirth.slice(5).localeCompare(b.dateOfBirth.slice(5))),
     ),
   })),
 
@@ -154,13 +184,9 @@ export const EmployeeStore = signalStore(
         patchState(store, { selectedId });
       },
 
-      /** Local-only edit used by the change-detection demo to mutate one row. */
-      bumpSalary(id: number, amount: number): void {
-        patchState(store, (state) => ({
-          employees: state.employees.map((employee) =>
-            employee.id === id ? { ...employee, salary: employee.salary + amount } : employee,
-          ),
-        }));
+      /** Looks up a record without going back to the API. */
+      byId(id: number): Employee | null {
+        return store.employees().find((employee) => employee.id === id) ?? null;
       },
     };
   }),

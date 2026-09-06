@@ -13,6 +13,7 @@ import { cacheInterceptor, clearHttpCache } from './cache.interceptor';
 import { errorInterceptor } from './error.interceptor';
 import { mockBackendInterceptor, resetMockBackend } from './mock-backend.interceptor';
 import { profilingInterceptor } from './profiling.interceptor';
+import { makeEmployeeDraft } from '../../testing/employee.fixture';
 
 /** Records the headers the mock backend actually received. */
 let seenAuthorization: string | null = null;
@@ -100,24 +101,11 @@ describe('HTTP interceptor chain', () => {
   });
 
   it('invalidates the cache when a write goes through', async () => {
+    auth.login('Riya', 'MANAGER');
     const before = await firstValueFrom(http.get<Page<Employee>>('/api/employees'));
 
     await firstValueFrom(
-      http.post('/api/employees', {
-        firstName: 'New',
-        lastName: 'Hire',
-        email: 'new.hire@acme.io',
-        title: 'Engineer',
-        department: 'Engineering',
-        role: 'EMPLOYEE',
-        status: 'ACTIVE',
-        salary: 100000,
-        joinedOn: '2026-01-01',
-        location: 'Remote',
-        skills: [],
-        bioHtml: '',
-        avatarColor: '#000',
-      }),
+      http.post('/api/employees', makeEmployeeDraft({ firstName: 'New', lastName: 'Hire' })),
     );
 
     const after = await firstValueFrom(http.get<Page<Employee>>('/api/employees'));
@@ -129,6 +117,14 @@ describe('HTTP interceptor chain', () => {
       status: 500,
       url: '/api/boom',
     });
+  });
+
+  it('rejects a POST from a role without manager rights', async () => {
+    auth.login('Daniel', 'EMPLOYEE');
+
+    await expect(
+      firstValueFrom(http.post('/api/employees', makeEmployeeDraft())),
+    ).rejects.toMatchObject({ status: 403 });
   });
 
   it('rejects a DELETE from a non-admin role with 403', async () => {

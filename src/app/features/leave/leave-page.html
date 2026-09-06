@@ -1,0 +1,169 @@
+<header class="page-head leave-head">
+  <div>
+    <h1 i18n="@@leave.title">Leave</h1>
+    <p i18n="@@leave.subtitle">
+      Balances, requests and approvals.
+    </p>
+  </div>
+  @if (me()) {
+    <button type="button" class="btn" (click)="showForm.set(!showForm())">
+      {{ showForm() ? 'Close' : 'Apply for leave' }}
+    </button>
+  }
+</header>
+
+@if (myBalance(); as balance) {
+  <div class="tiles">
+    <app-stat-tile label="Annual leave" [value]="balance.annual" hint="days remaining" accent="#2a78d6" />
+    <app-stat-tile label="Sick leave" [value]="balance.sick" hint="days remaining" accent="#1baf7a" />
+    <app-stat-tile label="Casual leave" [value]="balance.casual" hint="days remaining" accent="#eda100" />
+    <app-stat-tile label="Pending" [value]="store.pendingCount()" hint="awaiting decision" accent="#fab219" />
+  </div>
+}
+
+@if (showForm()) {
+  <app-card heading="Apply for leave" subtitle="Requests go to your manager for approval">
+    <form [formGroup]="form" (ngSubmit)="apply()" class="form" novalidate>
+      <label class="field">
+        <span>Leave type</span>
+        <select formControlName="type">
+          @for (type of leaveTypes; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>From</span>
+        <input formControlName="from" type="date" [class.is-invalid]="showError('from')" />
+        @if (showError('from')) { <em class="error">A start date is required.</em> }
+      </label>
+
+      <label class="field">
+        <span>To</span>
+        <input formControlName="to" type="date" [class.is-invalid]="showError('to')" />
+        @if (showError('to')) {
+          <em class="error">
+            @if (form.controls.to.hasError('range')) { The end date must be on or after the start date. }
+            @else { An end date is required. }
+          </em>
+        }
+      </label>
+
+      <label class="field field--wide">
+        <span>Reason</span>
+        <input formControlName="reason" placeholder="Give your manager some context"
+               [class.is-invalid]="showError('reason')" />
+        @if (showError('reason')) {
+          <em class="error">Give a reason of at least 8 characters.</em>
+        }
+      </label>
+
+      <div class="form__actions">
+        <button type="submit" class="btn" [disabled]="store.loading()">Submit request</button>
+        <button type="button" class="btn btn--ghost" (click)="showForm.set(false)">Cancel</button>
+        @if (requestedDays() > 0) {
+          <span class="hint">{{ requestedDays() }} working day(s)</span>
+        }
+      </div>
+    </form>
+  </app-card>
+}
+
+<app-card
+  [heading]="auth.hasRole('MANAGER') ? 'All requests' : 'My requests'"
+  [subtitle]="rows().length + ' request(s)'"
+>
+  <div card-actions>
+    <select class="filter" [value]="store.status()" (change)="onStatusFilter($any($event.target).value)"
+            aria-label="Filter by status">
+      <option value="ALL">All statuses</option>
+      <option value="PENDING">Pending</option>
+      <option value="APPROVED">Approved</option>
+      <option value="REJECTED">Rejected</option>
+    </select>
+  </div>
+
+  @if (store.loading() && rows().length === 0) {
+    <p class="hint">Loading requests…</p>
+  } @else if (rows().length === 0) {
+    <p class="hint">No leave requests to show.</p>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            @if (auth.hasRole('MANAGER')) { <th scope="col">Employee</th> }
+            <th scope="col">Type</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col" class="num">Days</th>
+            <th scope="col">Reason</th>
+            <th scope="col">Status</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (request of rows(); track request.id) {
+            <tr>
+              @if (auth.hasRole('MANAGER')) {
+                <td>
+                  <a class="person" [routerLink]="['/employees', request.employeeId]">
+                    <span class="person__avatar" [style.background]="avatarColor(request.employeeId)">
+                      {{ employeeName(request.employeeId) | initials }}
+                    </span>
+                    <strong>{{ employeeName(request.employeeId) }}</strong>
+                  </a>
+                </td>
+              }
+              <td>{{ request.type }}</td>
+              <td>{{ request.from | date: 'd MMM' }}</td>
+              <td>{{ request.to | date: 'd MMM' }}</td>
+              <td class="num">{{ request.days }}</td>
+              <td class="reason" [title]="request.reason">{{ request.reason }}</td>
+              <td>
+                <span class="status" [class]="'status ' + statusClass(request.status)">
+                  {{ request.status }}
+                </span>
+                @if (request.decidedBy) {
+                  <small class="by">by {{ request.decidedBy }}</small>
+                }
+              </td>
+              <td class="actions">
+                @if (request.status === 'PENDING') {
+                  <span *appHasRole="['MANAGER', 'ADMIN']" class="row">
+                    <button type="button" class="btn btn--sm" (click)="approve(request)">
+                      Approve
+                    </button>
+                    <button type="button" class="btn btn--ghost btn--sm"
+                            (click)="rejecting.set(request)">
+                      Reject
+                    </button>
+                  </span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</app-card>
+
+@if (rejecting(); as request) {
+  <app-confirm-dialog
+    heading="Reject this request?"
+    confirmLabel="Reject"
+    (confirmed)="confirmReject()"
+    (cancelled)="rejecting.set(null)"
+  >
+    <p>
+      {{ employeeName(request.employeeId) }}'s {{ request.days }}-day
+      {{ request.type.toLowerCase() }} leave will be rejected. They will be notified.
+    </p>
+    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
+            (click)="rejecting.set(null)">
+      Not now
+    </button>
+  </app-confirm-dialog>
+}

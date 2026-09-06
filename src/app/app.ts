@@ -1,50 +1,74 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ROLES, Role } from '@core/models/employee.model';
+import { Role } from '@core/models/employee.model';
 import { AuthService } from '@core/services/auth.service';
+import { ThemeService } from '@core/services/theme.service';
+import { NotificationStore } from '@core/state/notification.store';
 import { APP_CONFIG } from '@core/tokens/app-config.token';
+import { NotificationBell } from '@shared/components/notification-bell/notification-bell';
 import { ToastHost } from '@shared/components/toast-host/toast-host';
-import { RoleBadgeDirective } from '@shared/directives/role-badge.directive';
+import { ClickOutsideDirective } from '@shared/directives/click-outside.directive';
+import { InitialsPipe } from '@shared/pipes/initials.pipe';
 
 interface NavItem {
   readonly path: string;
   readonly label: string;
+  readonly icon: string;
   readonly minRole?: Role;
 }
 
 const NAV: readonly NavItem[] = [
-  { path: '/dashboard', label: 'Dashboard' },
-  { path: '/employees', label: 'Employees', minRole: 'EMPLOYEE' },
-  { path: '/departments', label: 'Departments', minRole: 'EMPLOYEE' },
-  { path: '/admin', label: 'Admin', minRole: 'MANAGER' },
+  { path: '/dashboard', label: 'Dashboard', icon: '▦' },
+  { path: '/employees', label: 'Employees', icon: '👥', minRole: 'EMPLOYEE' },
+  { path: '/attendance', label: 'Attendance', icon: '🕘', minRole: 'EMPLOYEE' },
+  { path: '/leave', label: 'Leave', icon: '🗓️', minRole: 'EMPLOYEE' },
+  { path: '/departments', label: 'Departments', icon: '🏢', minRole: 'EMPLOYEE' },
+  { path: '/admin', label: 'Admin', icon: '⚙️', minRole: 'MANAGER' },
 ];
+
+const THEME_LABEL = { system: 'System', light: 'Light', dark: 'Dark' } as const;
+const THEME_ICON = { system: '🖥️', light: '☀️', dark: '🌙' } as const;
 
 @Component({
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, RoleBadgeDirective, ToastHost],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    NotificationBell,
+    ToastHost,
+    ClickOutsideDirective,
+    InitialsPipe,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
   private readonly router = inject(Router);
+  private readonly notifications = inject(NotificationStore);
   protected readonly auth = inject(AuthService);
+  protected readonly theme = inject(ThemeService);
   protected readonly config = inject(APP_CONFIG);
 
-  protected readonly roles: readonly Role[] = ROLES;
   protected readonly menuOpen = signal(false);
+  protected readonly accountOpen = signal(false);
 
-  /** Nav entries the current role may reach — the guards enforce it again. */
+  /** Nav entries this role may reach; guards enforce the same rule again. */
   protected readonly visibleNav = computed(() =>
     NAV.filter((item) => !item.minRole || this.auth.hasRole(item.minRole)),
   );
 
-  protected switchRole(role: Role): void {
-    this.auth.switchRole(role);
+  protected readonly themeLabel = computed(() => THEME_LABEL[this.theme.preference()]);
+  protected readonly themeIcon = computed(() => THEME_ICON[this.theme.preference()]);
+
+  constructor() {
+    void this.notifications.load();
   }
 
   protected signOut(): void {
+    this.accountOpen.set(false);
     this.auth.logout();
-    void this.router.navigate(['/dashboard']);
+    void this.router.navigate(['/login']);
   }
 }

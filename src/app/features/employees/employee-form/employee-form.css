@@ -1,28 +1,45 @@
 :host { display: block; }
-.form {
+.form-head .back { font-size: 0.8rem; text-decoration: none; }
+.form-head .back:hover { text-decoration: underline; }
+
+form { display: grid; gap: 1rem; }
+
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.9rem;
 }
-.field { display: grid; gap: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+.field { display: grid; gap: 0.3rem; font-size: 0.8rem; color: var(--muted); align-content: start; }
 .field--wide { grid-column: 1 / -1; }
+.field > span b { color: var(--danger); font-weight: 700; }
 .field input,
 .field select {
   font: inherit;
-  padding: 0.45rem 0.55rem;
+  padding: 0.48rem 0.6rem;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
   color: var(--text);
 }
-.field input:invalid.ng-touched { border-color: #dc2626; }
-.error { color: #dc2626; font-style: normal; font-size: 0.75rem; }
-.actions {
-  grid-column: 1 / -1;
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  flex-wrap: wrap;
-  border-top: 1px dashed var(--border);
-  padding-top: 0.85rem;
+.field input:disabled { background: var(--surface-2); color: var(--muted); }
+.field input:focus-visible,
+.field select:focus-visible { border-color: var(--accent); }
+.field input.is-invalid { border-color: var(--danger); background: var(--danger-soft); }
+
+.error { color: var(--danger); font-style: normal; font-size: 0.75rem; }
+.hint-inline { color: var(--muted); font-style: normal; font-size: 0.72rem; }
+
+.form-actions {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 0.85rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.form-error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.83rem;
 }

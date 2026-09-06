@@ -1,26 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Employee } from '@core/models/employee.model';
+import { makeEmployee } from '../../../testing/employee.fixture';
 import { ConsoleLogger } from '@core/services/logger.service';
 import { Logger } from '@core/tokens/logger.token';
 import { EmployeeProfile, ProfileNote } from './employee-profile';
 
-const EMPLOYEE: Employee = {
-  id: 42,
-  firstName: 'Mei',
-  lastName: 'Tanaka',
-  email: 'mei.tanaka@acme.io',
-  title: 'Product Designer',
-  department: 'Design',
-  role: 'EMPLOYEE',
-  status: 'ACTIVE',
-  salary: 118000,
-  joinedOn: '2020-05-04',
-  location: 'Osaka',
-  skills: ['Design systems', 'Figma', 'Accessibility'],
-  bioHtml: '<p>Bio</p><img src="x" onerror="alert(1)">',
-  avatarColor: '#f97316',
-};
+const EMPLOYEE: Employee = makeEmployee();
 
 @Component({
   imports: [EmployeeProfile],

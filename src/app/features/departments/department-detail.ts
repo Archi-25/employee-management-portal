@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthService } from '@core/services/auth.service';
 import { EmployeeStore } from '@core/state/employee.store';
 import { Card } from '@shared/components/card/card';
 import { InitialsPipe } from '@shared/pipes/initials.pipe';
@@ -15,7 +16,9 @@ import { TooltipDirective } from '@shared/directives/tooltip.directive';
   template: `
     <app-card [heading]="department()" [subtitle]="members().length + ' people'">
       <div card-actions>
-        <span class="payroll">{{ payroll() | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+        @if (auth.hasRole('MANAGER')) {
+          <span class="payroll">{{ payroll() | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+        }
       </div>
 
       @if (members().length) {
@@ -67,6 +70,7 @@ import { TooltipDirective } from '@shared/directives/tooltip.directive';
 export class DepartmentDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly store = inject(EmployeeStore);
+  protected readonly auth = inject(AuthService);
 
   private readonly params = toSignal(this.route.paramMap, { requireSync: true });
 

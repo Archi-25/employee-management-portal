@@ -3,7 +3,16 @@ import { ChangeDetectionStrategy, Component, OnDestroy, computed, inject, signal
 import { Router, RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Department, Employee, EmployeeStatus, fullName } from '@core/models/employee.model';
+import {
+  DEPARTMENTS,
+  EMPLOYEE_STATUSES,
+  EMPLOYMENT_TYPES,
+  Department,
+  Employee,
+  EmployeeStatus,
+  EmploymentType,
+  fullName,
+} from '@core/models/employee.model';
 import { AuthService } from '@core/services/auth.service';
 import { EmployeeStore } from '@core/state/employee.store';
 import { APP_CONFIG } from '@core/tokens/app-config.token';
@@ -17,25 +26,14 @@ import { TooltipDirective } from '@shared/directives/tooltip.directive';
 import { InitialsPipe } from '@shared/pipes/initials.pipe';
 import { TenurePipe } from '@shared/pipes/tenure.pipe';
 
-const DEPARTMENTS: readonly (Department | 'ALL')[] = [
-  'ALL',
-  'Engineering',
-  'Design',
-  'Finance',
-  'People Ops',
-  'Sales',
-  'Support',
-];
+const STATUS_CLASS: Record<EmployeeStatus, string> = {
+  ACTIVE: 'status--good',
+  PROBATION: 'status--warning',
+  ON_LEAVE: 'status--serious',
+  EXITED: 'status--critical',
+};
 
-const STATUSES: readonly (EmployeeStatus | 'ALL')[] = [
-  'ALL',
-  'ACTIVE',
-  'ON_LEAVE',
-  'PROBATION',
-  'EXITED',
-];
-
-type SortKey = 'name' | 'department' | 'joinedOn' | 'salary';
+type SortKey = 'name' | 'code' | 'department' | 'title' | 'joinedOn' | 'salary';
 
 /**
  * The employee directory — the main working screen of the portal.
@@ -72,7 +70,8 @@ export class EmployeeList implements OnDestroy {
   private readonly searchInput$ = new Subject<string>();
 
   protected readonly departments = DEPARTMENTS;
-  protected readonly statuses = STATUSES;
+  protected readonly statuses = EMPLOYEE_STATUSES;
+  protected readonly employmentTypes = EMPLOYMENT_TYPES;
 
   protected readonly searchText = signal('');
   protected readonly sortKey = signal<SortKey>('name');
@@ -136,6 +135,36 @@ export class EmployeeList implements OnDestroy {
     this.store.setFilter({ status: value as EmployeeStatus | 'ALL' });
     this.page.set(1);
   }
+
+  protected onEmploymentType(value: string): void {
+    this.store.setFilter({ employmentType: value as EmploymentType | 'ALL' });
+    this.page.set(1);
+  }
+
+  protected onDesignation(value: string): void {
+    this.store.setFilter({ designation: value });
+    this.page.set(1);
+  }
+
+  protected statusClass(status: EmployeeStatus): string {
+    return STATUS_CLASS[status];
+  }
+
+  protected label(value: string): string {
+    return value.replace('_', ' ');
+  }
+
+  /** True when any filter is narrowing the list. */
+  protected readonly hasActiveFilters = computed(() => {
+    const filter = this.store.filter();
+    return (
+      filter.search !== '' ||
+      filter.department !== 'ALL' ||
+      filter.status !== 'ALL' ||
+      filter.employmentType !== 'ALL' ||
+      filter.designation !== 'ALL'
+    );
+  });
 
   protected sortBy(key: SortKey): void {
     if (this.sortKey() === key) {

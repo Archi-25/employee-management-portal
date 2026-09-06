@@ -1,28 +1,44 @@
 <header class="page-head">
   <h1 i18n="@@dashboard.title">Dashboard</h1>
   <p i18n="@@dashboard.subtitle">
-    Headcount, recent joiners and company announcements at a glance.
+    Headcount, attendance and what needs your attention today.
   </p>
 </header>
 
 <div class="tiles">
-  <app-stat-tile label="Headcount" i18n-label="@@tile.headcount" [value]="store.total()" accent="#6366f1" />
-  <app-stat-tile label="Active" i18n-label="@@tile.active" [value]="store.activeCount()" accent="#16a34a" />
-  <app-stat-tile label="On leave" [value]="onLeave().length" accent="#f59e0b" />
   <app-stat-tile
-    label="Online now"
-    [value]="presence()?.onlineNow ?? '—'"
-    [hint]="presence() ? 'live' : 'connecting…'"
-    accent="#0ea5e9"
-  />
+    label="Total employees" i18n-label="@@tile.headcount"
+    [value]="store.total()" accent="#2a78d6" />
+  <app-stat-tile
+    label="Active" i18n-label="@@tile.active"
+    [value]="store.activeCount()" accent="#0ca30c" />
+  <app-stat-tile
+    label="On leave today"
+    [value]="store.onLeaveCount()" accent="#fab219" />
+  <app-stat-tile
+    label="New (90 days)"
+    [value]="store.recentJoiners().length" accent="#1baf7a" />
+  <app-stat-tile
+    label="Attendance today"
+    [value]="attendance.attendanceRate() + '%'"
+    [hint]="attendance.present() + ' present · ' + attendance.absent() + ' absent'"
+    accent="#4a3aa7" />
+  <app-stat-tile
+    label="Pending approvals"
+    [value]="leave.pendingCount()"
+    hint="leave requests"
+    accent="#ec835a" />
 </div>
 
 <div *appHasRole="'EMPLOYEE'; else: signedOut" class="welcome">
-  Welcome back, <strong>{{ auth.displayName() }}</strong>.
+  <span>Welcome back, <strong>{{ auth.displayName() }}</strong>.</span>
+  @if (leave.pendingCount() > 0 && auth.hasRole('MANAGER')) {
+    <a routerLink="/leave">{{ leave.pendingCount() }} leave request(s) need your decision →</a>
+  }
 </div>
 <ng-template #signedOut>
   <div class="welcome welcome--muted">
-    You are browsing as a guest — <a routerLink="/login">sign in</a> to manage the directory.
+    <span>You are browsing as a guest — <a routerLink="/login">sign in</a> to manage the directory.</span>
   </div>
 </ng-template>
 
@@ -32,53 +48,82 @@
       <a class="btn btn--ghost btn--sm" routerLink="/departments">All departments</a>
     </div>
 
-    @if (departments().length) {
-      <ul class="bars">
-        @for (row of departments(); track row.department) {
-          <li>
-            <a class="bars__label" [routerLink]="['/departments', row.department]">
-              {{ row.department }}
-            </a>
-            <span class="bars__track">
-              <span class="bars__fill" [style.width.%]="share(row.count)"></span>
-            </span>
-            <span class="bars__value">{{ row.count }}</span>
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="hint">Loading headcount…</p>
-    }
+    <app-bar-chart
+      [data]="departmentChart()"
+      unit="employees"
+      categoryLabel="Department"
+      caption="Employee headcount by department"
+    />
   </app-card>
 
-  <app-card heading="Recent joiners" subtitle="Newest first">
+  <app-card heading="Recent employees" subtitle="Joined in the last 90 days">
     <div card-actions>
       <a class="btn btn--ghost btn--sm" routerLink="/employees">Directory</a>
     </div>
 
     @if (recentJoiners().length) {
-      <ul class="joiners">
+      <ul class="people">
         @for (person of recentJoiners(); track person.id) {
           <li>
-            <span class="joiners__avatar" [style.background]="person.avatarColor">
+            <span class="people__avatar" [style.background]="person.avatarColor">
               {{ person.firstName + ' ' + person.lastName | initials }}
             </span>
-            <span class="joiners__text">
+            <span class="people__text">
               <a [routerLink]="['/employees', person.id]">
                 {{ person.firstName }} {{ person.lastName }}
               </a>
-              <small>{{ person.title }} · joined {{ person.joinedOn | date: 'MMM y' }}</small>
+              <small>{{ person.title }} · {{ person.department }}</small>
             </span>
-            <span class="joiners__tenure">{{ person.joinedOn | tenure }}</span>
+            <span class="people__meta">{{ person.joinedOn | date: 'd MMM' }}</span>
           </li>
         }
       </ul>
     } @else {
-      <p class="hint">Loading joiners…</p>
+      <p class="hint">No one has joined in the last 90 days.</p>
     }
   </app-card>
 
-  <!-- Announcement bodies are author-supplied rich text; the panel sanitises them. -->
+  <app-card heading="Recent activity" subtitle="Latest across leave and joiners">
+    @if (activity().length) {
+      <ul class="activity">
+        @for (entry of activity(); track entry.id) {
+          <li>
+            <span class="status" [class]="'status ' + statusClass(entry.status)">
+              {{ entry.status }}
+            </span>
+            <span class="activity__text">{{ entry.text }}</span>
+            <small>{{ entry.at | date: 'd MMM' }}</small>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">Nothing has happened yet.</p>
+    }
+  </app-card>
+
+  <app-card heading="Upcoming birthdays" subtitle="Next two weeks">
+    @if (birthdays().length) {
+      <ul class="people">
+        @for (person of birthdays(); track person.id) {
+          <li>
+            <span class="people__avatar" [style.background]="person.avatarColor">
+              {{ person.firstName + ' ' + person.lastName | initials }}
+            </span>
+            <span class="people__text">
+              <a [routerLink]="['/employees', person.id]">
+                {{ person.firstName }} {{ person.lastName }}
+              </a>
+              <small>{{ person.dateOfBirth | date: 'd MMMM' }}</small>
+            </span>
+            <span class="people__meta">{{ daysUntilBirthday(person.dateOfBirth) }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="hint">No birthdays in the next two weeks.</p>
+    }
+  </app-card>
+
   <app-announcement-panel [limit]="3">
     <a panel-actions *appHasRole="['MANAGER', 'ADMIN']" class="btn btn--ghost btn--sm"
        routerLink="/admin/announcements">
@@ -86,20 +131,16 @@
     </a>
   </app-announcement-panel>
 
-  <app-card heading="Currently on leave" [subtitle]="onLeave().length + ' people'">
-    @if (onLeave().length) {
-      <ul class="leave">
-        @for (person of onLeave(); track person.id) {
-          <li>
-            <a [routerLink]="['/employees', person.id]">
-              {{ person.firstName }} {{ person.lastName }}
-            </a>
-            <small>{{ person.department }}</small>
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="hint">Everyone is in.</p>
-    }
+  <app-card heading="Attendance today" [subtitle]="attendance.date()">
+    <div card-actions>
+      <a class="btn btn--ghost btn--sm" routerLink="/attendance">Open</a>
+    </div>
+
+    <ul class="breakdown">
+      <li><span class="status status--good">PRESENT</span><b>{{ attendance.present() }}</b></li>
+      <li><span class="status status--warning">LATE</span><b>{{ attendance.late() }}</b></li>
+      <li><span class="status status--critical">ABSENT</span><b>{{ attendance.absent() }}</b></li>
+      <li><span class="status status--neutral">ON LEAVE</span><b>{{ attendance.onLeave() }}</b></li>
+    </ul>
   </app-card>
 </div>
