@@ -13,7 +13,7 @@
     [attr.aria-expanded]="menuOpen()"
     aria-label="Toggle navigation"
   >
-    ☰
+    <app-icon name="menu" [size]="18" />
   </button>
 
   <nav class="nav" [class.is-open]="menuOpen()" aria-label="Main">
@@ -24,7 +24,7 @@
         [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
         (click)="menuOpen.set(false)"
       >
-        <span class="nav__icon" aria-hidden="true">{{ item.icon }}</span>
+        <app-icon class="nav__icon" [name]="item.icon" />
         {{ item.label }}
       </a>
     }
@@ -38,7 +38,7 @@
       [attr.aria-label]="'Theme: ' + themeLabel() + '. Change theme.'"
       [attr.title]="'Theme: ' + themeLabel()"
     >
-      <span aria-hidden="true">{{ themeIcon() }}</span>
+      <app-icon [name]="themeIcon()" [size]="17" />
     </button>
 
     @if (auth.isAuthenticated()) {

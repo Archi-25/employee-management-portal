@@ -19,15 +19,15 @@ import { FeatureFlagDirective } from '@shared/directives/feature-flag.directive'
   imports: [DatePipe, Card, StatTile, FeatureFlagDirective],
   template: `
     <div class="tiles">
-      <app-stat-tile label="Requests" [value]="profiling.requestCount()" accent="#6366f1" />
-      <app-stat-tile label="Average latency" [value]="profiling.averageMs() + ' ms'" accent="#f59e0b" />
+      <app-stat-tile label="Requests" [value]="profiling.requestCount()" accent="var(--accent)" />
+      <app-stat-tile label="Average latency" [value]="profiling.averageMs() + ' ms'" accent="var(--accent)" />
       <app-stat-tile
         label="Cache hits"
         [value]="profiling.cacheHits()"
         hint="served without a round trip"
-        accent="#16a34a"
+        accent="var(--good)"
       />
-      <app-stat-tile label="Cached entries" [value]="cacheSize()" accent="#0ea5e9" />
+      <app-stat-tile label="Cached entries" [value]="cacheSize()" accent="var(--accent)" />
     </div>
 
     <app-card heading="Configuration" subtitle="Resolved from APP_CONFIG">

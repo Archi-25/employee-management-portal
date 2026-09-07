@@ -28,15 +28,24 @@ app-card + app-card { margin-top: 1rem; display: block; }
 .table-wrap { overflow-x: auto; }
 .grid { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
 .grid th,
-.grid td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
-.grid th {
-  font-size: 0.7rem;
+.grid td { text-align: left; padding: 0.62rem 0.7rem; border-bottom: 1px solid var(--border); }
+.grid thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface-2);
+  font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--muted);
-  font-weight: 500;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-strong);
 }
-.grid tbody tr:hover { background: var(--surface-2); }
+.grid thead th:first-child { border-top-left-radius: 8px; }
+.grid thead th:last-child { border-top-right-radius: 8px; }
+.grid tbody tr { transition: background-color 110ms ease; }
+.grid tbody tr:hover { background: var(--accent-soft); }
+.grid tbody tr:last-child td { border-bottom: 0; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 
 .sort {

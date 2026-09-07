@@ -14,10 +14,10 @@
 
 @if (myBalance(); as balance) {
   <div class="tiles">
-    <app-stat-tile label="Annual leave" [value]="balance.annual" hint="days remaining" accent="#2a78d6" />
-    <app-stat-tile label="Sick leave" [value]="balance.sick" hint="days remaining" accent="#1baf7a" />
-    <app-stat-tile label="Casual leave" [value]="balance.casual" hint="days remaining" accent="#eda100" />
-    <app-stat-tile label="Pending" [value]="store.pendingCount()" hint="awaiting decision" accent="#fab219" />
+    <app-stat-tile label="Annual leave" [value]="balance.annual" hint="days remaining" accent="var(--accent)" />
+    <app-stat-tile label="Sick leave" [value]="balance.sick" hint="days remaining" accent="var(--accent)" />
+    <app-stat-tile label="Casual leave" [value]="balance.casual" hint="days remaining" accent="var(--accent)" />
+    <app-stat-tile label="Pending" [value]="store.pendingCount()" hint="awaiting decision" accent="var(--warning)" />
   </div>
 }
 

@@ -8,26 +8,31 @@ import { APP_CONFIG } from '@core/tokens/app-config.token';
 import { NotificationBell } from '@shared/components/notification-bell/notification-bell';
 import { ToastHost } from '@shared/components/toast-host/toast-host';
 import { ClickOutsideDirective } from '@shared/directives/click-outside.directive';
+import { Icon, IconName } from '@shared/components/icon/icon';
 import { InitialsPipe } from '@shared/pipes/initials.pipe';
 
 interface NavItem {
   readonly path: string;
   readonly label: string;
-  readonly icon: string;
+  readonly icon: IconName;
   readonly minRole?: Role;
 }
 
 const NAV: readonly NavItem[] = [
-  { path: '/dashboard', label: 'Dashboard', icon: '▦' },
-  { path: '/employees', label: 'Employees', icon: '👥', minRole: 'EMPLOYEE' },
-  { path: '/attendance', label: 'Attendance', icon: '🕘', minRole: 'EMPLOYEE' },
-  { path: '/leave', label: 'Leave', icon: '🗓️', minRole: 'EMPLOYEE' },
-  { path: '/departments', label: 'Departments', icon: '🏢', minRole: 'EMPLOYEE' },
-  { path: '/admin', label: 'Admin', icon: '⚙️', minRole: 'MANAGER' },
+  { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
+  { path: '/employees', label: 'Employees', icon: 'users', minRole: 'EMPLOYEE' },
+  { path: '/attendance', label: 'Attendance', icon: 'clock', minRole: 'EMPLOYEE' },
+  { path: '/leave', label: 'Leave', icon: 'calendar', minRole: 'EMPLOYEE' },
+  { path: '/departments', label: 'Departments', icon: 'building', minRole: 'EMPLOYEE' },
+  { path: '/admin', label: 'Admin', icon: 'sliders', minRole: 'MANAGER' },
 ];
 
 const THEME_LABEL = { system: 'System', light: 'Light', dark: 'Dark' } as const;
-const THEME_ICON = { system: '🖥️', light: '☀️', dark: '🌙' } as const;
+const THEME_ICON = {
+  system: 'monitor',
+  light: 'sun',
+  dark: 'moon',
+} as const satisfies Record<string, IconName>;
 
 @Component({
   selector: 'app-root',
@@ -39,6 +44,7 @@ const THEME_ICON = { system: '🖥️', light: '☀️', dark: '🌙' } as const
     NotificationBell,
     ToastHost,
     ClickOutsideDirective,
+    Icon,
     InitialsPipe,
   ],
   templateUrl: './app.html',

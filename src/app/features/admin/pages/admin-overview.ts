@@ -9,18 +9,18 @@ import { StatTile } from '@shared/components/stat-tile/stat-tile';
   imports: [Card, StatTile],
   template: `
     <div class="tiles">
-      <app-stat-tile label="Headcount" [value]="store.total()" accent="#6366f1" />
-      <app-stat-tile label="Active" [value]="store.activeCount()" accent="#16a34a" />
+      <app-stat-tile label="Headcount" [value]="store.total()" accent="var(--accent)" />
+      <app-stat-tile label="Active" [value]="store.activeCount()" accent="var(--good)" />
       <app-stat-tile
         label="Annual payroll"
         [value]="store.payrollTotal()"
         [currency]="true"
-        accent="#f59e0b"
+        accent="var(--accent)"
       />
       <app-stat-tile
         label="Departments"
         [value]="store.headcountByDepartment().length"
-        accent="#0ea5e9"
+        accent="var(--accent)"
       />
     </div>
 

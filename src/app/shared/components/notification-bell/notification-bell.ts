@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { AppNotification } from '@core/models/hr.model';
 import { NotificationStore } from '@core/state/notification.store';
 import { ClickOutsideDirective } from '@shared/directives/click-outside.directive';
+import { Icon } from '@shared/components/icon/icon';
 
 const ICONS: Record<AppNotification['kind'], string> = {
   leave: '🗓️',
@@ -16,7 +17,7 @@ const ICONS: Record<AppNotification['kind'], string> = {
 @Component({
   selector: 'app-notification-bell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePipe, RouterLink, ClickOutsideDirective],
+  imports: [DatePipe, RouterLink, ClickOutsideDirective, Icon],
   template: `
     <div class="bell" (appClickOutside)="open.set(false)">
       <button
@@ -26,7 +27,7 @@ const ICONS: Record<AppNotification['kind'], string> = {
         [attr.aria-label]="label()"
         (click)="toggle()"
       >
-        <span aria-hidden="true">🔔</span>
+        <app-icon name="bell" [size]="17" />
         @if (store.unreadCount() > 0) {
           <span class="bell__badge">{{ store.unreadCount() }}</span>
         }

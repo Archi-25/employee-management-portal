@@ -58,9 +58,13 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@a
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 1.15rem 1.25rem;
-      box-shadow: 0 1px 2px rgb(15 23 42 / 6%);
+      box-shadow: var(--shadow-1);
+      transition: box-shadow 160ms ease;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lift);
     }
     .card__head {
       display: flex;
@@ -70,9 +74,9 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@a
     }
     .card__title h3 {
       margin: 0;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
+      font-size: 1.02rem;
+      font-weight: 650;
+      letter-spacing: -0.015em;
     }
     .card__subtitle {
       margin: 0.35rem 0 0;

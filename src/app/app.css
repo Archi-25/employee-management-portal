@@ -20,9 +20,10 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.55rem 1.25rem;
+  padding: 0.6rem 1.25rem;
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
   position: sticky;
   top: 0;
   z-index: 30;
@@ -31,8 +32,9 @@
 
 .brand { display: flex; align-items: center; gap: 0.55rem; text-decoration: none; color: inherit; }
 .brand__mark {
-  background: var(--accent);
+  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #7c3aed));
   color: #fff;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--accent) 40%, transparent);
   font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -57,21 +59,27 @@
 .nav a {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.36rem 0.7rem;
-  border-radius: 8px;
+  gap: 0.42rem;
+  padding: 0.4rem 0.72rem;
+  border-radius: 9px;
   font-size: 0.84rem;
   font-weight: 500;
   text-decoration: none;
   color: var(--muted);
+  transition: background-color 130ms ease, color 130ms ease;
 }
 .nav a:hover { background: var(--surface-2); color: var(--text); }
-.nav a.is-active { background: var(--accent-soft); color: var(--accent); }
-.nav__icon { font-size: 0.8rem; }
+.nav a.is-active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.nav__icon { opacity: 0.9; }
+.nav a.is-active .nav__icon { opacity: 1; }
 
 .session { display: flex; align-items: center; gap: 0.45rem; }
 
 .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 130ms ease;
   background: none;
   border: 1px solid transparent;
   border-radius: 8px;
@@ -98,10 +106,10 @@
 }
 .account__trigger:hover { border-color: var(--border); background: var(--surface-2); }
 .account__avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--accent);
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #7c3aed));
   color: #fff;
   display: grid;
   place-items: center;

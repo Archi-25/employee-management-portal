@@ -6,14 +6,14 @@
 </header>
 
 <div class="tiles">
-  <app-stat-tile label="Headcount" i18n-label="@@tile.headcount" [value]="store.total()" accent="#6366f1" />
-  <app-stat-tile label="Active" i18n-label="@@tile.active" [value]="store.activeCount()" accent="#16a34a" />
-  <app-stat-tile label="Matching filters" [value]="store.filtered().length" accent="#0ea5e9" />
+  <app-stat-tile label="Headcount" i18n-label="@@tile.headcount" [value]="store.total()" accent="var(--accent)" />
+  <app-stat-tile label="Active" i18n-label="@@tile.active" [value]="store.activeCount()" accent="var(--good)" />
+  <app-stat-tile label="Matching filters" [value]="store.filtered().length" accent="var(--accent)" />
   <app-stat-tile
     label="Annual payroll"
     [value]="store.payrollTotal()"
     [currency]="true"
-    accent="#f59e0b"
+    accent="var(--accent)"
   />
 </div>
 

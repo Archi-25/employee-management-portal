@@ -8,31 +8,31 @@
 <div class="tiles">
   <app-stat-tile
     label="Total employees" i18n-label="@@tile.headcount"
-    [value]="store.total()" accent="#2a78d6" />
+    [value]="store.total()" accent="var(--accent)" />
   <app-stat-tile
     label="Active" i18n-label="@@tile.active"
-    [value]="store.activeCount()" accent="#0ca30c" />
+    [value]="store.activeCount()" accent="var(--good)" />
   <app-stat-tile
     label="On leave today"
-    [value]="store.onLeaveCount()" accent="#fab219" />
+    [value]="store.onLeaveCount()" accent="var(--warning)" />
   <app-stat-tile
     label="New (90 days)"
-    [value]="store.recentJoiners().length" accent="#1baf7a" />
+    [value]="store.recentJoiners().length" accent="var(--accent)" />
   <app-stat-tile
     label="Attendance today"
     [value]="attendance.attendanceRate() + '%'"
     [hint]="attendance.present() + ' present · ' + attendance.absent() + ' absent'"
-    accent="#4a3aa7" />
+    accent="var(--accent)" />
   <app-stat-tile
     label="Pending approvals"
     [value]="leave.pendingCount()"
     hint="leave requests"
-    accent="#ec835a" />
+    accent="var(--warning)" />
   <app-stat-tile
     label="Online now"
     [value]="presence()?.onlineNow ?? '—'"
     [hint]="presence() ? 'live · updates every 5s' : 'connecting…'"
-    accent="#e87ba4" />
+    accent="var(--accent)" />
 </div>
 
 <div *appHasRole="'EMPLOYEE'; else: signedOut" class="welcome">

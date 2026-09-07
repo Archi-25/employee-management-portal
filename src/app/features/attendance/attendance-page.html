@@ -6,15 +6,15 @@
 </header>
 
 <div class="tiles">
-  <app-stat-tile label="Present" [value]="store.present()" accent="#0ca30c" />
-  <app-stat-tile label="Late" [value]="store.late()" accent="#fab219" />
-  <app-stat-tile label="Absent" [value]="store.absent()" accent="#d03b3b" />
-  <app-stat-tile label="On leave" [value]="store.onLeave()" accent="#6b7383" />
+  <app-stat-tile label="Present" [value]="store.present()" accent="var(--good)" />
+  <app-stat-tile label="Late" [value]="store.late()" accent="var(--warning)" />
+  <app-stat-tile label="Absent" [value]="store.absent()" accent="var(--danger)" />
+  <app-stat-tile label="On leave" [value]="store.onLeave()" accent="var(--muted)" />
   <app-stat-tile
     label="Attendance rate"
     [value]="store.attendanceRate() + '%'"
     hint="present or late"
-    accent="#2a78d6" />
+    accent="var(--accent)" />
 </div>
 
 <app-card heading="Filters" subtitle="Pick a date, then narrow the list">
