@@ -19,9 +19,9 @@
   --muted: #6b7383;
 
   /* brand */
-  --accent: #2a78d6;
-  --accent-hover: #256abf;
-  --accent-soft: #eaf2fd;
+  --accent: #5f6b2a;
+  --accent-hover: #4e5822;
+  --accent-soft: #eff1e3;
   --accent-ink: #ffffff;
 
   /* status — fixed, never themed; always paired with a text label */
@@ -39,7 +39,7 @@
   --danger-ink: #9c2626;
 
   /* data visualisation — validated against these surfaces */
-  --viz-bar: #2a78d6;
+  --viz-bar: #5f6b2a;
   --viz-track: #e8ebf1;
   --viz-grid: #e1e0d9;
   --viz-axis: #898781;
@@ -69,9 +69,9 @@
     --text-2: #b9c0cc;
     --muted: #8b93a3;
 
-    --accent: #3987e5;
-    --accent-hover: #5598e7;
-    --accent-soft: #16233a;
+    --accent: #a3b55c;
+    --accent-hover: #b4c574;
+    --accent-soft: #1f2413;
 
     --good-soft: #102a10;
     --good-ink: #6ede6e;
@@ -82,7 +82,7 @@
     --danger-soft: #2e1416;
     --danger-ink: #f08a8a;
 
-    --viz-bar: #3987e5;
+    --viz-bar: #a3b55c;
     --viz-track: #252c39;
     --viz-grid: #2c2c2a;
 
@@ -104,9 +104,9 @@
   --text-2: #b9c0cc;
   --muted: #8b93a3;
 
-  --accent: #3987e5;
-  --accent-hover: #5598e7;
-  --accent-soft: #16233a;
+  --accent: #a3b55c;
+  --accent-hover: #b4c574;
+  --accent-soft: #1f2413;
 
   --good-soft: #102a10;
   --good-ink: #6ede6e;
@@ -117,7 +117,7 @@
   --danger-soft: #2e1416;
   --danger-ink: #f08a8a;
 
-  --viz-bar: #3987e5;
+  --viz-bar: #a3b55c;
   --viz-track: #252c39;
   --viz-grid: #2c2c2a;
 
@@ -140,6 +140,14 @@ body {
 }
 
 a { color: var(--accent); }
+
+/* Checkboxes, radios and range inputs otherwise stay the browser's blue. */
+input[type='checkbox'],
+input[type='radio'],
+input[type='range'],
+progress {
+  accent-color: var(--accent);
+}
 
 code, kbd {
   font-family: var(--font-mono);

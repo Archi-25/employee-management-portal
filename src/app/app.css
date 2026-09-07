@@ -32,7 +32,7 @@
 
 .brand { display: flex; align-items: center; gap: 0.55rem; text-decoration: none; color: inherit; }
 .brand__mark {
-  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #7c3aed));
+  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #2f3d14));
   color: #fff;
   box-shadow: 0 1px 3px color-mix(in srgb, var(--accent) 40%, transparent);
   font-size: 0.66rem;
@@ -109,7 +109,7 @@
   width: 30px;
   height: 30px;
   border-radius: 9px;
-  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #7c3aed));
+  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #2f3d14));
   color: #fff;
   display: grid;
   place-items: center;

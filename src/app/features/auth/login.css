@@ -24,7 +24,7 @@
   height: 380px;
   bottom: -120px;
   right: -80px;
-  background: color-mix(in srgb, #7c3aed 24%, transparent);
+  background: color-mix(in srgb, #9a8b30 26%, transparent);
 }
 
 .login {
@@ -49,7 +49,7 @@
 }
 .login__mark {
   display: inline-block;
-  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #7c3aed));
+  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #2f3d14));
   color: #fff;
   box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 40%, transparent);
   font-size: 0.68rem;
