@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-import { fullName } from '@core/models/employee.model';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ThemeService, ThemePreference } from '@core/services/theme.service';
@@ -45,8 +44,8 @@ export class SettingsPage {
 
   /** The directory record behind the signed-in session, if there is one. */
   protected readonly me = computed(() => {
-    const name = this.auth.displayName();
-    return this.employees.employees().find((employee) => fullName(employee) === name) ?? null;
+    const id = this.auth.employeeId();
+    return id === null ? null : this.employees.byId(id);
   });
 
   protected readonly passwordForm = this.fb.nonNullable.group(

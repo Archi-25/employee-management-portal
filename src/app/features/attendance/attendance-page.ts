@@ -60,11 +60,8 @@ export class AttendancePage {
     });
   });
 
-  /** Maps the signed-in display name onto a directory record for the demo. */
-  private readonly ownEmployeeId = computed(() => {
-    const name = this.auth.displayName();
-    return this.employees.employees().find((employee) => fullName(employee) === name)?.id ?? -1;
-  });
+  /** The signed-in person's directory id; -1 when the session has no record. */
+  private readonly ownEmployeeId = computed(() => this.auth.employeeId() ?? -1);
 
   protected employeeName(id: number): string {
     const employee = this.employees.byId(id);

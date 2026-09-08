@@ -6,7 +6,15 @@ import { Logger } from '@core/tokens/logger.token';
 const STORAGE_KEY = 'emp-portal-session';
 
 export interface Session {
-  userId: number;
+  /**
+   * The signed-in person's row in the employee directory, or null when the
+   * session has no directory record behind it (the demo role-switcher).
+   *
+   * Screens that show "my own" attendance or leave resolve the person from
+   * this id. They used to match `fullName(employee) === displayName`, which
+   * silently returned the wrong record for two people sharing a name.
+   */
+  employeeId: number | null;
   displayName: string;
   role: Role;
   token: string;
@@ -31,10 +39,17 @@ export class AuthService {
   readonly role = computed<Role>(() => this.session()?.role ?? 'GUEST');
   readonly displayName = computed(() => this.session()?.displayName ?? 'Guest');
   readonly token = computed(() => this.session()?.token ?? null);
+  /** Directory id of the signed-in person, or null when there is no record. */
+  readonly employeeId = computed(() => this.session()?.employeeId ?? null);
 
-  login(displayName: string, role: Role, remember = false): Session {
+  login(
+    displayName: string,
+    role: Role,
+    remember = false,
+    employeeId: number | null = null,
+  ): Session {
     const session: Session = {
-      userId: 1,
+      employeeId,
       displayName,
       role,
       token: `emp-portal.${role.toLowerCase()}.${Date.now().toString(36)}`,
@@ -107,7 +122,7 @@ export class AuthService {
       const parsed = JSON.parse(raw) as Partial<Session>;
       return parsed.displayName && parsed.role
         ? {
-            userId: parsed.userId ?? 1,
+            employeeId: parsed.employeeId ?? null,
             displayName: parsed.displayName,
             role: parsed.role,
             token: parsed.token ?? `emp-portal.${parsed.role.toLowerCase()}`,

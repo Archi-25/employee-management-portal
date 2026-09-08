@@ -9,13 +9,15 @@ interface DemoAccount {
   readonly name: string;
   readonly role: Role;
   readonly blurb: string;
+  /** Their row in the seeded directory, carried into the session. */
+  readonly employeeId: number;
 }
 
 /** Sign-in shortcuts, so a reviewer can switch roles without inventing details. */
 const DEMO_ACCOUNTS: readonly DemoAccount[] = [
-  { email: 'admin@acme.io', name: 'Aarav Mehta', role: 'ADMIN', blurb: 'Full access, including delete and settings' },
-  { email: 'manager@acme.io', name: 'Riya Sharma', role: 'MANAGER', blurb: 'Team, approvals and salaries' },
-  { email: 'employee@acme.io', name: 'Daniel Okafor', role: 'EMPLOYEE', blurb: 'Own profile, attendance and leave' },
+  { email: 'admin@acme.io', name: 'Aarav Mehta', role: 'ADMIN', employeeId: 1, blurb: 'Full access, including delete and settings' },
+  { email: 'manager@acme.io', name: 'Riya Sharma', role: 'MANAGER', employeeId: 2, blurb: 'Team, approvals and salaries' },
+  { email: 'employee@acme.io', name: 'Daniel Okafor', role: 'EMPLOYEE', employeeId: 3, blurb: 'Own profile, attendance and leave' },
 ];
 
 const MIN_PASSWORD_LENGTH = 6;
@@ -78,7 +80,7 @@ export class Login {
     }
 
     this.submitting.set(true);
-    this.auth.login(account.name, account.role, remember);
+    this.auth.login(account.name, account.role, remember, account.employeeId);
     this.submitting.set(false);
 
     await this.router.navigateByUrl(this.redirectTo() || '/dashboard');

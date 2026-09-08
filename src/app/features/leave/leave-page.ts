@@ -59,10 +59,10 @@ export class LeavePage {
     void this.store.load();
   }
 
-  /** The signed-in person's directory record, matched by display name. */
+  /** The signed-in person's directory record, resolved from the session id. */
   protected readonly me = computed(() => {
-    const name = this.auth.displayName();
-    return this.employees.employees().find((employee) => fullName(employee) === name) ?? null;
+    const id = this.auth.employeeId();
+    return id === null ? null : this.employees.byId(id);
   });
 
   protected readonly myBalance = computed(() => {

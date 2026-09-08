@@ -1,5 +1,5 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { Provider } from '@angular/core';
+import { Component, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
@@ -23,6 +23,17 @@ import { Logger } from '@core/tokens/logger.token';
  * `TestBed.overrideProvider` afterwards, because signing in below instantiates
  * the module and overrides are refused after that point.
  */
+/**
+ * Somewhere for a navigation to land.
+ *
+ * Screens navigate on success — the employee form goes to `/employees` after
+ * saving. With an empty route table that rejects with NG04002 as an unhandled
+ * rejection: the tests still pass, but the runner exits non-zero. A catch-all
+ * route absorbs those navigations without asserting anything about them.
+ */
+@Component({ template: '' })
+class BlankRouteTarget {}
+
 export function configureFeatureTest(
   role: Role | 'ANONYMOUS' = 'ADMIN',
   extra: Provider[] = [],
@@ -34,7 +45,7 @@ export function configureFeatureTest(
     providers: [
       ConsoleLogger,
       { provide: Logger, useExisting: ConsoleLogger },
-      provideRouter([]),
+      provideRouter([{ path: '**', component: BlankRouteTarget }]),
       provideHttpClient(
         withInterceptors([
           authInterceptor,
@@ -48,14 +59,16 @@ export function configureFeatureTest(
   });
 
   if (role !== 'ANONYMOUS') {
-    // Display name matches a seeded record so "my own rows" scoping resolves.
-    const names: Record<Role, string> = {
-      ADMIN: 'Aarav Mehta',
-      MANAGER: 'Riya Sharma',
-      EMPLOYEE: 'Daniel Okafor',
-      GUEST: 'Guest',
+    // Name and directory id both match a seeded record, so "my own rows"
+    // scoping resolves to a real person.
+    const people: Record<Role, { name: string; employeeId: number | null }> = {
+      ADMIN: { name: 'Aarav Mehta', employeeId: 1 },
+      MANAGER: { name: 'Riya Sharma', employeeId: 2 },
+      EMPLOYEE: { name: 'Daniel Okafor', employeeId: 3 },
+      GUEST: { name: 'Guest', employeeId: null },
     };
-    TestBed.inject(AuthService).login(names[role], role);
+    const { name, employeeId } = people[role];
+    TestBed.inject(AuthService).login(name, role, false, employeeId);
   }
 }
 
