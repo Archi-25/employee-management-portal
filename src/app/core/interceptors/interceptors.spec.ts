@@ -15,7 +15,6 @@ import { mockBackendInterceptor, resetMockBackend } from './mock-backend.interce
 import { profilingInterceptor } from './profiling.interceptor';
 import { makeEmployeeDraft } from '../../testing/employee.fixture';
 
-/** Records the headers the mock backend actually received. */
 let seenAuthorization: string | null = null;
 let seenRole: string | null = null;
 

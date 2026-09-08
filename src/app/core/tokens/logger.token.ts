@@ -9,11 +9,6 @@ export interface LogEntry {
   at: number;
 }
 
-/**
- * Abstract class used as both the DI token and the contract.
- * MODULE 5 — resolved with `useClass` at root and re-provided per component
- * to demonstrate hierarchical injection.
- */
 export abstract class Logger {
   abstract readonly scope: string;
   abstract log(level: LogLevel, message: string): void;
@@ -32,7 +27,6 @@ export abstract class Logger {
   }
 }
 
-/** Shared sink so every Logger instance in the tree writes to one visible list. */
 export const LOG_SINK = new InjectionToken<LogEntry[]>('LOG_SINK', {
   providedIn: 'root',
   factory: () => [],

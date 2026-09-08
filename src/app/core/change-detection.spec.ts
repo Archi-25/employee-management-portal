@@ -1,15 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-/**
- * Default vs OnPush, demonstrated by behaviour rather than by prose.
- *
- * The application itself is OnPush everywhere — that is the correct setting and
- * it is enforced by lint, so there is no Default-strategy component left to
- * point at. These two throwaway components exist purely to prove the difference
- * the assessment asks about, and to pin down the failure mode that makes OnPush
- * worth understanding.
- */
 interface Row {
   salary: number;
 }
@@ -45,17 +36,14 @@ class Host {
   readonly row = signal<Row>({ salary: 100 });
   readonly ticks = signal(0);
 
-  /** Something unrelated changing, to force a change-detection pass. */
   tick(): void {
     this.ticks.update((value) => value + 1);
   }
 
-  /** Same object, new field value — the reference never changes. */
   mutateInPlace(): void {
     this.row().salary += 50;
   }
 
-  /** New object — the reference changes. */
   replaceReference(): void {
     this.row.set({ salary: this.row().salary + 50 });
   }

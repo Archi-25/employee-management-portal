@@ -10,7 +10,6 @@ interface CacheEntry {
   storedAt: number;
 }
 
-/** Module-level store: one cache for the whole application lifetime. */
 const store = new Map<string, CacheEntry>();
 
 export function clearHttpCache(): void {
@@ -21,10 +20,6 @@ export function httpCacheSize(): number {
   return store.size;
 }
 
-/**
- * MODULE 8 — TTL cache for GET requests. A fresh entry short-circuits the chain,
- * so no request is issued at all. Mutations invalidate the whole collection.
- */
 export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
   const { httpCacheTtlMs } = inject(APP_CONFIG);
 

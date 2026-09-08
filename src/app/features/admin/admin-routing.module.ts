@@ -8,18 +8,6 @@ import { AdminAudit } from './pages/admin-audit';
 import { AdminSettings } from './pages/admin-settings';
 import { AdminSystem } from './pages/admin-system';
 
-/**
- * Admin routes, nested under a shell that provides the sub-navigation:
- *
- *   /admin/overview       organisation summary
- *   /admin/announcements  compose and manage notices
- *   /admin/system         API health and request metrics
- *   /admin/audit          activity trail
- *   /admin/settings       configuration (ADMIN only)
- *
- * `canActivateChild` re-checks on every child navigation, so a role change
- * mid-session takes effect immediately rather than at the next full load.
- */
 const routes: Routes = [
   {
     path: '',

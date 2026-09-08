@@ -13,8 +13,6 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
     </div>
   `,
   styles: `
-    /* The host is the grid item; without this the tile does not fill its cell
-       and a row of tiles ends up with ragged heights. */
     :host {
       display: flex;
     }
@@ -56,8 +54,6 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1.12;
-      /* Proportional figures: tabular digits make a large standalone number
-         look loose. Tabular-nums belongs in table columns, not here. */
       font-variant-numeric: proportional-nums;
     }
     .tile__hint {

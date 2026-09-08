@@ -9,11 +9,9 @@ interface DemoAccount {
   readonly name: string;
   readonly role: Role;
   readonly blurb: string;
-  /** Their row in the seeded directory, carried into the session. */
   readonly employeeId: number;
 }
 
-/** Sign-in shortcuts, so a reviewer can switch roles without inventing details. */
 const DEMO_ACCOUNTS: readonly DemoAccount[] = [
   {
     email: 'admin@acme.io',

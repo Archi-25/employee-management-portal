@@ -22,10 +22,6 @@ function describe(error: HttpErrorResponse): string {
   return error.error?.message ?? error.message ?? 'Unexpected error.';
 }
 
-/**
- * MODULE 8 — turns raw `HttpErrorResponse`s into a normalised {@link ApiError},
- * surfaces one toast, and re-throws so callers can still react.
- */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const notifications = inject(NotificationService);
   const logger = inject(Logger);

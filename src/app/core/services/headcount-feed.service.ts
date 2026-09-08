@@ -9,20 +9,11 @@ export interface PresenceSnapshot {
   checkedAt: number;
 }
 
-/**
- * Live "who is online" ticker shown on the dashboard.
- *
- * The source is a hand-written observable rather than `interval()` because the
- * producer must own its own polling handle: the returned teardown stops the
- * timer the moment the last subscriber leaves, so navigating away from the
- * dashboard genuinely stops the work instead of leaking a timer.
- */
 @Injectable({ providedIn: 'root' })
 export class HeadcountFeedService {
   private readonly store = inject(EmployeeStore);
   private readonly logger = inject(Logger);
 
-  /** Emits a presence snapshot every `intervalMs` while subscribed. */
   presence(intervalMs = 5000): Observable<PresenceSnapshot> {
     return new Observable<PresenceSnapshot>((subscriber) => {
       this.logger.debug('presence feed: polling started');
@@ -48,10 +39,6 @@ export class HeadcountFeedService {
     );
   }
 
-  /**
-   * Subscribes with an explicit `Observer` so `next`, `error` and `complete`
-   * are each handled by name. Returns the unsubscribe handle.
-   */
   watch(observer: Observer<PresenceSnapshot>, intervalMs = 5000): Subscription {
     return this.presence(intervalMs).subscribe(observer);
   }

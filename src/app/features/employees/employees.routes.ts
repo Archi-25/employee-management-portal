@@ -3,7 +3,6 @@ import { unsavedChangesGuard } from '@core/guards/unsaved-changes.guard';
 import { roleGuard } from '@core/guards/role.guard';
 import { employeeResolver } from '@core/resolvers/employee.resolver';
 
-/** Employee directory routes. Each screen is its own lazily loaded chunk. */
 export const EMPLOYEE_ROUTES: Routes = [
   {
     path: '',

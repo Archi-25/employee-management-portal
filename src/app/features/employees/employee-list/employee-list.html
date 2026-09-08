@@ -191,8 +191,6 @@
                 <td class="num">{{ employee.salary | number }}</td>
               }
               <td class="actions">
-                <!-- The menu only holds privileged actions, so roles without any
-                     never get the trigger. Viewing is what clicking the row does. -->
                 <div *appHasRole="['MANAGER', 'ADMIN']" class="menu">
                   <button
                     type="button"

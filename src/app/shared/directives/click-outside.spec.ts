@@ -2,14 +2,6 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ClickOutsideDirective } from './click-outside.directive';
 
-/**
- * Mirrors the employee table: several rows, each with its own trigger, but a
- * single outside-click watcher around the whole list.
- *
- * The regression this guards against: putting the watcher on every row meant a
- * click on row 1's trigger looked "outside" to rows 2..n, whose handlers then
- * closed the menu on the very click that opened it.
- */
 @Component({
   imports: [ClickOutsideDirective],
   template: `

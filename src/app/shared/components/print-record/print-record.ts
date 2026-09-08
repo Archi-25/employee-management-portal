@@ -1,15 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
 import { Employee, fullName } from '@core/models/employee.model';
 
-/**
- * Printable employee record, used by the Print button on a profile.
- *
- * `ViewEncapsulation.None` is deliberate and necessary here: `@page` rules and
- * `@media print` overrides have to apply to the whole document — the browser's
- * print box is not scoped to a component — so these styles must escape into
- * `document.head`. Every selector is namespaced under `.print-record` or
- * `.printing` to keep that escape hatch from becoming a mess.
- */
 @Component({
   selector: 'app-print-record',
   changeDetection: ChangeDetectionStrategy.OnPush,

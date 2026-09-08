@@ -2,10 +2,6 @@ import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards/auth.guard';
 import { roleGuard } from '@core/guards/role.guard';
 
-/**
- * Root route table. Every screen is lazily loaded, so the initial bundle
- * carries only the shell and whatever the landing route needs.
- */
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
 

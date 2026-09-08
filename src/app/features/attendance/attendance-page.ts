@@ -47,10 +47,6 @@ export class AttendancePage {
     });
   }
 
-  /**
-   * An employee only ever sees their own attendance; managers and admins see
-   * everyone. The API would enforce the same rule in a real deployment.
-   */
   protected readonly rows = computed(() => {
     const term = this.search().trim().toLowerCase();
     const scoped = this.auth.hasRole('MANAGER')
@@ -69,7 +65,6 @@ export class AttendancePage {
     });
   });
 
-  /** The signed-in person's directory id; -1 when the session has no record. */
   private readonly ownEmployeeId = computed(() => this.auth.employeeId() ?? -1);
 
   protected employeeName(id: number): string {

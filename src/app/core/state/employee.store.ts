@@ -52,12 +52,6 @@ function matches(employee: Employee, filter: EmployeeFilter): boolean {
   );
 }
 
-/**
- * MODULE 9 — state management with `@ngrx/signals`. The store is the single
- * source of truth for the employee feature: state is signals, derived data is
- * `computed`, and every mutation goes through a method. No reducers, no effects
- * boilerplate, and it composes with `OnPush` for free.
- */
 export const EmployeeStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
@@ -82,7 +76,6 @@ export const EmployeeStore = signalStore(
       () => employees().filter((employee) => employee.status === 'ON_LEAVE').length,
     ),
     payrollTotal: computed(() => employees().reduce((sum, employee) => sum + employee.salary, 0)),
-    /** Everyone who joined in the last 90 days. */
     recentJoiners: computed(() => {
       const cutoff = new Date();
       cutoff.setDate(cutoff.getDate() - 90);
@@ -91,7 +84,6 @@ export const EmployeeStore = signalStore(
         .filter((employee) => employee.joinedOn >= iso)
         .sort((a, b) => b.joinedOn.localeCompare(a.joinedOn));
     }),
-    /** Distinct job titles, for the designation filter. */
     designations: computed(() =>
       [...new Set(employees().map((employee) => employee.title))].sort((a, b) =>
         a.localeCompare(b),
@@ -182,7 +174,6 @@ export const EmployeeStore = signalStore(
         patchState(store, { selectedId });
       },
 
-      /** Looks up a record without going back to the API. */
       byId(id: number): Employee | null {
         return store.employees().find((employee) => employee.id === id) ?? null;
       },

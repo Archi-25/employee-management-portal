@@ -3,8 +3,6 @@
   position: relative;
 }
 
-/* Two soft colour washes behind the panels, so the page is not a lone card
-   floating in empty grey. Decorative only — no markup, no a11y surface. */
 :host::before,
 :host::after {
   content: '';

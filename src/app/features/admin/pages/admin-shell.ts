@@ -4,11 +4,6 @@ import { AuthService } from '@core/services/auth.service';
 import { FEATURE_FLAGS } from '@core/tokens/feature-flags.token';
 import { Logger } from '@core/tokens/logger.token';
 
-/**
- * MODULE 4 — the parent of the nested admin routes. Its `<router-outlet>` is
- * where every child renders, and the shell itself is never re-created while
- * navigating between children.
- */
 @Component({
   selector: 'app-admin-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,7 +68,6 @@ import { Logger } from '@core/tokens/logger.token';
 })
 export class AdminShell {
   protected readonly auth = inject(AuthService);
-  /** Resolves to the module-scoped logger, not the root one (MODULE 5). */
   protected readonly logger = inject(Logger);
 
   private readonly flags = inject(FEATURE_FLAGS, { optional: true }) ?? [];

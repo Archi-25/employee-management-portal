@@ -9,7 +9,6 @@ interface NotificationState {
   loading: boolean;
 }
 
-/** Backs the bell menu in the header. */
 export const NotificationStore = signalStore(
   { providedIn: 'root' },
   withState<NotificationState>({ items: [], loading: false }),

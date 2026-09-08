@@ -59,7 +59,6 @@ export class LeavePage {
     void this.store.load();
   }
 
-  /** The signed-in person's directory record, resolved from the session id. */
   protected readonly me = computed(() => {
     const id = this.auth.employeeId();
     return id === null ? null : this.employees.byId(id);
@@ -72,7 +71,6 @@ export class LeavePage {
       : (this.store.balances().find((balance) => balance.employeeId === id) ?? null);
   });
 
-  /** Employees see only their own requests; managers see everyone's. */
   protected readonly rows = computed(() => {
     const visible = this.store.visible();
     if (this.auth.hasRole('MANAGER')) {
@@ -82,7 +80,6 @@ export class LeavePage {
     return visible.filter((request) => request.employeeId === id);
   });
 
-  /** Working days the current form selection would consume. */
   protected readonly requestedDays = computed(() => {
     const { from, to } = this.form.getRawValue();
     return from && to ? countLeaveDays(from, to) : 0;

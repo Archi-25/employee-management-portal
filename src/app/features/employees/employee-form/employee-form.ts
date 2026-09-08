@@ -23,14 +23,12 @@ import { Card } from '@shared/components/card/card';
 
 const PALETTE = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#4a3aa7', '#e34948'];
 
-/** 18 years ago — the latest date of birth we accept. */
 function maxDateOfBirth(): string {
   const date = new Date();
   date.setFullYear(date.getFullYear() - 18);
   return date.toISOString().slice(0, 10);
 }
 
-/** Rejects a date of birth that would make the employee under 18. */
 function adultValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) {
     return null;
@@ -38,7 +36,6 @@ function adultValidator(control: AbstractControl): ValidationErrors | null {
   return control.value <= maxDateOfBirth() ? null : { tooYoung: true };
 }
 
-/** Rejects a joining date in the future. */
 function notFutureValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) {
     return null;
@@ -76,7 +73,6 @@ export class EmployeeForm implements HasUnsavedChanges {
   });
   protected readonly isEdit = computed(() => this.employeeId() !== null);
 
-  /** Possible reporting managers — anyone with a manager-or-above role. */
   protected readonly managers = computed(() =>
     this.store
       .employees()
@@ -140,7 +136,6 @@ export class EmployeeForm implements HasUnsavedChanges {
     return this.form.dirty && !this.saving();
   }
 
-  /** True once the field should show its error, i.e. after a touch or a submit. */
   protected showError(name: keyof typeof this.form.controls): boolean {
     const control = this.form.controls[name];
     return control.invalid && (control.touched || this.submitted());
@@ -244,7 +239,6 @@ export class EmployeeForm implements HasUnsavedChanges {
     this.form.markAsPristine();
   }
 
-  /** Moves focus to the first invalid control so the error is not off-screen. */
   private focusFirstError(): void {
     const firstInvalid = Object.keys(this.form.controls).find(
       (name) => this.form.controls[name as keyof typeof this.form.controls].invalid,

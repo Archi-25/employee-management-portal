@@ -18,13 +18,6 @@ import {
   LeaveRequest,
 } from '@core/models/hr.model';
 
-/**
- * Seed data for the in-memory backend.
- *
- * Written as compact tuples plus a mapper rather than 16 hand-typed object
- * literals: the shape stays visible at a glance and a new field is added in one
- * place instead of sixteen.
- */
 type Row = [
   first: string,
   last: string,
@@ -352,11 +345,6 @@ const ROWS: readonly Row[] = [
   ],
 ];
 
-/**
- * Joining dates for the newest hires are written as `~N` meaning "N days ago",
- * so the dashboard's recent-joiners and new-starter counts always have data
- * however long after the seed was written the portal is run.
- */
 function resolveDate(value: string): string {
   if (!value.startsWith('~')) {
     return value;
@@ -485,7 +473,6 @@ export const DEPARTMENT_SEED: readonly DepartmentRecord[] = [
 
 // ---------------------------------------------------------------- attendance
 
-/** Deterministic pattern so the demo data is stable between reloads. */
 function attendanceStatusFor(employeeId: number, dayOffset: number): AttendanceStatus {
   const seed = (employeeId * 7 + dayOffset * 3) % 12;
   if (seed === 0) return 'ABSENT';

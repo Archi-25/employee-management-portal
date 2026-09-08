@@ -19,7 +19,6 @@ import { APP_CONFIG } from '@core/tokens/app-config.token';
 
 const items = <T>() => map((page: Page<T>) => page.items);
 
-/** One thin HTTP client for the HR resources that hang off the directory. */
 @Injectable({ providedIn: 'root' })
 export class HrService {
   private readonly http = inject(HttpClient);

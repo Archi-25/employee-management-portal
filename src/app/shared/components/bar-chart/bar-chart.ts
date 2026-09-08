@@ -3,21 +3,9 @@ import { ChangeDetectionStrategy, Component, computed, input, signal } from '@an
 export interface BarDatum {
   label: string;
   value: number;
-  /** Optional in-app link for the category. */
   link?: unknown[];
 }
 
-/**
- * Horizontal bar chart for a single measure across categories.
- *
- * One measure means ONE colour: the category is already named on the axis, so
- * colouring each bar differently would encode nothing and would fail the
- * palette's CVD gates for no benefit. Bars are horizontal because category
- * names are long enough to collide when rotated under vertical bars.
- *
- * Every value is directly labelled and the same numbers are available as a
- * table, so the chart never depends on colour or on hover to be readable.
- */
 @Component({
   selector: 'app-bar-chart',
   changeDetection: ChangeDetectionStrategy.OnPush,

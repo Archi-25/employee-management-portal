@@ -14,7 +14,6 @@ interface AttendanceState {
   error: string | null;
 }
 
-/** Most recent weekday, so the page opens on a day that has data. */
 function defaultDate(): string {
   const date = new Date();
   while (date.getDay() === 0 || date.getDay() === 6) {

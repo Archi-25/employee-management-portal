@@ -1,9 +1,5 @@
 import { Employee, EmployeeDraft } from '@core/models/employee.model';
 
-/**
- * Test fixtures. One place to add a field when the model grows, instead of
- * every spec that happens to need an Employee.
- */
 const BASE: Employee = {
   id: 42,
   code: 'EMP042',

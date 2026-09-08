@@ -8,11 +8,6 @@ import { Card } from '@shared/components/card/card';
 import { StatTile } from '@shared/components/stat-tile/stat-tile';
 import { FeatureFlagDirective } from '@shared/directives/feature-flag.directive';
 
-/**
- * System health — the operational view an administrator uses to see whether the
- * portal's API layer is behaving: request volume, latency, cache effectiveness
- * and recent failures. The numbers are collected by the HTTP interceptors.
- */
 @Component({
   selector: 'app-admin-system',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,18 +5,6 @@ import { Announcement } from '@core/models/announcement.model';
 import { AnnouncementStore } from '@core/state/announcement.store';
 import { Card } from '@shared/components/card/card';
 
-/**
- * Company announcements, rendered on the dashboard.
- *
- * Announcement bodies are rich text written by managers, so they are untrusted
- * input. `[innerHTML]` runs Angular's HTML sanitiser, which strips `<script>`,
- * event-handler attributes such as `onerror`, and `javascript:` URLs while
- * keeping the formatting authors legitimately use. We never call
- * `bypassSecurityTrustHtml` on this content — that would defeat the protection.
- *
- * `sanitizeBody` also runs the value through `DomSanitizer.sanitize` explicitly
- * so the stored and rendered forms can be compared in the admin preview.
- */
 @Component({
   selector: 'app-announcement-panel',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,7 +46,6 @@ export class AnnouncementPanel {
   protected readonly store = inject(AnnouncementStore);
   private readonly sanitizer = inject(DomSanitizer);
 
-  /** Cap shown on compact surfaces such as the dashboard. */
   readonly limit = input(3);
 
   protected visible(): Announcement[] {
@@ -70,7 +57,6 @@ export class AnnouncementPanel {
     return total === 0 ? 'Nothing posted' : `${total} posted`;
   }
 
-  /** Exposed for the admin preview: shows exactly what survives sanitisation. */
   sanitizeBody(bodyHtml: string): SafeHtml {
     return this.sanitizer.sanitize(SecurityContext.HTML, bodyHtml) ?? '';
   }

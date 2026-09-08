@@ -5,15 +5,6 @@ import { resetMockBackend } from '@core/interceptors/mock-backend.interceptor';
 import { EmployeeService, HeadcountTick } from './employee.service';
 import { configureFeatureTest } from '../../testing/test-setup';
 
-/**
- * The hand-written observable in `EmployeeService`.
- *
- * The behaviour worth pinning down is the teardown. The producer owns a
- * `setInterval`, and the function it returns is what clears it — so an
- * unsubscribe has to genuinely stop the timer rather than merely stop
- * delivering. These tests assert that with fake timers, because a leaked
- * interval is invisible to an assertion about emitted values.
- */
 describe('EmployeeService', () => {
   let service: EmployeeService;
 
@@ -74,8 +65,6 @@ describe('EmployeeService', () => {
       expect(ticks).toHaveLength(2);
 
       sub.unsubscribe();
-      // If the teardown did not clear the interval, the producer would keep
-      // running and this would push the count higher.
       vi.advanceTimersByTime(10_000);
       expect(ticks).toHaveLength(2);
       expect(vi.getTimerCount()).toBe(0);
@@ -90,8 +79,6 @@ describe('EmployeeService', () => {
 
       vi.advanceTimersByTime(2000);
 
-      // shareReplay with refCount means one interval, not two — so the second
-      // subscriber sees the same sequence numbers rather than its own from 1.
       expect(a).toEqual(b);
       subA.unsubscribe();
       subB.unsubscribe();
@@ -104,8 +91,6 @@ describe('EmployeeService', () => {
       const labels: string[] = [];
       const sub = service.evenHeadcountLabels(stop).subscribe((label) => labels.push(label));
 
-      // evenHeadcountLabels uses headcountFeed()'s default 1200ms interval,
-      // so reaching sequence 4 takes 4800ms.
       vi.advanceTimersByTime(4800);
 
       expect(labels).toHaveLength(2);

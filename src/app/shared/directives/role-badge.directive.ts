@@ -8,10 +8,6 @@ const PALETTE: Record<Role, { bg: string; fg: string }> = {
   GUEST: { bg: '#e5e7eb', fg: '#374151' },
 };
 
-/**
- * MODULE 2 — attribute directive that builds DOM imperatively with `Renderer2`:
- * `createElement`, `createText`, `appendChild`, `setStyle`, `addClass`.
- */
 @Directive({
   selector: '[appRoleBadge]',
 })

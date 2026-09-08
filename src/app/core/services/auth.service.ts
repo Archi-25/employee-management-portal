@@ -6,14 +6,6 @@ import { Logger } from '@core/tokens/logger.token';
 const STORAGE_KEY = 'emp-portal-session';
 
 export interface Session {
-  /**
-   * The signed-in person's row in the employee directory, or null when the
-   * session has no directory record behind it (the demo role-switcher).
-   *
-   * Screens that show "my own" attendance or leave resolve the person from
-   * this id. They used to match `fullName(employee) === displayName`, which
-   * silently returned the wrong record for two people sharing a name.
-   */
   employeeId: number | null;
   displayName: string;
   role: Role;
@@ -22,16 +14,11 @@ export interface Session {
 
 const RANK: Record<Role, number> = { GUEST: 0, EMPLOYEE: 1, MANAGER: 2, ADMIN: 3 };
 
-/**
- * MODULE 9 — signal-based session state. No `BehaviorSubject` plumbing: templates,
- * guards and directives all read the same signals.
- */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly logger = inject(Logger);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  /** Restored from storage when the last sign-in asked to be remembered. */
   private readonly session = signal<Session | null>(this.restore());
 
   readonly currentSession = this.session.asReadonly();
@@ -39,7 +26,6 @@ export class AuthService {
   readonly role = computed<Role>(() => this.session()?.role ?? 'GUEST');
   readonly displayName = computed(() => this.session()?.displayName ?? 'Guest');
   readonly token = computed(() => this.session()?.token ?? null);
-  /** Directory id of the signed-in person, or null when there is no record. */
   readonly employeeId = computed(() => this.session()?.employeeId ?? null);
 
   login(
@@ -60,7 +46,6 @@ export class AuthService {
     return session;
   }
 
-  /** Switches role without a round trip — used by the demo toolbar. */
   switchRole(role: Role): void {
     const current = this.session();
     if (!current) {
@@ -93,7 +78,6 @@ export class AuthService {
     }
   }
 
-  /** Writes the session for "remember me", or clears it when passed null. */
   private persist(session: Session | null): void {
     if (!this.isBrowser) {
       return;
@@ -133,7 +117,6 @@ export class AuthService {
     }
   }
 
-  /** True when the active role is at least as privileged as `required`. */
   hasRole(required: Role | readonly Role[]): boolean {
     const roles: readonly Role[] = Array.isArray(required) ? required : [required as Role];
     const active = RANK[this.role()];

@@ -1,16 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-/**
- * Inline SVG icon set.
- *
- * Emoji were used here originally, which render differently on every platform
- * and cannot inherit colour or line weight. These are stroke icons on a 24×24
- * grid drawn with `currentColor`, so they take the surrounding text colour and
- * scale with the type.
- *
- * Every icon is expressed purely as `<path>` data — circles included, written as
- * arcs — so the template can loop over strings and never needs `innerHTML`.
- */
 export type IconName =
   | 'dashboard'
   | 'users'

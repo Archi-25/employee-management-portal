@@ -1,19 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { FEATURE_FLAGS } from '@core/tokens/feature-flags.token';
 
-/**
- * Structural directive that keeps unreleased UI out of the DOM entirely:
- *
- * ```html
- * <button *appFeatureFlag="'admin.payroll-export'">Export payroll</button>
- * ```
- *
- * The `*` is sugar: Angular rewrites the line above into an `<ng-template>`
- * that this directive owns and stamps into the view container on demand.
- *
- * Reads the `FEATURE_FLAGS` multi-provider, so the root application and any
- * lazy-loaded module can each contribute their own flags.
- */
 @Directive({
   selector: '[appFeatureFlag]',
 })

@@ -11,7 +11,6 @@ import { Card } from '@shared/components/card/card';
 import { HasRoleDirective } from '@shared/directives/has-role.directive';
 import { InitialsPipe } from '@shared/pipes/initials.pipe';
 
-/** Confirms the two password fields agree. */
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const next = group.get('nextPassword')?.value;
   const confirm = group.get('confirmPassword')?.value;
@@ -42,7 +41,6 @@ export class SettingsPage {
   protected readonly themes = THEMES;
   protected readonly passwordSaved = signal(false);
 
-  /** The directory record behind the signed-in session, if there is one. */
   protected readonly me = computed(() => {
     const id = this.auth.employeeId();
     return id === null ? null : this.employees.byId(id);

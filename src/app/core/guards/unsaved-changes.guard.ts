@@ -4,7 +4,6 @@ export interface HasUnsavedChanges {
   hasUnsavedChanges(): boolean;
 }
 
-/** MODULE 4 — `CanDeactivate` keyed on a component-implemented interface. */
 export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = (component) => {
   if (!component.hasUnsavedChanges()) {
     return true;

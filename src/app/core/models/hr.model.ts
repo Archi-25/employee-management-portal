@@ -1,5 +1,3 @@
-/** Models for attendance, leave, departments and documents. */
-
 export type AttendanceStatus = 'PRESENT' | 'ABSENT' | 'LATE' | 'ON_LEAVE';
 
 export const ATTENDANCE_STATUSES: readonly AttendanceStatus[] = [
@@ -12,9 +10,7 @@ export const ATTENDANCE_STATUSES: readonly AttendanceStatus[] = [
 export interface AttendanceRecord {
   readonly id: number;
   employeeId: number;
-  /** ISO-8601 date, e.g. `2026-09-06`. */
   date: string;
-  /** `HH:mm`, or null when absent. */
   checkIn: string | null;
   checkOut: string | null;
   status: AttendanceStatus;
@@ -30,7 +26,6 @@ export interface LeaveRequest {
   readonly id: number;
   employeeId: number;
   type: LeaveType;
-  /** ISO-8601 dates. */
   from: string;
   to: string;
   days: number;
@@ -42,7 +37,6 @@ export interface LeaveRequest {
 
 export type LeaveDraft = Omit<LeaveRequest, 'id' | 'status' | 'appliedOn' | 'decidedBy' | 'days'>;
 
-/** Remaining allowance per leave type, per employee. */
 export interface LeaveBalance {
   employeeId: number;
   annual: number;
@@ -75,7 +69,6 @@ export interface EmployeeDocument {
   employeeId: number;
   name: string;
   type: DocumentType;
-  /** Bytes. */
   size: number;
   uploadedOn: string;
 }
@@ -88,11 +81,9 @@ export interface AppNotification {
   message: string;
   at: string;
   read: boolean;
-  /** Optional in-app destination. */
   link: string | null;
 }
 
-/** Inclusive working-day count between two ISO dates. */
 export function countLeaveDays(from: string, to: string): number {
   const start = new Date(from);
   const end = new Date(to);

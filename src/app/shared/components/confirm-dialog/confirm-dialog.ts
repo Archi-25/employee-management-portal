@@ -11,13 +11,6 @@ import {
 } from '@angular/core';
 import { DialogRef } from './dialog-ref';
 
-/**
- * Confirmation dialog used before any destructive action.
- *
- * `viewProviders` (not `providers`) supplies the {@link DialogRef}, which is
- * what lets `[appDialogClose]` find it with `@Host()` from inside this
- * template while remaining invisible to the rest of the application.
- */
 @Component({
   selector: 'app-confirm-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,7 +52,6 @@ export class ConfirmDialog implements AfterViewInit {
 
   private readonly dialogRef = inject(DialogRef);
 
-  /** Signal query — used to move focus into the dialog when it opens. */
   private readonly cancelButton = viewChild<ElementRef<HTMLButtonElement>>('cancelButton');
 
   ngAfterViewInit(): void {
@@ -67,7 +59,6 @@ export class ConfirmDialog implements AfterViewInit {
     this.cancelButton()?.nativeElement.focus();
   }
 
-  /** Escape closes the dialog, as a modal is expected to. */
   @HostListener('document:keydown.escape')
   cancel(): void {
     this.dialogRef.close(false);

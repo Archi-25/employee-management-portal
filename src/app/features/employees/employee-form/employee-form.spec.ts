@@ -6,7 +6,6 @@ import { EmployeeStore } from '@core/state/employee.store';
 import { configureFeatureTest } from '../../../testing/test-setup';
 import { EmployeeForm } from './employee-form';
 
-/** Stubs the route so the component can be mounted in create or edit mode. */
 function withRouteParam(id?: string) {
   return {
     provide: ActivatedRoute,
@@ -32,7 +31,6 @@ describe('EmployeeForm', () => {
     element = fixture.nativeElement as HTMLElement;
   }
 
-  /** The form is `protected`, so reach it through a narrow structural cast. */
   const form = (): FormGroup => (fixture.componentInstance as unknown as { form: FormGroup }).form;
   const control = (name: string): AbstractControl => form().controls[name];
 

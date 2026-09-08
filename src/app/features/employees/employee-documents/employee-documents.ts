@@ -15,13 +15,6 @@ const ICONS: Record<DocumentType, string> = {
   Other: '📎',
 };
 
-/**
- * Documents held against an employee record.
- *
- * The file itself is never uploaded anywhere — this portal has no storage
- * backend — but the metadata round-trips through the API so the list, the
- * delete and the counts are real.
- */
 @Component({
   selector: 'app-employee-documents',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,7 +110,6 @@ export class EmployeeDocuments {
     });
   }
 
-  /** Records the metadata; the bytes stay on the user's machine. */
   protected onFile(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];

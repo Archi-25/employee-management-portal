@@ -1,9 +1,5 @@
 import { Directive, ElementRef, HostListener, inject, output } from '@angular/core';
 
-/**
- * Emits when a click lands anywhere outside the host element.
- * Used to dismiss the row action menus on the employee table.
- */
 @Directive({
   selector: '[appClickOutside]',
 })

@@ -6,14 +6,6 @@ import { DepartmentStore } from './department.store';
 import { LeaveStore } from './leave.store';
 import { configureFeatureTest } from '../../testing/test-setup';
 
-/**
- * The stores behind the announcement, department and leave screens.
- *
- * These exercise the paths the screen specs do not reach: the ordering rules,
- * and the failure branch of every mutation. A store that silently swallows a
- * rejected write is worse than one that throws, so each failure case asserts
- * both that `error` is populated and that `loading` was released.
- */
 describe('AnnouncementStore', () => {
   let store: InstanceType<typeof AnnouncementStore>;
 

@@ -5,7 +5,6 @@ import { APP_CONFIG } from '@core/tokens/app-config.token';
 import { FEATURE_FLAGS } from '@core/tokens/feature-flags.token';
 import { Card } from '@shared/components/card/card';
 
-/** Reachable only by ADMIN — guarded by `roleGuard('ADMIN')` on the route. */
 @Component({
   selector: 'app-admin-settings',
   changeDetection: ChangeDetectionStrategy.OnPush,

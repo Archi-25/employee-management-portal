@@ -1,15 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
 import { Employee, fullName } from '@core/models/employee.model';
 
-/**
- * Shareable employee badge — the artefact HR exports for lanyards and for
- * embedding in other internal tools.
- *
- * `ViewEncapsulation.ShadowDom` gives it a real shadow root, which isolates it
- * in BOTH directions: the host page cannot restyle the badge, and the badge
- * cannot leak into the host page. That guarantee is the whole point of a
- * component meant to be dropped into a page it does not control.
- */
 @Component({
   selector: 'app-badge-widget',
   changeDetection: ChangeDetectionStrategy.OnPush,

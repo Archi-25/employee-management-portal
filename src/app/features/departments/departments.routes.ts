@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-/** Nested feature routes: a list that hosts its own child detail outlet. */
 export const DEPARTMENT_ROUTES: Routes = [
   {
     path: '',

@@ -3,11 +3,6 @@ import { inject } from '@angular/core';
 import { finalize, tap } from 'rxjs/operators';
 import { ProfilingService } from '@core/services/profiling.service';
 
-/**
- * MODULE 8 — measures wall-clock duration per request. Registered first so it
- * wraps every other interceptor, which is what makes a cache hit measurable
- * (sub-millisecond, never reaching the network).
- */
 export const profilingInterceptor: HttpInterceptorFn = (req, next) => {
   const profiling = inject(ProfilingService);
   const startedAt = performance.now();

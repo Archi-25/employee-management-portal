@@ -30,12 +30,6 @@ import {
   NOTIFICATION_SEED,
 } from '@core/services/employee-seed';
 
-/**
- * The portal ships without a server, so this interceptor terminates the chain
- * and answers `/api/**` from memory. It is registered LAST, which means auth,
- * error, cache and profiling all run against it exactly as they would against a
- * real backend — swapping in a real API means deleting this one file.
- */
 const LATENCY_MS = 180;
 
 interface Db {

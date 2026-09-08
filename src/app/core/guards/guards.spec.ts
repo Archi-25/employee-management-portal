@@ -17,7 +17,6 @@ function setup() {
   };
 }
 
-/** Guards are functions that must run inside an injection context. */
 function run<T>(fn: () => T): T {
   return TestBed.runInInjectionContext(fn);
 }

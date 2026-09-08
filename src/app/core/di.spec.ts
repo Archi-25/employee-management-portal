@@ -7,7 +7,6 @@ import { APP_CONFIG } from '@core/tokens/app-config.token';
 import { FEATURE_FLAGS, provideFeatureFlags } from '@core/tokens/feature-flags.token';
 import { LOG_SINK, Logger } from '@core/tokens/logger.token';
 
-/** Mirrors how AdminModule re-provides Logger for everything beneath it. */
 @Component({
   selector: 'app-scoped-area',
   providers: [{ provide: Logger, useFactory: () => new ScopedLogger('admin') }],
@@ -15,7 +14,6 @@ import { LOG_SINK, Logger } from '@core/tokens/logger.token';
 })
 class ScopedArea {
   readonly logger = inject(Logger);
-  /** skipSelf walks past this component's own provider to the root one. */
   readonly rootLogger = inject(Logger, { skipSelf: true });
 }
 

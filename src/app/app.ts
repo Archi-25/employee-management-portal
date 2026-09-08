@@ -60,7 +60,6 @@ export class App {
   protected readonly menuOpen = signal(false);
   protected readonly accountOpen = signal(false);
 
-  /** Nav entries this role may reach; guards enforce the same rule again. */
   protected readonly visibleNav = computed(() =>
     NAV.filter((item) => !item.minRole || this.auth.hasRole(item.minRole)),
   );

@@ -53,7 +53,6 @@ export class Dashboard implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private presenceSub: Subscription | null = null;
 
-  /** Live "who is online" figure, pushed by the presence feed. */
   protected readonly presence = signal<PresenceSnapshot | null>(null);
 
   protected readonly departmentChart = computed<BarDatum[]>(() =>
@@ -71,7 +70,6 @@ export class Dashboard implements OnDestroy {
     this.store.upcomingBirthdays().slice(0, RECENT_LIMIT),
   );
 
-  /** Newest activity across leave and joiners, as a single feed. */
   protected readonly activity = computed(() => {
     const fromLeave = this.leave
       .requests()
@@ -112,8 +110,6 @@ export class Dashboard implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Completing the notifier runs the observable's teardown, which clears the
-    // polling timer — leaving the dashboard genuinely stops the work.
     this.destroy$.next();
     this.destroy$.complete();
     this.presenceSub?.unsubscribe();
@@ -131,7 +127,6 @@ export class Dashboard implements OnDestroy {
     return 'status--neutral';
   }
 
-  /** Days until the next birthday, for the "in N days" label. */
   protected daysUntilBirthday(dateOfBirth: string): string {
     const now = new Date();
     const dob = new Date(dateOfBirth);

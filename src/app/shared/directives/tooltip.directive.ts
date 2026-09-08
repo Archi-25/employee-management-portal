@@ -11,13 +11,6 @@ import {
 
 let tooltipSeq = 0;
 
-/**
- * Accessible tooltip: `<span [appTooltip]="'On parental leave'">`.
- *
- * Built with `Renderer2` rather than `nativeElement.innerHTML` so the same code
- * runs under server-side rendering, and so the label can never be interpreted
- * as markup.
- */
 @Directive({
   selector: '[appTooltip]',
 })
@@ -30,7 +23,6 @@ export class TooltipDirective implements OnDestroy {
   private readonly tooltipId = `tooltip-${++tooltipSeq}`;
   private bubble: HTMLElement | null = null;
 
-  /** Host bindings keep the element keyboard-reachable and correctly labelled. */
   @HostBinding('attr.tabindex') readonly tabIndex = '0';
   @HostBinding('class.has-tooltip') readonly hasTooltip = true;
   @HostBinding('attr.aria-describedby') describedBy: string | null = null;

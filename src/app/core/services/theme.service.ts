@@ -6,13 +6,6 @@ export type ThemePreference = 'system' | 'light' | 'dark';
 
 const STORAGE_KEY = 'emp-portal-theme';
 
-/**
- * Theme preference, persisted per browser.
- *
- * `system` stamps nothing on the root element so the OS setting wins through
- * `prefers-color-scheme`; the explicit choices stamp `data-theme`, which the
- * stylesheet scopes above the media query so a toggle beats the OS both ways.
- */
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
@@ -29,7 +22,6 @@ export class ThemeService {
     this.current.set(preference);
   }
 
-  /** Cycles system → light → dark → system, for a single toggle button. */
   cycle(): void {
     const order: ThemePreference[] = ['system', 'light', 'dark'];
     const next = order[(order.indexOf(this.current()) + 1) % order.length];

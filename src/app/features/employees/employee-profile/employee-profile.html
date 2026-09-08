@@ -26,8 +26,6 @@
 
     <div class="profile__actions">
       <ng-content select="[profile-actions]" />
-      <!-- Editing needs manager rights; removing needs admin. Anyone else
-           never receives the button at all. -->
       <button
         *appHasRole="['MANAGER', 'ADMIN']"
         type="button"

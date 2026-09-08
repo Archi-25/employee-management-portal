@@ -15,14 +15,6 @@ import { Card } from '@shared/components/card/card';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
 import { DialogCloseDirective } from '@shared/directives/dialog-close.directive';
 
-/**
- * Compose and manage company announcements.
- *
- * The body is rich text typed by a human, so it is untrusted by definition.
- * The live preview binds it with `[innerHTML]`, which sanitises it, and the
- * panel underneath shows exactly what the sanitiser kept — so an author can see
- * before publishing that their `<script>` or `onclick` will not survive.
- */
 @Component({
   selector: 'app-admin-announcements',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -144,14 +136,12 @@ export class AdminAnnouncements {
     pinned: [false],
   });
 
-  /** Raw author input, tracked as a signal so the preview stays reactive. */
   protected readonly bodyValue = signal(this.form.controls.bodyHtml.value);
 
   protected readonly sanitised = computed(
     () => this.sanitizer.sanitize(SecurityContext.HTML, this.bodyValue()) ?? '',
   );
 
-  /** True when sanitisation actually changed the markup. */
   protected readonly wasModified = computed(
     () => this.sanitised().replace(/\s+/g, '') !== this.bodyValue().replace(/\s+/g, ''),
   );

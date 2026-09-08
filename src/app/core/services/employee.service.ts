@@ -13,7 +13,6 @@ import {
 import { APP_CONFIG } from '@core/tokens/app-config.token';
 import { Logger } from '@core/tokens/logger.token';
 
-/** Payload pushed by {@link EmployeeService.headcountFeed}. */
 export interface HeadcountTick {
   sequence: number;
   activeCount: number;
@@ -30,7 +29,6 @@ export class EmployeeService {
     return `${this.config.apiBaseUrl}/employees`;
   }
 
-  /** MODULE 6 — `map` reshapes the envelope into a plain array. */
   list(filters?: Partial<EmployeeFilter>): Observable<Employee[]> {
     let params = new HttpParams();
     if (filters?.search) {
@@ -68,11 +66,6 @@ export class EmployeeService {
       .pipe(tap(() => this.logger.warn(`Deleted employee #${id}`)));
   }
 
-  /**
-   * MODULE 6 — a hand-written observable. The subscriber function is the
-   * producer; the returned teardown runs on unsubscribe/complete/error, which is
-   * what makes `takeUntil` able to stop the interval cleanly.
-   */
   headcountFeed(intervalMs = 1200): Observable<HeadcountTick> {
     return new Observable<HeadcountTick>((subscriber: Subscriber<HeadcountTick>) => {
       let sequence = 0;
@@ -98,10 +91,6 @@ export class EmployeeService {
     }).pipe(shareReplay({ bufferSize: 1, refCount: true }));
   }
 
-  /**
-   * MODULE 6 — `filter` + `map` + `takeUntil` composed over the custom observable.
-   * `notifier` is normally a `Subject` completed in `ngOnDestroy`.
-   */
   evenHeadcountLabels(notifier: Observable<unknown>): Observable<string> {
     return this.headcountFeed().pipe(
       filter((tick) => tick.sequence % 2 === 0),
@@ -110,10 +99,6 @@ export class EmployeeService {
     );
   }
 
-  /**
-   * MODULE 6 — an explicit `Observer` object (next/error/complete) rather than
-   * three positional callbacks. Returns the teardown so callers can cancel.
-   */
   watchStatusChanges(observer: Observer<EmployeeStatus>, stop: Observable<unknown>): () => void {
     const cycle: EmployeeStatus[] = ['ACTIVE', 'ON_LEAVE', 'PROBATION', 'EXITED'];
     const subscription = timer(0, 900)

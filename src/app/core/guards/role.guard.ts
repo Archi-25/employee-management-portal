@@ -5,14 +5,8 @@ import { Role } from '@core/models/employee.model';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 
-/**
- * MODULE 4 — factory guard. `roleGuard('ADMIN')` returns a `CanActivateFn`, so
- * the required role lives in the route definition instead of in the guard.
- */
 export function roleGuard(...allowed: Role[]): CanActivateFn & CanActivateChildFn {
   return () => {
-    // Same reasoning as authGuard: the server cannot see a remembered session,
-    // so it defers the decision to the browser rather than refusing outright.
     if (isPlatformServer(inject(PLATFORM_ID))) {
       return true;
     }

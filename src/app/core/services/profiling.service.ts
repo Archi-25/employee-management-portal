@@ -3,7 +3,6 @@ import { HttpTiming } from '@core/models/api.model';
 
 const MAX_TIMINGS = 25;
 
-/** Collects the measurements produced by the profiling interceptor (MODULE 8). */
 @Injectable({ providedIn: 'root' })
 export class ProfilingService {
   private nextId = 1;

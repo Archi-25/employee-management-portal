@@ -70,10 +70,6 @@ import { Card } from '@shared/components/card/card';
   `,
 })
 export class AdminAudit {
-  /**
-   * Resolves the admin module's own logger rather than the root one, because
-   * `AdminModule` re-provides `Logger` in its environment injector.
-   */
   protected readonly logger = inject(Logger);
   protected readonly entries = inject(LOG_SINK);
 }

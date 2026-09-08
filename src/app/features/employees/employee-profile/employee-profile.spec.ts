@@ -50,7 +50,6 @@ describe('EmployeeProfile', () => {
     return { fixture, element: fixture.nativeElement as HTMLElement };
   }
 
-  /** Buttons are removed from the DOM, not disabled — so query by text. */
   function buttonNamed(element: HTMLElement, text: string): HTMLButtonElement | undefined {
     return [...element.querySelectorAll('button')].find(
       (button) => button.textContent?.trim() === text,

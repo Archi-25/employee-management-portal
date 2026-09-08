@@ -1,4 +1,3 @@
-/** Roles recognised by the portal, ordered from least to most privileged. */
 export type Role = 'GUEST' | 'EMPLOYEE' | 'MANAGER' | 'ADMIN';
 
 export const ROLES: readonly Role[] = ['GUEST', 'EMPLOYEE', 'MANAGER', 'ADMIN'] as const;
@@ -52,7 +51,6 @@ export interface Address {
 
 export interface Employee {
   readonly id: number;
-  /** Human-facing identifier shown in the UI, e.g. `EMP001`. */
   code: string;
 
   // --- personal ---
@@ -60,7 +58,6 @@ export interface Employee {
   lastName: string;
   email: string;
   phone: string;
-  /** ISO-8601 date. */
   dateOfBirth: string;
   gender: Gender;
 
@@ -68,7 +65,6 @@ export interface Employee {
   title: string;
   department: Department;
   employmentType: EmploymentType;
-  /** ISO-8601 date. */
   joinedOn: string;
   managerId: number | null;
   salary: number;
@@ -79,7 +75,6 @@ export interface Employee {
 
   // --- other ---
   address: Address;
-  /** Rich text written by People Ops; sanitised before render. */
   bioHtml: string;
   avatarColor: string;
 }
@@ -106,7 +101,6 @@ export function fullName(employee: Pick<Employee, 'firstName' | 'lastName'>): st
   return `${employee.firstName} ${employee.lastName}`.trim();
 }
 
-/** Next free code in the `EMP###` sequence. */
 export function nextEmployeeCode(existing: readonly Employee[]): string {
   const highest = existing.reduce((max, employee) => {
     const parsed = Number.parseInt(employee.code.replace(/\D/g, ''), 10);
@@ -115,7 +109,6 @@ export function nextEmployeeCode(existing: readonly Employee[]): string {
   return `EMP${String(highest + 1).padStart(3, '0')}`;
 }
 
-/** Day-of-year comparison so birthdays can be found without the year. */
 export function birthdayWithinDays(dateOfBirth: string, days: number, now = new Date()): boolean {
   const dob = new Date(dateOfBirth);
   if (Number.isNaN(dob.getTime())) {

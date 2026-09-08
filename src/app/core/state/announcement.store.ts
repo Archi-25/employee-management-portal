@@ -18,13 +18,11 @@ const initialState: AnnouncementState = {
   error: null,
 };
 
-/** Company announcements, kept in the same SignalStore style as the directory. */
 export const AnnouncementStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
 
   withComputed(({ announcements }) => ({
-    /** Pinned first, then newest. */
     ordered: computed(() =>
       [...announcements()].sort((a, b) => {
         if (a.pinned !== b.pinned) {

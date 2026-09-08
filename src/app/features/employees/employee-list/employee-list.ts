@@ -42,12 +42,6 @@ const STATUS_CLASS: Record<EmployeeStatus, string> = {
 
 type SortKey = 'name' | 'code' | 'department' | 'title' | 'joinedOn' | 'salary';
 
-/**
- * The employee directory — the main working screen of the portal.
- *
- * Search is debounced through a `Subject` so typing does not re-filter on every
- * keystroke, and the subscription is closed by `takeUntil` on destroy.
- */
 @Component({
   selector: 'app-employee-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -89,7 +83,6 @@ export class EmployeeList implements OnDestroy {
 
   protected readonly pageSize = this.config.defaultPageSize;
 
-  /** Filtered by the store, then sorted here for presentation. */
   protected readonly sorted = computed(() => {
     const key = this.sortKey();
     const direction = this.sortAsc() ? 1 : -1;
@@ -161,7 +154,6 @@ export class EmployeeList implements OnDestroy {
     return value.replace('_', ' ');
   }
 
-  /** True when any filter is narrowing the list. */
   protected readonly hasActiveFilters = computed(() => {
     const filter = this.store.filter();
     return (

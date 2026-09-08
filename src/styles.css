@@ -1,9 +1,3 @@
-/* ---------------------------------------------------------------------------
-   Employee Management Portal — design tokens and shared primitives.
-   Component-specific styling lives in its component; this file holds only what
-   is genuinely shared.
-   ------------------------------------------------------------------------- */
-
 :root {
   color-scheme: light;
 
@@ -54,8 +48,6 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-/* Dark values are selected for the dark surface, not an automatic inversion.
-   Declared under both the OS media query and the explicit toggle scope. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;

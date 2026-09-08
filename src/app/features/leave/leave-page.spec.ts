@@ -29,8 +29,6 @@ describe('LeavePage', () => {
 
     expect(element.textContent).toContain('All requests');
     expect(rowCount()).toBe(store.requests().length);
-    // The employee column only exists for managers. (CSS uppercases the header,
-    // so assert against the real text, not the rendered casing.)
     const headers = [...element.querySelectorAll('th')].map((h) => h.textContent?.trim());
     expect(headers).toContain('Employee');
   });
