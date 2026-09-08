@@ -48,8 +48,7 @@ export const routes: Routes = [
     path: 'settings',
     title: 'Settings · Employee Management Portal',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('@features/settings/settings-page').then((m) => m.SettingsPage),
+    loadComponent: () => import('@features/settings/settings-page').then((m) => m.SettingsPage),
   },
 
   // The admin area is a lazily loaded NgModule with its own environment injector.

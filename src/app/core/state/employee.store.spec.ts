@@ -3,7 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from '@core/services/auth.service';
 import { ConsoleLogger } from '@core/services/logger.service';
 import { Logger } from '@core/tokens/logger.token';
-import { mockBackendInterceptor, resetMockBackend } from '@core/interceptors/mock-backend.interceptor';
+import {
+  mockBackendInterceptor,
+  resetMockBackend,
+} from '@core/interceptors/mock-backend.interceptor';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { errorInterceptor } from '@core/interceptors/error.interceptor';
 import { EmployeeStore } from './employee.store';
@@ -34,9 +37,7 @@ describe('EmployeeStore', () => {
   });
 
   it('derives active headcount and payroll from the same source', () => {
-    const expectedPayroll = store
-      .employees()
-      .reduce((sum, employee) => sum + employee.salary, 0);
+    const expectedPayroll = store.employees().reduce((sum, employee) => sum + employee.salary, 0);
 
     expect(store.payrollTotal()).toBe(expectedPayroll);
     expect(store.activeCount()).toBe(
@@ -106,7 +107,12 @@ describe('EmployeeStore', () => {
     const before = store.total();
 
     await store.create(
-      makeEmployeeDraft({ firstName: 'Nina', lastName: 'Berg', email: 'nina.berg@acme.io', title: 'SRE' }),
+      makeEmployeeDraft({
+        firstName: 'Nina',
+        lastName: 'Berg',
+        email: 'nina.berg@acme.io',
+        title: 'SRE',
+      }),
     );
 
     expect(store.total()).toBe(before + 1);

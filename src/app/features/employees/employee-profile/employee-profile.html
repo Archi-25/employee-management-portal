@@ -12,8 +12,11 @@
       <p class="identity__title">{{ employee.title }} · {{ employee.department }}</p>
       <div class="identity__meta">
         <span [appRoleBadge]="employee.role"></span>
-        <span class="chip chip--status" [attr.data-status]="employee.status"
-              [appTooltip]="statusHint">
+        <span
+          class="chip chip--status"
+          [attr.data-status]="employee.status"
+          [appTooltip]="statusHint"
+        >
           {{ employee.status }}
         </span>
         <span class="chip">{{ employee.location }}</span>
@@ -25,24 +28,46 @@
       <ng-content select="[profile-actions]" />
       <!-- Editing needs manager rights; removing needs admin. Anyone else
            never receives the button at all. -->
-      <button *appHasRole="['MANAGER', 'ADMIN']" type="button" class="btn"
-              (click)="edit.emit(employee)">
+      <button
+        *appHasRole="['MANAGER', 'ADMIN']"
+        type="button"
+        class="btn"
+        (click)="edit.emit(employee)"
+      >
         Edit
       </button>
-      <button *appHasRole="'ADMIN'" type="button" class="btn btn--danger"
-              (click)="remove.emit(employee)">
+      <button
+        *appHasRole="'ADMIN'"
+        type="button"
+        class="btn btn--danger"
+        (click)="remove.emit(employee)"
+      >
         Remove
       </button>
     </div>
   </header>
 
   <dl class="facts">
-    <div><dt>Email</dt><dd><a [href]="'mailto:' + employee.email">{{ employee.email }}</a></dd></div>
-    <div><dt>Joined</dt><dd>{{ employee.joinedOn | date: 'mediumDate' }}</dd></div>
+    <div>
+      <dt>Email</dt>
+      <dd>
+        <a [href]="'mailto:' + employee.email">{{ employee.email }}</a>
+      </dd>
+    </div>
+    <div>
+      <dt>Joined</dt>
+      <dd>{{ employee.joinedOn | date: 'mediumDate' }}</dd>
+    </div>
     @if (showSalary()) {
-      <div><dt>Salary</dt><dd>{{ employee.salary | currency: 'USD' : 'symbol' : '1.0-0' }}</dd></div>
+      <div>
+        <dt>Salary</dt>
+        <dd>{{ employee.salary | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
+      </div>
     }
-    <div><dt>Employee ID</dt><dd>#{{ employee.id }}</dd></div>
+    <div>
+      <dt>Employee ID</dt>
+      <dd>#{{ employee.id }}</dd>
+    </div>
   </dl>
 
   <section class="skills">
@@ -50,11 +75,22 @@
 
     @if (employee.skills.length) {
       <!-- Arrow keys move between chips; the directive queries them to do it. -->
-      <ul #skillList class="skills__list" role="listbox" aria-label="Skills" tabindex="-1"
-          (keydown)="onSkillKeydown($event)">
+      <ul
+        #skillList
+        class="skills__list"
+        role="listbox"
+        aria-label="Skills"
+        tabindex="-1"
+        (keydown)="onSkillKeydown($event)"
+      >
         @for (skill of employee.skills; track skill) {
-          <li #skillChip class="chip chip--skill" role="option" tabindex="0"
-              [attr.aria-selected]="false">
+          <li
+            #skillChip
+            class="chip chip--skill"
+            role="option"
+            tabindex="0"
+            [attr.aria-selected]="false"
+          >
             {{ skill }}
           </li>
         }
@@ -94,7 +130,9 @@
     @if (notes().length) {
       <ul class="notes__list">
         @for (note of notes(); track note.at) {
-          <li>{{ note.text }} <small>{{ note.at | date: 'shortTime' }}</small></li>
+          <li>
+            {{ note.text }} <small>{{ note.at | date: 'shortTime' }}</small>
+          </li>
         }
       </ul>
     } @else {

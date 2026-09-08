@@ -19,7 +19,10 @@
 </header>
 
 @if (showBadge()) {
-  <app-card heading="Shareable badge" subtitle="Isolated in a shadow root so host styles cannot alter it">
+  <app-card
+    heading="Shareable badge"
+    subtitle="Isolated in a shadow root so host styles cannot alter it"
+  >
     <div class="badge-frame"><app-badge-widget [employee]="employee()" /></div>
   </app-card>
 }
@@ -61,8 +64,11 @@
             <div profile-banner class="banner">
               {{ employee().code }} · last reviewed by People Ops
             </div>
-            <a profile-actions class="btn btn--ghost btn--sm"
-               [routerLink]="['/departments', employee().department]">
+            <a
+              profile-actions
+              class="btn btn--ghost btn--sm"
+              [routerLink]="['/departments', employee().department]"
+            >
               View team
             </a>
             <small profile-footer class="hint">
@@ -74,10 +80,24 @@
         <aside class="side">
           <app-card heading="Contact">
             <dl class="kv">
-              <div><dt>Email</dt><dd><a [href]="'mailto:' + employee().email">{{ employee().email }}</a></dd></div>
-              <div><dt>Phone</dt><dd>{{ employee().phone }}</dd></div>
-              <div><dt>Date of birth</dt><dd>{{ employee().dateOfBirth }}</dd></div>
-              <div><dt>Gender</dt><dd>{{ employee().gender }}</dd></div>
+              <div>
+                <dt>Email</dt>
+                <dd>
+                  <a [href]="'mailto:' + employee().email">{{ employee().email }}</a>
+                </dd>
+              </div>
+              <div>
+                <dt>Phone</dt>
+                <dd>{{ employee().phone }}</dd>
+              </div>
+              <div>
+                <dt>Date of birth</dt>
+                <dd>{{ employee().dateOfBirth }}</dd>
+              </div>
+              <div>
+                <dt>Gender</dt>
+                <dd>{{ employee().gender }}</dd>
+              </div>
             </dl>
           </app-card>
 
@@ -96,23 +116,51 @@
       <div class="layout">
         <app-card heading="Employment" subtitle="Role, reporting line and compensation">
           <dl class="kv kv--wide">
-            <div><dt>Employee ID</dt><dd>{{ employee().code }}</dd></div>
-            <div><dt>Designation</dt><dd>{{ employee().title }}</dd></div>
-            <div><dt>Department</dt><dd>{{ employee().department }}</dd></div>
-            <div><dt>Employment type</dt><dd>{{ employee().employmentType }}</dd></div>
-            <div><dt>Joining date</dt><dd>{{ employee().joinedOn }}</dd></div>
-            <div><dt>Work location</dt><dd>{{ employee().location }}</dd></div>
+            <div>
+              <dt>Employee ID</dt>
+              <dd>{{ employee().code }}</dd>
+            </div>
+            <div>
+              <dt>Designation</dt>
+              <dd>{{ employee().title }}</dd>
+            </div>
+            <div>
+              <dt>Department</dt>
+              <dd>{{ employee().department }}</dd>
+            </div>
+            <div>
+              <dt>Employment type</dt>
+              <dd>{{ employee().employmentType }}</dd>
+            </div>
+            <div>
+              <dt>Joining date</dt>
+              <dd>{{ employee().joinedOn }}</dd>
+            </div>
+            <div>
+              <dt>Work location</dt>
+              <dd>{{ employee().location }}</dd>
+            </div>
             <div>
               <dt>Reporting manager</dt>
               <dd>
                 @if (manager(); as boss) {
-                  <a [routerLink]="['/employees', boss.id]">{{ boss.firstName }} {{ boss.lastName }}</a>
-                } @else { — }
+                  <a [routerLink]="['/employees', boss.id]"
+                    >{{ boss.firstName }} {{ boss.lastName }}</a
+                  >
+                } @else {
+                  —
+                }
               </dd>
             </div>
-            <div><dt>Portal access</dt><dd>{{ employee().role }}</dd></div>
+            <div>
+              <dt>Portal access</dt>
+              <dd>{{ employee().role }}</dd>
+            </div>
             @if (auth.hasRole('MANAGER')) {
-              <div><dt>Salary</dt><dd>{{ employee().salary.toLocaleString('en-US') }} USD</dd></div>
+              <div>
+                <dt>Salary</dt>
+                <dd>{{ employee().salary.toLocaleString('en-US') }} USD</dd>
+              </div>
             }
           </dl>
         </app-card>
@@ -123,7 +171,9 @@
               <ul class="mates">
                 @for (mate of teammates(); track mate.id) {
                   <li>
-                    <a [routerLink]="['/employees', mate.id]">{{ mate.firstName }} {{ mate.lastName }}</a>
+                    <a [routerLink]="['/employees', mate.id]"
+                      >{{ mate.firstName }} {{ mate.lastName }}</a
+                    >
                     <small>{{ mate.title }}</small>
                   </li>
                 }
@@ -139,16 +189,27 @@
     @case ('attendance') {
       <app-card heading="Recent attendance" subtitle="Last 10 recorded days">
         <div class="mini-tiles">
-          <span class="mini"><b>{{ attendanceSummary().present }}</b> present</span>
-          <span class="mini"><b>{{ attendanceSummary().late }}</b> late</span>
-          <span class="mini"><b>{{ attendanceSummary().absent }}</b> absent</span>
+          <span class="mini"
+            ><b>{{ attendanceSummary().present }}</b> present</span
+          >
+          <span class="mini"
+            ><b>{{ attendanceSummary().late }}</b> late</span
+          >
+          <span class="mini"
+            ><b>{{ attendanceSummary().absent }}</b> absent</span
+          >
         </div>
 
         @if (attendance().length) {
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th scope="col">Date</th><th scope="col">Check in</th><th scope="col">Check out</th><th scope="col">Status</th></tr>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Check in</th>
+                  <th scope="col">Check out</th>
+                  <th scope="col">Status</th>
+                </tr>
               </thead>
               <tbody>
                 @for (record of attendance(); track record.id) {
@@ -178,7 +239,14 @@
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th scope="col">Type</th><th scope="col">From</th><th scope="col">To</th><th scope="col" class="num">Days</th><th scope="col">Reason</th><th scope="col">Status</th></tr>
+                <tr>
+                  <th scope="col">Type</th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                  <th scope="col" class="num">Days</th>
+                  <th scope="col">Reason</th>
+                  <th scope="col">Status</th>
+                </tr>
               </thead>
               <tbody>
                 @for (request of leave(); track request.id) {
@@ -223,8 +291,13 @@
       <strong>{{ displayName() }}</strong> ({{ employee().code }}) will be removed from the
       directory. This action cannot be undone.
     </p>
-    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
-            (click)="confirmingDelete.set(false)">
+    <button
+      dialog-extra-actions
+      type="button"
+      class="btn btn--ghost"
+      appDialogClose
+      (click)="confirmingDelete.set(false)"
+    >
       Not now
     </button>
   </app-confirm-dialog>

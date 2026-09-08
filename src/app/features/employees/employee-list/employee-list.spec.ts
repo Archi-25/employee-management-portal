@@ -129,18 +129,22 @@ describe('EmployeeList', () => {
 
     (element.querySelector('.menu__trigger') as HTMLElement).click();
     await fixture.whenStable();
-    ([...element.querySelectorAll('[role="menuitem"]')].find(
-      (i) => i.textContent?.trim() === 'Remove',
-    ) as HTMLElement).click();
+    (
+      [...element.querySelectorAll('[role="menuitem"]')].find(
+        (i) => i.textContent?.trim() === 'Remove',
+      ) as HTMLElement
+    ).click();
     await fixture.whenStable();
 
     // The dialog appears; nothing is deleted yet.
     expect(element.querySelector('app-confirm-dialog')).not.toBeNull();
     expect(store.total()).toBe(before);
 
-    ([...element.querySelectorAll('button')].find(
-      (b) => b.textContent?.trim() === 'Remove' && b.classList.contains('btn--danger'),
-    ) as HTMLElement).click();
+    (
+      [...element.querySelectorAll('button')].find(
+        (b) => b.textContent?.trim() === 'Remove' && b.classList.contains('btn--danger'),
+      ) as HTMLElement
+    ).click();
     await fixture.whenStable();
 
     expect(store.total()).toBe(before - 1);

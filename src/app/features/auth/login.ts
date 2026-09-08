@@ -15,9 +15,27 @@ interface DemoAccount {
 
 /** Sign-in shortcuts, so a reviewer can switch roles without inventing details. */
 const DEMO_ACCOUNTS: readonly DemoAccount[] = [
-  { email: 'admin@acme.io', name: 'Aarav Mehta', role: 'ADMIN', employeeId: 1, blurb: 'Full access, including delete and settings' },
-  { email: 'manager@acme.io', name: 'Riya Sharma', role: 'MANAGER', employeeId: 2, blurb: 'Team, approvals and salaries' },
-  { email: 'employee@acme.io', name: 'Daniel Okafor', role: 'EMPLOYEE', employeeId: 3, blurb: 'Own profile, attendance and leave' },
+  {
+    email: 'admin@acme.io',
+    name: 'Aarav Mehta',
+    role: 'ADMIN',
+    employeeId: 1,
+    blurb: 'Full access, including delete and settings',
+  },
+  {
+    email: 'manager@acme.io',
+    name: 'Riya Sharma',
+    role: 'MANAGER',
+    employeeId: 2,
+    blurb: 'Team, approvals and salaries',
+  },
+  {
+    email: 'employee@acme.io',
+    name: 'Daniel Okafor',
+    role: 'EMPLOYEE',
+    employeeId: 3,
+    blurb: 'Own profile, attendance and leave',
+  },
 ];
 
 const MIN_PASSWORD_LENGTH = 6;
@@ -40,9 +58,7 @@ export class Login {
   protected readonly submitting = signal(false);
   protected readonly failed = signal(false);
 
-  protected readonly redirectTo = signal(
-    this.route.snapshot.queryParamMap.get('redirectTo') ?? '',
-  );
+  protected readonly redirectTo = signal(this.route.snapshot.queryParamMap.get('redirectTo') ?? '');
 
   protected readonly form = this.fb.nonNullable.group({
     email: ['admin@acme.io', [Validators.required, Validators.email]],

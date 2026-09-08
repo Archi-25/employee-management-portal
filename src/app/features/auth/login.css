@@ -1,4 +1,7 @@
-:host { display: block; position: relative; }
+:host {
+  display: block;
+  position: relative;
+}
 
 /* Two soft colour washes behind the panels, so the page is not a lone card
    floating in empty grey. Decorative only — no markup, no a11y surface. */
@@ -38,7 +41,11 @@
   align-items: center;
   min-height: calc(100dvh - 210px);
 }
-@media (max-width: 800px) { .login { grid-template-columns: 1fr; } }
+@media (max-width: 800px) {
+  .login {
+    grid-template-columns: 1fr;
+  }
+}
 
 .login__panel {
   background: var(--surface);
@@ -49,7 +56,11 @@
 }
 .login__mark {
   display: inline-block;
-  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #2f3d14));
+  background: linear-gradient(
+    140deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 72%, #2f3d14)
+  );
   color: #fff;
   box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 40%, transparent);
   font-size: 0.68rem;
@@ -59,12 +70,28 @@
   border-radius: 8px;
   margin-bottom: 0.9rem;
 }
-.login__panel h1 { margin: 0 0 0.25rem; font-size: 1.65rem; letter-spacing: -0.025em; }
-.login__lede { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.88rem; }
+.login__panel h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.65rem;
+  letter-spacing: -0.025em;
+}
+.login__lede {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
 
-form { display: grid; gap: 0.9rem; }
+form {
+  display: grid;
+  gap: 0.9rem;
+}
 
-.field { display: grid; gap: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+.field {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
 .field input {
   font: inherit;
   padding: 0.62rem 0.72rem;
@@ -73,18 +100,32 @@ form { display: grid; gap: 0.9rem; }
   background: var(--surface);
   color: var(--text);
   width: 100%;
-  transition: border-color 130ms ease, box-shadow 130ms ease;
+  transition:
+    border-color 130ms ease,
+    box-shadow 130ms ease;
 }
 .field input:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
-.field input.is-invalid { border-color: var(--danger); background: var(--danger-soft); }
-.error { color: var(--danger); font-style: normal; font-size: 0.75rem; }
+.field input.is-invalid {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+.error {
+  color: var(--danger);
+  font-style: normal;
+  font-size: 0.75rem;
+}
 
-.password { position: relative; display: block; }
-.password input { padding-right: 4rem; }
+.password {
+  position: relative;
+  display: block;
+}
+.password input {
+  padding-right: 4rem;
+}
 .password__toggle {
   position: absolute;
   right: 5px;
@@ -100,9 +141,18 @@ form { display: grid; gap: 0.9rem; }
   padding: 0.3rem 0.45rem;
 }
 
-.remember { display: flex; align-items: center; gap: 0.5rem; font-size: 0.83rem; }
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.83rem;
+}
 
-.btn--block { width: 100%; padding: 0.65rem 0.9rem; font-size: 0.9rem; }
+.btn--block {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+}
 
 .alert {
   margin: 0;
@@ -120,9 +170,22 @@ form { display: grid; gap: 0.9rem; }
   border-radius: var(--radius-lg);
   padding: 1.25rem;
 }
-.login__demo h2 { margin: 0 0 0.3rem; font-size: 0.95rem; }
-.login__demo > p { margin: 0 0 0.9rem; font-size: 0.8rem; color: var(--muted); }
-.login__demo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.login__demo h2 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+.login__demo > p {
+  margin: 0 0 0.9rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.login__demo ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
 .login__demo button {
   width: 100%;
   display: grid;
@@ -136,15 +199,32 @@ form { display: grid; gap: 0.9rem; }
   color: inherit;
   cursor: pointer;
 }
-.login__demo button { transition: border-color 130ms ease, box-shadow 130ms ease, transform 130ms ease; }
+.login__demo button {
+  transition:
+    border-color 130ms ease,
+    box-shadow 130ms ease,
+    transform 130ms ease;
+}
 .login__demo button:hover {
   border-color: var(--accent);
   box-shadow: var(--shadow-1);
   transform: translateY(-1px);
 }
 @media (prefers-reduced-motion: reduce) {
-  .login__demo button:hover { transform: none; }
+  .login__demo button:hover {
+    transform: none;
+  }
 }
-.login__demo strong { font-size: 0.72rem; letter-spacing: 0.05em; color: var(--accent); }
-.login__demo .email { font-size: 0.83rem; font-weight: 500; }
-.login__demo small { font-size: 0.74rem; color: var(--muted); }
+.login__demo strong {
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+.login__demo .email {
+  font-size: 0.83rem;
+  font-weight: 500;
+}
+.login__demo small {
+  font-size: 0.74rem;
+  color: var(--muted);
+}

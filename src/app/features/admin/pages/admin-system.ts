@@ -20,7 +20,11 @@ import { FeatureFlagDirective } from '@shared/directives/feature-flag.directive'
   template: `
     <div class="tiles">
       <app-stat-tile label="Requests" [value]="profiling.requestCount()" accent="var(--accent)" />
-      <app-stat-tile label="Average latency" [value]="profiling.averageMs() + ' ms'" accent="var(--accent)" />
+      <app-stat-tile
+        label="Average latency"
+        [value]="profiling.averageMs() + ' ms'"
+        accent="var(--accent)"
+      />
       <app-stat-tile
         label="Cache hits"
         [value]="profiling.cacheHits()"
@@ -45,10 +49,24 @@ import { FeatureFlagDirective } from '@shared/directives/feature-flag.directive'
       </div>
 
       <dl class="kv">
-        <div><dt>API base</dt><dd><code>{{ config.apiBaseUrl }}</code></dd></div>
-        <div><dt>Cache TTL</dt><dd>{{ config.httpCacheTtlMs }} ms</dd></div>
-        <div><dt>Page size</dt><dd>{{ config.defaultPageSize }}</dd></div>
-        <div><dt>Signed in as</dt><dd>{{ auth.displayName() }} ({{ auth.role() }})</dd></div>
+        <div>
+          <dt>API base</dt>
+          <dd>
+            <code>{{ config.apiBaseUrl }}</code>
+          </dd>
+        </div>
+        <div>
+          <dt>Cache TTL</dt>
+          <dd>{{ config.httpCacheTtlMs }} ms</dd>
+        </div>
+        <div>
+          <dt>Page size</dt>
+          <dd>{{ config.defaultPageSize }}</dd>
+        </div>
+        <div>
+          <dt>Signed in as</dt>
+          <dd>{{ auth.displayName() }} ({{ auth.role() }})</dd>
+        </div>
       </dl>
     </app-card>
 
@@ -57,14 +75,24 @@ import { FeatureFlagDirective } from '@shared/directives/feature-flag.directive'
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>Time</th><th>Method</th><th>Endpoint</th><th>Status</th><th class="num">Duration</th></tr>
+              <tr>
+                <th>Time</th>
+                <th>Method</th>
+                <th>Endpoint</th>
+                <th>Status</th>
+                <th class="num">Duration</th>
+              </tr>
             </thead>
             <tbody>
               @for (timing of profiling.timings(); track timing.id) {
-                <tr [class.is-cache]="timing.status === 'CACHE'"
-                    [class.is-error]="timing.status === 'ERROR'">
+                <tr
+                  [class.is-cache]="timing.status === 'CACHE'"
+                  [class.is-error]="timing.status === 'ERROR'"
+                >
                   <td>{{ timing.at | date: 'HH:mm:ss' }}</td>
-                  <td><code>{{ timing.method }}</code></td>
+                  <td>
+                    <code>{{ timing.method }}</code>
+                  </td>
                   <td class="url">{{ timing.url }}</td>
                   <td>{{ timing.status }}</td>
                   <td class="num">{{ timing.durationMs }} ms</td>
@@ -79,20 +107,71 @@ import { FeatureFlagDirective } from '@shared/directives/feature-flag.directive'
     </app-card>
   `,
   styles: `
-    :host { display: block; display: grid; gap: 1rem; }
-    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
-    .kv { margin: 0; display: grid; gap: 0.4rem; }
-    .kv div { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; }
-    .kv dt { color: var(--muted); }
-    .kv dd { margin: 0; font-weight: 600; }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    th, td { text-align: left; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border); }
-    th { color: var(--muted); font-weight: 500; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .url { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .num { text-align: right; font-variant-numeric: tabular-nums; }
-    tr.is-cache { background: #f0fdf4; }
-    tr.is-error { background: #fef2f2; }
+    :host {
+      display: block;
+      display: grid;
+      gap: 1rem;
+    }
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+    .kv {
+      margin: 0;
+      display: grid;
+      gap: 0.4rem;
+    }
+    .kv div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+    .kv dt {
+      color: var(--muted);
+    }
+    .kv dd {
+      margin: 0;
+      font-weight: 600;
+    }
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    th,
+    td {
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .url {
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    tr.is-cache {
+      background: #f0fdf4;
+    }
+    tr.is-error {
+      background: #fef2f2;
+    }
   `,
 })
 export class AdminSystem {

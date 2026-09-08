@@ -1,8 +1,6 @@
 <header class="page-head">
   <h1 i18n="@@attendance.title">Attendance</h1>
-  <p i18n="@@attendance.subtitle">
-    Daily check-in and check-out records for the organisation.
-  </p>
+  <p i18n="@@attendance.subtitle">Daily check-in and check-out records for the organisation.</p>
 </header>
 
 <div class="tiles">
@@ -14,7 +12,8 @@
     label="Attendance rate"
     [value]="store.attendanceRate() + '%'"
     hint="present or late"
-    accent="var(--accent)" />
+    accent="var(--accent)"
+  />
 </div>
 
 <app-card heading="Filters" subtitle="Pick a date, then narrow the list">

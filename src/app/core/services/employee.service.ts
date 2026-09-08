@@ -43,9 +43,7 @@ export class EmployeeService {
       params = params.set('status', filters.status);
     }
 
-    return this.http
-      .get<Page<Employee>>(this.baseUrl, { params })
-      .pipe(map((page) => page.items));
+    return this.http.get<Page<Employee>>(this.baseUrl, { params }).pipe(map((page) => page.items));
   }
 
   getById(id: number): Observable<Employee> {
@@ -116,10 +114,7 @@ export class EmployeeService {
    * MODULE 6 — an explicit `Observer` object (next/error/complete) rather than
    * three positional callbacks. Returns the teardown so callers can cancel.
    */
-  watchStatusChanges(
-    observer: Observer<EmployeeStatus>,
-    stop: Observable<unknown>,
-  ): () => void {
+  watchStatusChanges(observer: Observer<EmployeeStatus>, stop: Observable<unknown>): () => void {
     const cycle: EmployeeStatus[] = ['ACTIVE', 'ON_LEAVE', 'PROBATION', 'EXITED'];
     const subscription = timer(0, 900)
       .pipe(

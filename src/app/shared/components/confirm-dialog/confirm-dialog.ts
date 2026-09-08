@@ -26,12 +26,7 @@ import { DialogRef } from './dialog-ref';
     <!-- A real button so the backdrop is keyboard-reachable, not just clickable. -->
     <button type="button" class="backdrop" aria-label="Close dialog" (click)="cancel()"></button>
 
-    <div
-      class="dialog"
-      role="dialog"
-      aria-modal="true"
-      [attr.aria-label]="heading()"
-    >
+    <div class="dialog" role="dialog" aria-modal="true" [attr.aria-label]="heading()">
       <h2 class="dialog__title">{{ heading() }}</h2>
 
       <div class="dialog__body">

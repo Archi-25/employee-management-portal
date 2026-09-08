@@ -81,9 +81,7 @@ export const EmployeeStore = signalStore(
     onLeaveCount: computed(
       () => employees().filter((employee) => employee.status === 'ON_LEAVE').length,
     ),
-    payrollTotal: computed(() =>
-      employees().reduce((sum, employee) => sum + employee.salary, 0),
-    ),
+    payrollTotal: computed(() => employees().reduce((sum, employee) => sum + employee.salary, 0)),
     /** Everyone who joined in the last 90 days. */
     recentJoiners: computed(() => {
       const cutoff = new Date();

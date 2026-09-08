@@ -314,9 +314,7 @@ function handleDocuments(
 ): Observable<HttpResponse<unknown>> | null {
   if (path === '/api/documents' && req.method === 'GET') {
     const employeeId = req.params.get('employeeId');
-    return page(
-      db.documents.filter((doc) => !employeeId || doc.employeeId === Number(employeeId)),
-    );
+    return page(db.documents.filter((doc) => !employeeId || doc.employeeId === Number(employeeId)));
   }
 
   if (path === '/api/documents' && req.method === 'POST') {

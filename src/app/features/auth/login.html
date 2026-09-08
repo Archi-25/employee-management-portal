@@ -24,8 +24,11 @@
         />
         @if (showError('email')) {
           <em class="error">
-            @if (form.controls.email.hasError('required')) { Email is required. }
-            @else { Enter a valid email address. }
+            @if (form.controls.email.hasError('required')) {
+              Email is required.
+            } @else {
+              Enter a valid email address.
+            }
           </em>
         }
       </label>
@@ -51,8 +54,11 @@
         </span>
         @if (showError('password')) {
           <em class="error">
-            @if (form.controls.password.hasError('required')) { Password is required. }
-            @else { Use at least 6 characters. }
+            @if (form.controls.password.hasError('required')) {
+              Password is required.
+            } @else {
+              Use at least 6 characters.
+            }
           </em>
         }
       </label>
@@ -67,7 +73,9 @@
       </button>
 
       @if (redirectTo()) {
-        <p class="hint">You will return to <code>{{ redirectTo() }}</code> afterwards.</p>
+        <p class="hint">
+          You will return to <code>{{ redirectTo() }}</code> afterwards.
+        </p>
       }
     </form>
   </section>

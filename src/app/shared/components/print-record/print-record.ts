@@ -22,12 +22,30 @@ import { Employee, fullName } from '@core/models/employee.model';
       </header>
 
       <dl class="print-record__facts">
-        <div><dt>Employee ID</dt><dd>#{{ employee().id }}</dd></div>
-        <div><dt>Email</dt><dd>{{ employee().email }}</dd></div>
-        <div><dt>Location</dt><dd>{{ employee().location }}</dd></div>
-        <div><dt>Status</dt><dd>{{ employee().status }}</dd></div>
-        <div><dt>Joined</dt><dd>{{ employee().joinedOn }}</dd></div>
-        <div><dt>Skills</dt><dd>{{ employee().skills.join(', ') || '—' }}</dd></div>
+        <div>
+          <dt>Employee ID</dt>
+          <dd>#{{ employee().id }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>{{ employee().email }}</dd>
+        </div>
+        <div>
+          <dt>Location</dt>
+          <dd>{{ employee().location }}</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>{{ employee().status }}</dd>
+        </div>
+        <div>
+          <dt>Joined</dt>
+          <dd>{{ employee().joinedOn }}</dd>
+        </div>
+        <div>
+          <dt>Skills</dt>
+          <dd>{{ employee().skills.join(', ') || '—' }}</dd>
+        </div>
       </dl>
 
       <footer class="print-record__foot">
@@ -57,12 +75,34 @@ import { Employee, fullName } from '@core/models/employee.model';
       padding: 1rem 1.1rem;
       background: var(--surface);
     }
-    .print-record__head h1 { margin: 0; font-size: 1.2rem; }
-    .print-record__head p { margin: 0.2rem 0 0.9rem; color: var(--muted); font-size: 0.85rem; }
-    .print-record__facts { display: grid; gap: 0.4rem; margin: 0; }
-    .print-record__facts div { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; }
-    .print-record__facts dt { color: var(--muted); }
-    .print-record__facts dd { margin: 0; font-weight: 600; text-align: right; }
+    .print-record__head h1 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .print-record__head p {
+      margin: 0.2rem 0 0.9rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .print-record__facts {
+      display: grid;
+      gap: 0.4rem;
+      margin: 0;
+    }
+    .print-record__facts div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+    .print-record__facts dt {
+      color: var(--muted);
+    }
+    .print-record__facts dd {
+      margin: 0;
+      font-weight: 600;
+      text-align: right;
+    }
     .print-record__foot {
       margin-top: 1rem;
       padding-top: 0.6rem;

@@ -38,8 +38,11 @@ export interface BarDatum {
             >
               <span class="bar__label" [title]="item.label">{{ item.label }}</span>
 
-              <span class="bar__track" role="img"
-                    [attr.aria-label]="item.label + ': ' + item.value + ' ' + unit()">
+              <span
+                class="bar__track"
+                role="img"
+                [attr.aria-label]="item.label + ': ' + item.value + ' ' + unit()"
+              >
                 <span class="bar__fill" [style.width.%]="percent(item.value)"></span>
               </span>
 
@@ -51,13 +54,23 @@ export interface BarDatum {
         <details class="table-view">
           <summary>View as table</summary>
           <table>
-            <caption class="sr-only">{{ caption() }}</caption>
+            <caption class="sr-only">
+              {{
+                caption()
+              }}
+            </caption>
             <thead>
-              <tr><th scope="col">{{ categoryLabel() }}</th><th scope="col">{{ unit() }}</th></tr>
+              <tr>
+                <th scope="col">{{ categoryLabel() }}</th>
+                <th scope="col">{{ unit() }}</th>
+              </tr>
             </thead>
             <tbody>
               @for (item of data(); track item.label) {
-                <tr><th scope="row">{{ item.label }}</th><td>{{ item.value }}</td></tr>
+                <tr>
+                  <th scope="row">{{ item.label }}</th>
+                  <td>{{ item.value }}</td>
+                </tr>
               }
             </tbody>
           </table>

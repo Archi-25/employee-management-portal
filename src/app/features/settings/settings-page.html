@@ -1,8 +1,6 @@
 <header class="page-head">
   <h1 i18n="@@settings.title">Profile &amp; settings</h1>
-  <p i18n="@@settings.subtitle">
-    Your account, appearance and company information.
-  </p>
+  <p i18n="@@settings.subtitle">Your account, appearance and company information.</p>
 </header>
 
 <div class="grid">
@@ -23,11 +21,23 @@
     </div>
 
     <dl class="kv">
-      <div><dt>Access level</dt><dd>{{ auth.role() }}</dd></div>
+      <div>
+        <dt>Access level</dt>
+        <dd>{{ auth.role() }}</dd>
+      </div>
       @if (me(); as record) {
-        <div><dt>Phone</dt><dd>{{ record.phone }}</dd></div>
-        <div><dt>Work location</dt><dd>{{ record.location }}</dd></div>
-        <div><dt>Joined</dt><dd>{{ record.joinedOn }}</dd></div>
+        <div>
+          <dt>Phone</dt>
+          <dd>{{ record.phone }}</dd>
+        </div>
+        <div>
+          <dt>Work location</dt>
+          <dd>{{ record.location }}</dd>
+        </div>
+        <div>
+          <dt>Joined</dt>
+          <dd>{{ record.joinedOn }}</dd>
+        </div>
       }
     </dl>
   </app-card>
@@ -36,8 +46,12 @@
     <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="form" novalidate>
       <label class="field">
         <span>Current password</span>
-        <input formControlName="currentPassword" type="password" autocomplete="current-password"
-               [class.is-invalid]="showError('currentPassword')" />
+        <input
+          formControlName="currentPassword"
+          type="password"
+          autocomplete="current-password"
+          [class.is-invalid]="showError('currentPassword')"
+        />
         @if (showError('currentPassword')) {
           <em class="error">Enter your current password.</em>
         }
@@ -45,8 +59,12 @@
 
       <label class="field">
         <span>New password</span>
-        <input formControlName="nextPassword" type="password" autocomplete="new-password"
-               [class.is-invalid]="showError('nextPassword')" />
+        <input
+          formControlName="nextPassword"
+          type="password"
+          autocomplete="new-password"
+          [class.is-invalid]="showError('nextPassword')"
+        />
         @if (showError('nextPassword')) {
           <em class="error">Use at least 8 characters.</em>
         }
@@ -54,8 +72,12 @@
 
       <label class="field">
         <span>Confirm new password</span>
-        <input formControlName="confirmPassword" type="password" autocomplete="new-password"
-               [class.is-invalid]="showError('confirmPassword')" />
+        <input
+          formControlName="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          [class.is-invalid]="showError('confirmPassword')"
+        />
         @if (passwordForm.hasError('mismatch') && passwordForm.controls.confirmPassword.touched) {
           <em class="error">The two passwords do not match.</em>
         }
@@ -90,10 +112,24 @@
 
   <app-card heading="Company" subtitle="Read-only in this build">
     <dl class="kv">
-      <div><dt>Organisation</dt><dd>Acme Corporation</dd></div>
-      <div><dt>Portal</dt><dd>{{ config.appName }}</dd></div>
-      <div><dt>API base</dt><dd><code>{{ config.apiBaseUrl }}</code></dd></div>
-      <div><dt>Rows per page</dt><dd>{{ config.defaultPageSize }}</dd></div>
+      <div>
+        <dt>Organisation</dt>
+        <dd>Acme Corporation</dd>
+      </div>
+      <div>
+        <dt>Portal</dt>
+        <dd>{{ config.appName }}</dd>
+      </div>
+      <div>
+        <dt>API base</dt>
+        <dd>
+          <code>{{ config.apiBaseUrl }}</code>
+        </dd>
+      </div>
+      <div>
+        <dt>Rows per page</dt>
+        <dd>{{ config.defaultPageSize }}</dd>
+      </div>
     </dl>
 
     <p *appHasRole="'ADMIN'" class="hint">
@@ -101,5 +137,4 @@
       <a routerLink="/admin/settings">Admin &rsaquo; Settings</a>.
     </p>
   </app-card>
-
 </div>

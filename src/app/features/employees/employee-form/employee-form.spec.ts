@@ -33,8 +33,7 @@ describe('EmployeeForm', () => {
   }
 
   /** The form is `protected`, so reach it through a narrow structural cast. */
-  const form = (): FormGroup =>
-    (fixture.componentInstance as unknown as { form: FormGroup }).form;
+  const form = (): FormGroup => (fixture.componentInstance as unknown as { form: FormGroup }).form;
   const control = (name: string): AbstractControl => form().controls[name];
 
   const validValues = {

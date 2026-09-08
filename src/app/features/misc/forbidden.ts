@@ -10,8 +10,8 @@ import { Card } from '@shared/components/card/card';
   template: `
     <app-card heading="403 — Not permitted" subtitle="A route guard rejected the navigation">
       <p>
-        You are signed in as <strong>{{ auth.role() }}</strong>. Raise your role from the header
-        switcher or the settings page, then try again.
+        You are signed in as <strong>{{ auth.role() }}</strong
+        >. Raise your role from the header switcher or the settings page, then try again.
       </p>
       <div card-footer class="row">
         <a class="btn" routerLink="/dashboard">Back to dashboard</a>

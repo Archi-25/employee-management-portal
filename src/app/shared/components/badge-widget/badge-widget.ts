@@ -26,7 +26,9 @@ import { Employee, fullName } from '@core/models/employee.model';
     </div>
   `,
   styles: `
-    :host { display: block; }
+    :host {
+      display: block;
+    }
     .badge {
       display: flex;
       align-items: center;
@@ -50,11 +52,26 @@ import { Employee, fullName } from '@core/models/employee.model';
       font-size: 0.78rem;
       flex: none;
     }
-    .badge__text { display: grid; flex: 1; min-width: 0; }
-    .badge__text strong { font-size: 0.9rem; }
-    .badge__text small { font-size: 0.74rem; color: #64748b; }
-    .badge__dept { font-style: italic; }
-    .badge__id { font-size: 0.7rem; color: #94a3b8; font-variant-numeric: tabular-nums; }
+    .badge__text {
+      display: grid;
+      flex: 1;
+      min-width: 0;
+    }
+    .badge__text strong {
+      font-size: 0.9rem;
+    }
+    .badge__text small {
+      font-size: 0.74rem;
+      color: #64748b;
+    }
+    .badge__dept {
+      font-style: italic;
+    }
+    .badge__id {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-variant-numeric: tabular-nums;
+    }
   `,
 })
 export class BadgeWidget {

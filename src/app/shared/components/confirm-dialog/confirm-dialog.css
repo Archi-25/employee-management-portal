@@ -1,4 +1,6 @@
-:host { display: contents; }
+:host {
+  display: contents;
+}
 .backdrop {
   position: fixed;
   inset: 0;
@@ -21,9 +23,17 @@
   padding: 1.25rem;
   box-shadow: 0 20px 50px rgb(15 23 42 / 30%);
 }
-.dialog__title { margin: 0 0 0.6rem; font-size: 1.05rem; }
-.dialog__body { font-size: 0.88rem; color: var(--muted); }
-.dialog__body p { margin: 0; }
+.dialog__title {
+  margin: 0 0 0.6rem;
+  font-size: 1.05rem;
+}
+.dialog__body {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.dialog__body p {
+  margin: 0;
+}
 .dialog__actions {
   display: flex;
   justify-content: flex-end;

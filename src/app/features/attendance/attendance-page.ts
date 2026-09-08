@@ -1,5 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { fullName } from '@core/models/employee.model';
 import { ATTENDANCE_STATUSES, AttendanceStatus } from '@core/models/hr.model';
@@ -55,8 +62,10 @@ export class AttendancePage {
     }
     return scoped.filter((record) => {
       const employee = this.employees.byId(record.employeeId);
-      return employee ? fullName(employee).toLowerCase().includes(term) ||
-        employee.code.toLowerCase().includes(term) : false;
+      return employee
+        ? fullName(employee).toLowerCase().includes(term) ||
+            employee.code.toLowerCase().includes(term)
+        : false;
     });
   });
 

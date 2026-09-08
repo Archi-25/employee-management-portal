@@ -21,8 +21,7 @@ export const EMPLOYEE_ROUTES: Routes = [
     path: ':id',
     title: 'Employee profile',
     resolve: { employee: employeeResolver },
-    loadComponent: () =>
-      import('./employee-detail/employee-detail').then((m) => m.EmployeeDetail),
+    loadComponent: () => import('./employee-detail/employee-detail').then((m) => m.EmployeeDetail),
   },
   {
     path: ':id/edit',

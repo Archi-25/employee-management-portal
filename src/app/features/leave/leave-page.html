@@ -1,9 +1,7 @@
 <header class="page-head leave-head">
   <div>
     <h1 i18n="@@leave.title">Leave</h1>
-    <p i18n="@@leave.subtitle">
-      Balances, requests and approvals.
-    </p>
+    <p i18n="@@leave.subtitle">Balances, requests and approvals.</p>
   </div>
   @if (me()) {
     <button type="button" class="btn" (click)="showForm.set(!showForm())">
@@ -14,10 +12,30 @@
 
 @if (myBalance(); as balance) {
   <div class="tiles">
-    <app-stat-tile label="Annual leave" [value]="balance.annual" hint="days remaining" accent="var(--accent)" />
-    <app-stat-tile label="Sick leave" [value]="balance.sick" hint="days remaining" accent="var(--accent)" />
-    <app-stat-tile label="Casual leave" [value]="balance.casual" hint="days remaining" accent="var(--accent)" />
-    <app-stat-tile label="Pending" [value]="store.pendingCount()" hint="awaiting decision" accent="var(--warning)" />
+    <app-stat-tile
+      label="Annual leave"
+      [value]="balance.annual"
+      hint="days remaining"
+      accent="var(--accent)"
+    />
+    <app-stat-tile
+      label="Sick leave"
+      [value]="balance.sick"
+      hint="days remaining"
+      accent="var(--accent)"
+    />
+    <app-stat-tile
+      label="Casual leave"
+      [value]="balance.casual"
+      hint="days remaining"
+      accent="var(--accent)"
+    />
+    <app-stat-tile
+      label="Pending"
+      [value]="store.pendingCount()"
+      hint="awaiting decision"
+      accent="var(--warning)"
+    />
   </div>
 }
 
@@ -36,7 +54,9 @@
       <label class="field">
         <span>From</span>
         <input formControlName="from" type="date" [class.is-invalid]="showError('from')" />
-        @if (showError('from')) { <em class="error">A start date is required.</em> }
+        @if (showError('from')) {
+          <em class="error">A start date is required.</em>
+        }
       </label>
 
       <label class="field">
@@ -44,16 +64,22 @@
         <input formControlName="to" type="date" [class.is-invalid]="showError('to')" />
         @if (showError('to')) {
           <em class="error">
-            @if (form.controls.to.hasError('range')) { The end date must be on or after the start date. }
-            @else { An end date is required. }
+            @if (form.controls.to.hasError('range')) {
+              The end date must be on or after the start date.
+            } @else {
+              An end date is required.
+            }
           </em>
         }
       </label>
 
       <label class="field field--wide">
         <span>Reason</span>
-        <input formControlName="reason" placeholder="Give your manager some context"
-               [class.is-invalid]="showError('reason')" />
+        <input
+          formControlName="reason"
+          placeholder="Give your manager some context"
+          [class.is-invalid]="showError('reason')"
+        />
         @if (showError('reason')) {
           <em class="error">Give a reason of at least 8 characters.</em>
         }
@@ -75,8 +101,12 @@
   [subtitle]="rows().length + ' request(s)'"
 >
   <div card-actions>
-    <select class="filter" [value]="store.status()" (change)="onStatusFilter($any($event.target).value)"
-            aria-label="Filter by status">
+    <select
+      class="filter"
+      [value]="store.status()"
+      (change)="onStatusFilter($any($event.target).value)"
+      aria-label="Filter by status"
+    >
       <option value="ALL">All statuses</option>
       <option value="PENDING">Pending</option>
       <option value="APPROVED">Approved</option>
@@ -93,7 +123,9 @@
       <table>
         <thead>
           <tr>
-            @if (auth.hasRole('MANAGER')) { <th scope="col">Employee</th> }
+            @if (auth.hasRole('MANAGER')) {
+              <th scope="col">Employee</th>
+            }
             <th scope="col">Type</th>
             <th scope="col">From</th>
             <th scope="col">To</th>
@@ -109,7 +141,10 @@
               @if (auth.hasRole('MANAGER')) {
                 <td>
                   <a class="person" [routerLink]="['/employees', request.employeeId]">
-                    <span class="person__avatar" [style.background]="avatarColor(request.employeeId)">
+                    <span
+                      class="person__avatar"
+                      [style.background]="avatarColor(request.employeeId)"
+                    >
                       {{ employeeName(request.employeeId) | initials }}
                     </span>
                     <strong>{{ employeeName(request.employeeId) }}</strong>
@@ -135,8 +170,11 @@
                     <button type="button" class="btn btn--sm" (click)="approve(request)">
                       Approve
                     </button>
-                    <button type="button" class="btn btn--ghost btn--sm"
-                            (click)="rejecting.set(request)">
+                    <button
+                      type="button"
+                      class="btn btn--ghost btn--sm"
+                      (click)="rejecting.set(request)"
+                    >
                       Reject
                     </button>
                   </span>
@@ -161,8 +199,13 @@
       {{ employeeName(request.employeeId) }}'s {{ request.days }}-day
       {{ request.type.toLowerCase() }} leave will be rejected. They will be notified.
     </p>
-    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
-            (click)="rejecting.set(null)">
+    <button
+      dialog-extra-actions
+      type="button"
+      class="btn btn--ghost"
+      appDialogClose
+      (click)="rejecting.set(null)"
+    >
       Not now
     </button>
   </app-confirm-dialog>

@@ -1,17 +1,38 @@
-:host { display: block; }
-.form-head .back { font-size: 0.8rem; text-decoration: none; }
-.form-head .back:hover { text-decoration: underline; }
+:host {
+  display: block;
+}
+.form-head .back {
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+.form-head .back:hover {
+  text-decoration: underline;
+}
 
-form { display: grid; gap: 1rem; }
+form {
+  display: grid;
+  gap: 1rem;
+}
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 0.9rem;
 }
-.field { display: grid; gap: 0.3rem; font-size: 0.8rem; color: var(--muted); align-content: start; }
-.field--wide { grid-column: 1 / -1; }
-.field > span b { color: var(--danger); font-weight: 700; }
+.field {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  align-content: start;
+}
+.field--wide {
+  grid-column: 1 / -1;
+}
+.field > span b {
+  color: var(--danger);
+  font-weight: 700;
+}
 .field input,
 .field select {
   font: inherit;
@@ -21,13 +42,29 @@ form { display: grid; gap: 1rem; }
   background: var(--surface);
   color: var(--text);
 }
-.field input:disabled { background: var(--surface-2); color: var(--muted); }
+.field input:disabled {
+  background: var(--surface-2);
+  color: var(--muted);
+}
 .field input:focus-visible,
-.field select:focus-visible { border-color: var(--accent); }
-.field input.is-invalid { border-color: var(--danger); background: var(--danger-soft); }
+.field select:focus-visible {
+  border-color: var(--accent);
+}
+.field input.is-invalid {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
 
-.error { color: var(--danger); font-style: normal; font-size: 0.75rem; }
-.hint-inline { color: var(--muted); font-style: normal; font-size: 0.72rem; }
+.error {
+  color: var(--danger);
+  font-style: normal;
+  font-size: 0.75rem;
+}
+.hint-inline {
+  color: var(--muted);
+  font-style: normal;
+  font-size: 0.72rem;
+}
 
 .form-actions {
   position: sticky;

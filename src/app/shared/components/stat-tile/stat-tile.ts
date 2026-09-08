@@ -30,7 +30,9 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
       gap: 0.15rem;
       overflow: hidden;
       box-shadow: var(--shadow-1);
-      transition: box-shadow 140ms ease, transform 140ms ease;
+      transition:
+        box-shadow 140ms ease,
+        transform 140ms ease;
     }
     /* Accent rail as a pseudo-element, so it follows the border radius. */
     .tile::before {
@@ -66,7 +68,9 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
       padding-top: 0.25rem;
     }
     @media (prefers-reduced-motion: reduce) {
-      .tile:hover { transform: none; }
+      .tile:hover {
+        transform: none;
+      }
     }
   `,
 })

@@ -1,5 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observer, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -60,27 +67,33 @@ export class Dashboard implements OnDestroy {
     this.store.recentJoiners().slice(0, RECENT_LIMIT),
   );
 
-  protected readonly birthdays = computed(() => this.store.upcomingBirthdays().slice(0, RECENT_LIMIT));
+  protected readonly birthdays = computed(() =>
+    this.store.upcomingBirthdays().slice(0, RECENT_LIMIT),
+  );
 
   /** Newest activity across leave and joiners, as a single feed. */
   protected readonly activity = computed(() => {
-    const fromLeave = this.leave.requests().slice(0, 4).map((request) => ({
-      id: `leave-${request.id}`,
-      at: request.appliedOn,
-      text: `${this.nameOf(request.employeeId)} requested ${request.days} day(s) of ${request.type.toLowerCase()} leave`,
-      status: request.status,
-    }));
+    const fromLeave = this.leave
+      .requests()
+      .slice(0, 4)
+      .map((request) => ({
+        id: `leave-${request.id}`,
+        at: request.appliedOn,
+        text: `${this.nameOf(request.employeeId)} requested ${request.days} day(s) of ${request.type.toLowerCase()} leave`,
+        status: request.status,
+      }));
 
-    const fromJoiners = this.store.recentJoiners().slice(0, 3).map((employee) => ({
-      id: `joiner-${employee.id}`,
-      at: employee.joinedOn,
-      text: `${employee.firstName} ${employee.lastName} joined ${employee.department}`,
-      status: 'JOINED' as const,
-    }));
+    const fromJoiners = this.store
+      .recentJoiners()
+      .slice(0, 3)
+      .map((employee) => ({
+        id: `joiner-${employee.id}`,
+        at: employee.joinedOn,
+        text: `${employee.firstName} ${employee.lastName} joined ${employee.department}`,
+        status: 'JOINED' as const,
+      }));
 
-    return [...fromLeave, ...fromJoiners]
-      .sort((a, b) => b.at.localeCompare(a.at))
-      .slice(0, 6);
+    return [...fromLeave, ...fromJoiners].sort((a, b) => b.at.localeCompare(a.at)).slice(0, 6);
   });
 
   constructor() {

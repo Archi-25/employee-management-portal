@@ -1,12 +1,40 @@
-:host { display: block; }
-.leave-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-app-card + app-card { display: block; margin-top: 1rem; }
+:host {
+  display: block;
+}
+.leave-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+app-card + app-card {
+  display: block;
+  margin-top: 1rem;
+}
 
-.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; }
-.field { display: grid; gap: 0.3rem; font-size: 0.8rem; color: var(--muted); }
-.field--wide { grid-column: 1 / -1; }
-.field input, .field select {
+.form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem;
+}
+.field {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.field--wide {
+  grid-column: 1 / -1;
+}
+.field input,
+.field select {
   font: inherit;
   padding: 0.45rem 0.55rem;
   border: 1px solid var(--border);
@@ -14,9 +42,22 @@ app-card + app-card { display: block; margin-top: 1rem; }
   background: var(--surface);
   color: var(--text);
 }
-.field input.is-invalid { border-color: var(--danger); background: var(--danger-soft); }
-.error { color: var(--danger); font-style: normal; font-size: 0.75rem; }
-.form__actions { grid-column: 1 / -1; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.field input.is-invalid {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+.error {
+  color: var(--danger);
+  font-style: normal;
+  font-size: 0.75rem;
+}
+.form__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
 .filter {
   font: inherit;
@@ -28,20 +69,73 @@ app-card + app-card { display: block; margin-top: 1rem; }
   color: var(--text);
 }
 
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; }
-tbody tr:hover { background: var(--surface-2); }
-.num { text-align: right; font-variant-numeric: tabular-nums; }
-.reason { max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); }
-.by { display: block; margin-top: 0.15rem; font-size: 0.68rem; color: var(--muted); }
-.actions { white-space: nowrap; }
-
-.person { display: inline-flex; align-items: center; gap: 0.45rem; text-decoration: none; color: inherit; }
-.person__avatar {
-  width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center;
-  color: #fff; font-size: 0.6rem; font-weight: 700; flex: none;
+.table-wrap {
+  overflow-x: auto;
 }
-.person strong { font-size: 0.84rem; }
-.person:hover strong { text-decoration: underline; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+th,
+td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 500;
+}
+tbody tr:hover {
+  background: var(--surface-2);
+}
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.reason {
+  max-width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.by {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.actions {
+  white-space: nowrap;
+}
+
+.person {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: inherit;
+}
+.person__avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  flex: none;
+}
+.person strong {
+  font-size: 0.84rem;
+}
+.person:hover strong {
+  text-decoration: underline;
+}

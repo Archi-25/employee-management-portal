@@ -21,7 +21,7 @@ function baseProviders() {
 @Component({
   imports: [HasRoleDirective],
   template: `
-    <p *appHasRole="'ADMIN'; else: fallback" id="granted">admin only</p>
+    <p *appHasRole="'ADMIN'; else fallback" id="granted">admin only</p>
     <ng-template #fallback><p id="denied">denied</p></ng-template>
   `,
 })

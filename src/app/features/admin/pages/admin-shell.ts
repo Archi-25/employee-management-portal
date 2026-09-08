@@ -16,9 +16,7 @@ import { Logger } from '@core/tokens/logger.token';
   template: `
     <header class="page-head">
       <h1 i18n="@@admin.title">Administration</h1>
-      <p i18n="@@admin.subtitle">
-        Organisation settings, announcements and system health.
-      </p>
+      <p i18n="@@admin.subtitle">Organisation settings, announcements and system health.</p>
     </header>
 
     <nav class="subnav">
@@ -37,7 +35,9 @@ import { Logger } from '@core/tokens/logger.token';
     <router-outlet />
   `,
   styles: `
-    :host { display: block; }
+    :host {
+      display: block;
+    }
     .subnav {
       display: flex;
       gap: 0.35rem;
@@ -54,10 +54,21 @@ import { Logger } from '@core/tokens/logger.token';
       text-decoration: none;
       color: var(--muted);
     }
-    .subnav a:hover { background: var(--surface-2); color: var(--text); }
-    .subnav a.is-active { background: var(--accent); color: #fff; }
-    .spacer { flex: 1; }
-    .flags { font-size: 0.75rem; color: var(--muted); }
+    .subnav a:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+    .subnav a.is-active {
+      background: var(--accent);
+      color: #fff;
+    }
+    .spacer {
+      flex: 1;
+    }
+    .flags {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
   `,
 })
 export class AdminShell {

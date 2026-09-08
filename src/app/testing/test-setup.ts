@@ -5,7 +5,10 @@ import { provideRouter } from '@angular/router';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { cacheInterceptor, clearHttpCache } from '@core/interceptors/cache.interceptor';
 import { errorInterceptor } from '@core/interceptors/error.interceptor';
-import { mockBackendInterceptor, resetMockBackend } from '@core/interceptors/mock-backend.interceptor';
+import {
+  mockBackendInterceptor,
+  resetMockBackend,
+} from '@core/interceptors/mock-backend.interceptor';
 import { Role } from '@core/models/employee.model';
 import { AuthService } from '@core/services/auth.service';
 import { ConsoleLogger } from '@core/services/logger.service';

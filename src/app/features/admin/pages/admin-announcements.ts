@@ -1,5 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, SecurityContext, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  SecurityContext,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@core/services/auth.service';
@@ -34,8 +41,11 @@ import { DialogCloseDirective } from '@shared/directives/dialog-close.directive'
 
           <label class="field">
             <span>Body</span>
-            <textarea formControlName="bodyHtml" rows="5"
-                      placeholder="<p>Details go here…</p>"></textarea>
+            <textarea
+              formControlName="bodyHtml"
+              rows="5"
+              placeholder="<p>Details go here…</p>"
+            ></textarea>
           </label>
 
           <label class="check">
@@ -105,8 +115,13 @@ import { DialogCloseDirective } from '@shared/directives/dialog-close.directive'
         (cancelled)="pendingId.set(null)"
       >
         <p>It will disappear from the dashboard immediately.</p>
-        <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
-                (click)="pendingId.set(null)">
+        <button
+          dialog-extra-actions
+          type="button"
+          class="btn btn--ghost"
+          appDialogClose
+          (click)="pendingId.set(null)"
+        >
           Not now
         </button>
       </app-confirm-dialog>
@@ -142,9 +157,7 @@ export class AdminAnnouncements {
   );
 
   constructor() {
-    this.form.controls.bodyHtml.valueChanges.subscribe((value) =>
-      this.bodyValue.set(value ?? ''),
-    );
+    this.form.controls.bodyHtml.valueChanges.subscribe((value) => this.bodyValue.set(value ?? ''));
     void this.store.load();
   }
 

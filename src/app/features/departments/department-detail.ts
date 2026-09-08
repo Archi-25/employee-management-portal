@@ -50,21 +50,67 @@ import { TooltipDirective } from '@shared/directives/tooltip.directive';
     </app-card>
   `,
   styles: `
-    .payroll { font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .members { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
-    .members li { display: flex; align-items: center; gap: 0.65rem; }
-    .avatar {
-      width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center;
-      color: #fff; font-size: 0.68rem; font-weight: 700; flex: none;
+    .payroll {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
     }
-    .who { display: grid; flex: 1; min-width: 0; }
-    .who a { color: inherit; font-weight: 600; font-size: 0.88rem; text-decoration: none; }
-    .who a:hover { text-decoration: underline; }
-    .who small { color: var(--muted); font-size: 0.75rem; }
-    .status { font-size: 0.66rem; letter-spacing: 0.05em; color: var(--muted); flex: none; }
-    .status[data-status='ACTIVE'] { color: #15803d; }
-    .status[data-status='ON_LEAVE'] { color: #b45309; }
-    .status[data-status='EXITED'] { color: #b91c1c; }
+    .members {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.45rem;
+    }
+    .members li {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      flex: none;
+    }
+    .who {
+      display: grid;
+      flex: 1;
+      min-width: 0;
+    }
+    .who a {
+      color: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+    }
+    .who a:hover {
+      text-decoration: underline;
+    }
+    .who small {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+    .status {
+      font-size: 0.66rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      flex: none;
+    }
+    .status[data-status='ACTIVE'] {
+      color: #15803d;
+    }
+    .status[data-status='ON_LEAVE'] {
+      color: #b45309;
+    }
+    .status[data-status='EXITED'] {
+      color: #b91c1c;
+    }
   `,
 })
 export class DepartmentDetail {

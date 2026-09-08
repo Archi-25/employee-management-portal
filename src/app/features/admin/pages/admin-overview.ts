@@ -45,11 +45,37 @@ import { StatTile } from '@shared/components/stat-tile/stat-tile';
       gap: 0.75rem;
       margin-bottom: 1rem;
     }
-    .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
-    .bars li { display: grid; grid-template-columns: 130px 1fr 32px; gap: 0.65rem; align-items: center; font-size: 0.85rem; }
-    .bars__track { background: var(--surface-2); border-radius: 999px; height: 8px; overflow: hidden; }
-    .bars__fill { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
-    .bars__value { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+    .bars {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.5rem;
+    }
+    .bars li {
+      display: grid;
+      grid-template-columns: 130px 1fr 32px;
+      gap: 0.65rem;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .bars__track {
+      background: var(--surface-2);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .bars__fill {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+    }
+    .bars__value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+    }
   `,
 })
 export class AdminOverview {

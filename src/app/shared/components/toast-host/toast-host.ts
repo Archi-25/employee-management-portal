@@ -38,9 +38,15 @@ import { NotificationService } from '@core/services/notification.service';
       color: #fff;
       box-shadow: 0 8px 24px rgb(15 23 42 / 22%);
     }
-    .toast--success { background: #15803d; }
-    .toast--error { background: #b91c1c; }
-    .toast--info { background: #1d4ed8; }
+    .toast--success {
+      background: #15803d;
+    }
+    .toast--error {
+      background: #b91c1c;
+    }
+    .toast--info {
+      background: #1d4ed8;
+    }
     .toast button {
       background: none;
       border: 0;

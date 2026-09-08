@@ -51,8 +51,12 @@ const ICONS: Record<DocumentType, string> = {
               </span>
               <span class="actions">
                 <button type="button" class="link" (click)="download(doc)">Download</button>
-                <button *appHasRole="'ADMIN'" type="button" class="link link--danger"
-                        (click)="deleting.set(doc)">
+                <button
+                  *appHasRole="'ADMIN'"
+                  type="button"
+                  class="link link--danger"
+                  (click)="deleting.set(doc)"
+                >
                   Delete
                 </button>
               </span>
@@ -71,9 +75,16 @@ const ICONS: Record<DocumentType, string> = {
         (confirmed)="confirmDelete()"
         (cancelled)="deleting.set(null)"
       >
-        <p><strong>{{ doc.name }}</strong> will be removed from this employee's file.</p>
-        <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
-                (click)="deleting.set(null)">
+        <p>
+          <strong>{{ doc.name }}</strong> will be removed from this employee's file.
+        </p>
+        <button
+          dialog-extra-actions
+          type="button"
+          class="btn btn--ghost"
+          appDialogClose
+          (click)="deleting.set(null)"
+        >
           Not now
         </button>
       </app-confirm-dialog>

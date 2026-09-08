@@ -135,8 +135,10 @@ export class EmployeeDetail {
 
   protected statusClass(status: string): string {
     if (status === 'PRESENT' || status === 'APPROVED' || status === 'ACTIVE') return 'status--good';
-    if (status === 'LATE' || status === 'PENDING' || status === 'PROBATION') return 'status--warning';
-    if (status === 'ABSENT' || status === 'REJECTED' || status === 'EXITED') return 'status--critical';
+    if (status === 'LATE' || status === 'PENDING' || status === 'PROBATION')
+      return 'status--warning';
+    if (status === 'ABSENT' || status === 'REJECTED' || status === 'EXITED')
+      return 'status--critical';
     return 'status--neutral';
   }
 

@@ -1,14 +1,26 @@
 <header class="page-head">
   <h1 i18n="@@directory.title">Employee directory</h1>
-  <p i18n="@@directory.subtitle">
-    Search, filter and manage the people in your organisation.
-  </p>
+  <p i18n="@@directory.subtitle">Search, filter and manage the people in your organisation.</p>
 </header>
 
 <div class="tiles">
-  <app-stat-tile label="Headcount" i18n-label="@@tile.headcount" [value]="store.total()" accent="var(--accent)" />
-  <app-stat-tile label="Active" i18n-label="@@tile.active" [value]="store.activeCount()" accent="var(--good)" />
-  <app-stat-tile label="Matching filters" [value]="store.filtered().length" accent="var(--accent)" />
+  <app-stat-tile
+    label="Headcount"
+    i18n-label="@@tile.headcount"
+    [value]="store.total()"
+    accent="var(--accent)"
+  />
+  <app-stat-tile
+    label="Active"
+    i18n-label="@@tile.active"
+    [value]="store.activeCount()"
+    accent="var(--good)"
+  />
+  <app-stat-tile
+    label="Matching filters"
+    [value]="store.filtered().length"
+    accent="var(--accent)"
+  />
   <app-stat-tile
     label="Annual payroll"
     [value]="store.payrollTotal()"
@@ -41,7 +53,10 @@
 
     <label class="field">
       <span i18n="@@filter.department">Department</span>
-      <select [value]="store.filter().department" (change)="onDepartment($any($event.target).value)">
+      <select
+        [value]="store.filter().department"
+        (change)="onDepartment($any($event.target).value)"
+      >
         <option value="ALL">All departments</option>
         @for (department of departments; track department) {
           <option [value]="department">{{ department }}</option>
@@ -61,8 +76,10 @@
 
     <label class="field">
       <span>Employment type</span>
-      <select [value]="store.filter().employmentType"
-              (change)="onEmploymentType($any($event.target).value)">
+      <select
+        [value]="store.filter().employmentType"
+        (change)="onEmploymentType($any($event.target).value)"
+      >
         <option value="ALL">All types</option>
         @for (type of employmentTypes; track type) {
           <option [value]="type">{{ type }}</option>
@@ -72,8 +89,10 @@
 
     <label class="field">
       <span>Designation</span>
-      <select [value]="store.filter().designation"
-              (change)="onDesignation($any($event.target).value)">
+      <select
+        [value]="store.filter().designation"
+        (change)="onDesignation($any($event.target).value)"
+      >
         <option value="ALL">All designations</option>
         @for (designation of store.designations(); track designation) {
           <option [value]="designation">{{ designation }}</option>
@@ -188,8 +207,13 @@
                   @if (openMenuId() === employee.id) {
                     <div class="menu__panel" role="menu">
                       <button type="button" role="menuitem" (click)="edit(employee)">Edit</button>
-                      <button *appHasRole="'ADMIN'" type="button" role="menuitem" class="danger"
-                              (click)="askToDelete(employee)">
+                      <button
+                        *appHasRole="'ADMIN'"
+                        type="button"
+                        role="menuitem"
+                        class="danger"
+                        (click)="askToDelete(employee)"
+                      >
                         Remove
                       </button>
                     </div>
@@ -204,13 +228,21 @@
 
     @if (totalPages() > 1) {
       <div class="pager">
-        <button type="button" class="btn btn--ghost btn--sm"
-                [disabled]="page() === 1" (click)="goToPage(page() - 1)">
+        <button
+          type="button"
+          class="btn btn--ghost btn--sm"
+          [disabled]="page() === 1"
+          (click)="goToPage(page() - 1)"
+        >
           Previous
         </button>
         <span class="pager__label">Page {{ page() }} of {{ totalPages() }}</span>
-        <button type="button" class="btn btn--ghost btn--sm"
-                [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">
+        <button
+          type="button"
+          class="btn btn--ghost btn--sm"
+          [disabled]="page() === totalPages()"
+          (click)="goToPage(page() + 1)"
+        >
           Next
         </button>
       </div>
@@ -230,8 +262,13 @@
       be undone.
     </p>
     <!-- [appDialogClose] finds the DialogRef with @Host() -->
-    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
-            (click)="pendingDelete.set(null)">
+    <button
+      dialog-extra-actions
+      type="button"
+      class="btn btn--ghost"
+      appDialogClose
+      (click)="pendingDelete.set(null)"
+    >
       Not now
     </button>
   </app-confirm-dialog>

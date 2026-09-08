@@ -100,9 +100,7 @@ export class HrService {
       .pipe(items<EmployeeDocument>());
   }
 
-  uploadDocument(
-    doc: Omit<EmployeeDocument, 'id' | 'uploadedOn'>,
-  ): Observable<EmployeeDocument> {
+  uploadDocument(doc: Omit<EmployeeDocument, 'id' | 'uploadedOn'>): Observable<EmployeeDocument> {
     return this.http.post<EmployeeDocument>(this.url('documents'), doc);
   }
 

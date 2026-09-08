@@ -31,13 +31,7 @@ export const GENDERS: readonly Gender[] = [
 ] as const;
 
 export type Department =
-  | 'Engineering'
-  | 'Design'
-  | 'Finance'
-  | 'People Ops'
-  | 'Sales'
-  | 'Support'
-  | 'Marketing';
+  'Engineering' | 'Design' | 'Finance' | 'People Ops' | 'Sales' | 'Support' | 'Marketing';
 
 export const DEPARTMENTS: readonly Department[] = [
   'Engineering',

@@ -27,9 +27,7 @@ describe('authGuard', () => {
     const { auth } = setup();
     auth.logout();
 
-    const result = run(() =>
-      authGuard({} as never, { url: '/employees/3' } as never),
-    ) as UrlTree;
+    const result = run(() => authGuard({} as never, { url: '/employees/3' } as never)) as UrlTree;
 
     expect(result instanceof UrlTree).toBe(true);
     expect(result.toString()).toContain('/login');
@@ -75,9 +73,7 @@ describe('unsavedChangesGuard', () => {
   const dirty: HasUnsavedChanges = { hasUnsavedChanges: () => true };
 
   it('allows navigation away from a clean form without prompting', () => {
-    expect(
-      unsavedChangesGuard(clean, {} as never, {} as never, {} as never),
-    ).toBe(true);
+    expect(unsavedChangesGuard(clean, {} as never, {} as never, {} as never)).toBe(true);
   });
 
   it('asks for confirmation when the form is dirty', () => {

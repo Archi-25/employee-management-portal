@@ -1,49 +1,62 @@
 <header class="page-head">
   <h1 i18n="@@dashboard.title">Dashboard</h1>
-  <p i18n="@@dashboard.subtitle">
-    Headcount, attendance and what needs your attention today.
-  </p>
+  <p i18n="@@dashboard.subtitle">Headcount, attendance and what needs your attention today.</p>
 </header>
 
 <div class="tiles">
   <app-stat-tile
-    label="Total employees" i18n-label="@@tile.headcount"
-    [value]="store.total()" accent="var(--accent)" />
+    label="Total employees"
+    i18n-label="@@tile.headcount"
+    [value]="store.total()"
+    accent="var(--accent)"
+  />
   <app-stat-tile
-    label="Active" i18n-label="@@tile.active"
-    [value]="store.activeCount()" accent="var(--good)" />
-  <app-stat-tile
-    label="On leave today"
-    [value]="store.onLeaveCount()" accent="var(--warning)" />
+    label="Active"
+    i18n-label="@@tile.active"
+    [value]="store.activeCount()"
+    accent="var(--good)"
+  />
+  <app-stat-tile label="On leave today" [value]="store.onLeaveCount()" accent="var(--warning)" />
   <app-stat-tile
     label="New (90 days)"
-    [value]="store.recentJoiners().length" accent="var(--accent)" />
+    [value]="store.recentJoiners().length"
+    accent="var(--accent)"
+  />
   <app-stat-tile
     label="Attendance today"
     [value]="attendance.attendanceRate() + '%'"
     [hint]="attendance.present() + ' present · ' + attendance.absent() + ' absent'"
-    accent="var(--accent)" />
+    accent="var(--accent)"
+  />
   <app-stat-tile
     label="Pending approvals"
     [value]="leave.pendingCount()"
     hint="leave requests"
-    accent="var(--warning)" />
+    accent="var(--warning)"
+  />
   <app-stat-tile
     label="Online now"
     [value]="presence()?.onlineNow ?? '—'"
     [hint]="presence() ? 'live · updates every 5s' : 'connecting…'"
-    accent="var(--accent)" />
+    accent="var(--accent)"
+  />
 </div>
 
-<div *appHasRole="'EMPLOYEE'; else: signedOut" class="welcome">
-  <span>Welcome back, <strong>{{ auth.displayName() }}</strong>.</span>
+<div *appHasRole="'EMPLOYEE'; else signedOut" class="welcome">
+  <span
+    >Welcome back, <strong>{{ auth.displayName() }}</strong
+    >.</span
+  >
   @if (leave.pendingCount() > 0 && auth.hasRole('MANAGER')) {
     <a routerLink="/leave">{{ leave.pendingCount() }} leave request(s) need your decision →</a>
   }
 </div>
 <ng-template #signedOut>
   <div class="welcome welcome--muted">
-    <span>You are browsing as a guest — <a routerLink="/login">sign in</a> to manage the directory.</span>
+    <span
+      >You are browsing as a guest — <a routerLink="/login">sign in</a> to manage the
+      directory.</span
+    >
   </div>
 </ng-template>
 
@@ -130,8 +143,12 @@
   </app-card>
 
   <app-announcement-panel [limit]="3">
-    <a panel-actions *appHasRole="['MANAGER', 'ADMIN']" class="btn btn--ghost btn--sm"
-       routerLink="/admin/announcements">
+    <a
+      panel-actions
+      *appHasRole="['MANAGER', 'ADMIN']"
+      class="btn btn--ghost btn--sm"
+      routerLink="/admin/announcements"
+    >
       Manage
     </a>
   </app-announcement-panel>
@@ -142,10 +159,18 @@
     </div>
 
     <ul class="breakdown">
-      <li><span class="status status--good">PRESENT</span><b>{{ attendance.present() }}</b></li>
-      <li><span class="status status--warning">LATE</span><b>{{ attendance.late() }}</b></li>
-      <li><span class="status status--critical">ABSENT</span><b>{{ attendance.absent() }}</b></li>
-      <li><span class="status status--neutral">ON LEAVE</span><b>{{ attendance.onLeave() }}</b></li>
+      <li>
+        <span class="status status--good">PRESENT</span><b>{{ attendance.present() }}</b>
+      </li>
+      <li>
+        <span class="status status--warning">LATE</span><b>{{ attendance.late() }}</b>
+      </li>
+      <li>
+        <span class="status status--critical">ABSENT</span><b>{{ attendance.absent() }}</b>
+      </li>
+      <li>
+        <span class="status status--neutral">ON LEAVE</span><b>{{ attendance.onLeave() }}</b>
+      </li>
     </ul>
   </app-card>
 </div>

@@ -13,10 +13,24 @@ import { Card } from '@shared/components/card/card';
   template: `
     <app-card heading="Portal settings" subtitle="ADMIN-only route">
       <dl class="kv">
-        <div><dt>Application</dt><dd>{{ config.appName }}</dd></div>
-        <div><dt>API base</dt><dd><code>{{ config.apiBaseUrl }}</code></dd></div>
-        <div><dt>Cache TTL</dt><dd>{{ config.httpCacheTtlMs }} ms</dd></div>
-        <div><dt>Page size</dt><dd>{{ config.defaultPageSize }}</dd></div>
+        <div>
+          <dt>Application</dt>
+          <dd>{{ config.appName }}</dd>
+        </div>
+        <div>
+          <dt>API base</dt>
+          <dd>
+            <code>{{ config.apiBaseUrl }}</code>
+          </dd>
+        </div>
+        <div>
+          <dt>Cache TTL</dt>
+          <dd>{{ config.httpCacheTtlMs }} ms</dd>
+        </div>
+        <div>
+          <dt>Page size</dt>
+          <dd>{{ config.defaultPageSize }}</dd>
+        </div>
       </dl>
     </app-card>
 
@@ -33,8 +47,8 @@ import { Card } from '@shared/components/card/card';
 
     <app-card heading="Access simulation" subtitle="Preview the portal as another role">
       <p class="hint">
-        Changing this affects only your session. Use it to check what a manager or an employee
-        can see before rolling out a permission change.
+        Changing this affects only your session. Use it to check what a manager or an employee can
+        see before rolling out a permission change.
       </p>
       <div class="row">
         @for (role of roles; track role) {
@@ -51,16 +65,54 @@ import { Card } from '@shared/components/card/card';
     </app-card>
   `,
   styles: `
-    :host { display: block; display: grid; gap: 1rem; }
-    .kv { margin: 0; display: grid; gap: 0.4rem; }
-    .kv div { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; }
-    .kv dt { color: var(--muted); }
-    .kv dd { margin: 0; font-weight: 600; }
-    .flags { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; font-size: 0.85rem; }
-    .flags li { display: flex; justify-content: space-between; }
-    .on { color: #15803d; font-weight: 600; }
-    .is-current { border-color: var(--accent); color: var(--accent); }
-    .ok { margin: 0.7rem 0 0; font-size: 0.85rem; color: #15803d; }
+    :host {
+      display: block;
+      display: grid;
+      gap: 1rem;
+    }
+    .kv {
+      margin: 0;
+      display: grid;
+      gap: 0.4rem;
+    }
+    .kv div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+    .kv dt {
+      color: var(--muted);
+    }
+    .kv dd {
+      margin: 0;
+      font-weight: 600;
+    }
+    .flags {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.3rem;
+      font-size: 0.85rem;
+    }
+    .flags li {
+      display: flex;
+      justify-content: space-between;
+    }
+    .on {
+      color: #15803d;
+      font-weight: 600;
+    }
+    .is-current {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .ok {
+      margin: 0.7rem 0 0;
+      font-size: 0.85rem;
+      color: #15803d;
+    }
   `,
 })
 export class AdminSettings {

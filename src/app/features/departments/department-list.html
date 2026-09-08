@@ -1,9 +1,7 @@
 <header class="page-head dept-head">
   <div>
     <h1 i18n="@@departments.title">Departments</h1>
-    <p i18n="@@departments.subtitle">
-      Team structure, headcount and who leads each department.
-    </p>
+    <p i18n="@@departments.subtitle">Team structure, headcount and who leads each department.</p>
   </div>
   <button *appHasRole="'ADMIN'" type="button" class="btn" (click)="startCreate()">
     Add department
@@ -18,16 +16,27 @@
     <form [formGroup]="form" (ngSubmit)="save()" class="form" novalidate>
       <label class="field">
         <span>Name <b aria-hidden="true">*</b></span>
-        <input formControlName="name" placeholder="Engineering"
-               [class.is-invalid]="showError('name')" />
-        @if (showError('name')) { <em class="error">A name of at least 2 characters is required.</em> }
+        <input
+          formControlName="name"
+          placeholder="Engineering"
+          [class.is-invalid]="showError('name')"
+        />
+        @if (showError('name')) {
+          <em class="error">A name of at least 2 characters is required.</em>
+        }
       </label>
 
       <label class="field">
         <span>Code <b aria-hidden="true">*</b></span>
-        <input formControlName="code" placeholder="ENG" maxlength="5"
-               [class.is-invalid]="showError('code')" />
-        @if (showError('code')) { <em class="error">2–5 uppercase letters, e.g. ENG.</em> }
+        <input
+          formControlName="code"
+          placeholder="ENG"
+          maxlength="5"
+          [class.is-invalid]="showError('code')"
+        />
+        @if (showError('code')) {
+          <em class="error">2–5 uppercase letters, e.g. ENG.</em>
+        }
       </label>
 
       <label class="field">
@@ -121,11 +130,16 @@
     (cancelled)="deleting.set(null)"
   >
     <p>
-      <strong>{{ department.name }}</strong> will be removed. Departments that still have
-      employees assigned cannot be deleted.
+      <strong>{{ department.name }}</strong> will be removed. Departments that still have employees
+      assigned cannot be deleted.
     </p>
-    <button dialog-extra-actions type="button" class="btn btn--ghost" appDialogClose
-            (click)="deleting.set(null)">
+    <button
+      dialog-extra-actions
+      type="button"
+      class="btn btn--ghost"
+      appDialogClose
+      (click)="deleting.set(null)"
+    >
       Not now
     </button>
   </app-confirm-dialog>
