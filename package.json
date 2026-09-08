@@ -19,10 +19,7 @@
     "sonar": "sonar-scanner || echo \"sonar-scanner not installed \u2014 see sonar-project.properties\"",
     "nx:build": "nx build employee-management-portal",
     "nx:graph": "nx graph",
-    "serve:ssr:fr": "node dist/employee-management-portal/server/fr/server.mjs",
-    "verify": "bash scripts/verify-requirements.sh",
-    "viva": "node scripts/build-viva-pdf.mjs",
-    "simple": "node scripts/build-simple-pdf.mjs"
+    "serve:ssr:fr": "node dist/employee-management-portal/server/fr/server.mjs"
   },
   "private": true,
   "packageManager": "npm@12.0.2",
